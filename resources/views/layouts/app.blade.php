@@ -1253,9 +1253,11 @@
             font-weight: 600;
             text-transform: uppercase;
         }
+
         .colored-toast {
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3);
         }
+
         .swal2-toast {
             border-radius: 12px !important;
         }
@@ -1284,67 +1286,67 @@
             <li><a href="#" class="sb-link"><i class="fas fa-star"></i><span>Feedback</span></a></li>
         </ul>
 
-       <div class="sb-section">Management</div>
-<ul class="sb-nav">
-    <li>
-        <a href="{{ route('users.index') }}"
-            class="sb-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
-            <i class="fas fa-user-plus"></i>
-            <span>Manage Users</span>
-        </a>
-    </li>
-    <li>
-        <a href="{{ route('roles.index') }}"
-            class="sb-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">
-            <i class="fas fa-user-shield"></i>
-            <span>Manage Roles</span>
-        </a>
-    </li>
-    {{-- <li>
-        <a href="{{ route('permissions.index') }}"
-            class="sb-link {{ request()->routeIs('permissions.*') ? 'active' : '' }}">
-            <i class="fas fa-key"></i>
-            <span>Manage Permissions</span>
-        </a>
-    </li> --}}
-</ul>
+        <div class="sb-section">Management</div>
+        <ul class="sb-nav">
+            <li>
+                <a href="{{ route('users.index') }}"
+                    class="sb-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Manage Users</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('roles.index') }}"
+                    class="sb-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Manage Roles</span>
+                </a>
+            </li>
+            {{-- <li>
+                <a href="{{ route('permissions.index') }}"
+                    class="sb-link {{ request()->routeIs('permissions.*') ? 'active' : '' }}">
+                    <i class="fas fa-key"></i>
+                    <span>Manage Permissions</span>
+                </a>
+            </li> --}}
+        </ul>
 
-<div class="sb-section">Master Data</div>
-<ul class="sb-nav">
-    <li>
-        <a href="{{ route('voucher-vendors.index') }}"
-            class="sb-link {{ request()->routeIs('voucher-vendors.*') ? 'active' : '' }}">
-            <i class="fas fa-tags"></i>
-            <span>Voucher Vendors</span>
-        </a>
-    </li>
-    <li>
-        <a href="{{ route('centers.index') }}"
-            class="sb-link {{ request()->routeIs('centers.*') ? 'active' : '' }}">
-            <i class="fas fa-store-alt"></i>
-            <span>Manage Centers</span>
-        </a>
-    </li>
-    <li>
-        <a href="{{ route('courses.index') }}"
-            class="sb-link {{ request()->routeIs('courses.*') ? 'active' : '' }}">
-            <i class="fas fa-book"></i>
-            <span>Manage Courses</span>
-        </a>
-    </li>
-    <li>
-        <a href="#" class="sb-link">
-            <i class="fas fa-users"></i>
-            <span>Students</span>
-        </a>
-    </li>
-    <li>
-        <a href="#" class="sb-link">
-            <i class="fas fa-chart-bar"></i>
-            <span>Reports</span>
-        </a>
-    </li>
-</ul>
+        <div class="sb-section">Master Data</div>
+        <ul class="sb-nav">
+            <li>
+                <a href="{{ route('voucher-vendors.index') }}"
+                    class="sb-link {{ request()->routeIs('voucher-vendors.*') ? 'active' : '' }}">
+                    <i class="fas fa-tags"></i>
+                    <span>Voucher Vendors</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('centers.index') }}"
+                    class="sb-link {{ request()->routeIs('centers.*') ? 'active' : '' }}">
+                    <i class="fas fa-store-alt"></i>
+                    <span>Manage Centers</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('courses.index') }}"
+                    class="sb-link {{ request()->routeIs('courses.*') ? 'active' : '' }}">
+                    <i class="fas fa-book"></i>
+                    <span>Manage Courses</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="sb-link">
+                    <i class="fas fa-users"></i>
+                    <span>Students</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="sb-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reports</span>
+                </a>
+            </li>
+        </ul>
 
 
         <div class="sb-section">System</div>
@@ -1565,28 +1567,28 @@
     </script>
     <!-- SweetAlert Success -->
     @if (session('success'))
-    <script>
-        Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'success',
-            title: '{{ session('success') }}',
-            showConfirmButton: false,
-            timer: 3500,
-            timerProgressBar: true,
-            background: '#1e2937',
-            color: '#e2e8f0',
-            customClass: {
-                popup: 'colored-toast'
-            },
-            didOpen: (toast) => {
-                toast.style.borderLeft = '5px solid #10b981';
-                toast.addEventListener('mouseenter', Swal.stopTimer);
-                toast.addEventListener('mouseleave', Swal.resumeTimer);
-            }
-        });
-    </script>
-@endif
+        <script>
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 3500,
+                timerProgressBar: true,
+                background: '#1e2937',
+                color: '#e2e8f0',
+                customClass: {
+                    popup: 'colored-toast'
+                },
+                didOpen: (toast) => {
+                    toast.style.borderLeft = '5px solid #10b981';
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                }
+            });
+        </script>
+    @endif
 
     <!-- Delete Confirmation with SweetAlert -->
     <script>
