@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CenterController;
 use App\Http\Controllers\Admin\CourseController;
+use App\Http\Controllers\Admin\LeadController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
@@ -37,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('centers', CenterController::class);
     Route::resource('courses', CourseController::class);
+    Route::resource('leads', LeadController::class);
 });
 
 require __DIR__.'/auth.php';
