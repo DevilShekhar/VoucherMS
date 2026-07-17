@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payment_transactions', function (Blueprint $table) {
-
             $table->id();
 
             $table->foreignId('payment_id')
                 ->constrained('payments')
                 ->cascadeOnDelete();
+
             $table->decimal('amount', 10, 2);
             $table->enum('payment_mode', [
                 'Cash',
@@ -26,10 +26,12 @@ return new class extends Migration
                 'Bank Transfer',
                 'Cheque',
             ]);
+
             $table->string('transaction_no')->nullable();
             $table->string('bank_name')->nullable();
             $table->dateTime('transaction_date');
             $table->string('receipt')->nullable();
+
             $table->timestamps();
         });
     }
