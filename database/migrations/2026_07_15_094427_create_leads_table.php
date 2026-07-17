@@ -17,10 +17,7 @@ return new class extends Migration
 
             $table->string('lead_no')->unique();
 
-            $table->foreignId('lead_source_id')
-                ->nullable()
-                ->constrained('lead_sources')
-                ->nullOnDelete();
+            
 
             $table->foreignId('assigned_to')
                 ->nullable()
