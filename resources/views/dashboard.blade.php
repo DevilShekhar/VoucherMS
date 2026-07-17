@@ -15,7 +15,7 @@
                             Overview
                         </span>
                         <h2>Dashboard</h2>
-                        <p>Good {{ $timeOfDay ?? 'afternoon' }}, {{ auth()->user()->name ?? 'Admin' }}! Here's what's happening across your campus today.</p>
+                        <p>Good {{ $timeOfDay ?? 'afternoon' }}, {{ auth()->user()->name ?? 'Admin' }}! Here's what's happening across your campus today.happy day</p>
                     </div>
                 </div>
                 <div class="premium-head-actions">
