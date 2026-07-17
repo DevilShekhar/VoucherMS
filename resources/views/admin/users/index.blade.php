@@ -1,0 +1,201 @@
+
+
+@extends('layouts.app')
+
+@section('content')
+
+<section class="section premium-dashboard">
+
+    <div class="premium-floating-header">
+
+        <div class="header-content">
+
+            <div class="header-left">
+
+                <div class="header-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+
+                <div>
+
+                    <span class="header-badge">
+                        User Management
+                    </span>
+
+                    <h2>Users</h2>
+
+                    <p>Manage all system users</p>
+
+                </div>
+
+            </div>
+
+            <div class="premium-head-actions">
+
+                <a href="{{ route('users.create') }}" class="btn btn-create">
+                    <i class="fas fa-plus-circle"></i>
+                    Add User
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="section premium-dashboard pt-0">
+
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <div class="card premium-block">
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th width="60">#</th>
+                            <th>Photo</th>
+                            <th>Employee Code</th>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Email</th>
+                            <th>Mobile</th>
+                            <th>Status</th>
+                            <th width="170" class="text-center">Action</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @forelse($users as $key => $user)
+
+                            <tr>
+
+                                <td>{{ $users->firstItem() + $key }}</td>
+
+                                <td>
+
+                                    @if($user->profile_photo)
+
+                                        <img src="{{ asset('storage/'.$user->profile_photo) }}"
+                                             width="45"
+                                             height="45"
+                                             class="rounded-circle"
+                                             style="object-fit: cover;">
+
+                                    @else
+
+                                        <img src="{{ asset('images/default-user.png') }}"
+                                             width="45"
+                                             height="45"
+                                             class="rounded-circle">
+
+                                    @endif
+
+                                </td>
+
+                                <td>{{ $user->employee_code }}</td>
+
+                                <td>{{ $user->name }}</td>
+
+                                <td>{{ $user->role?->name ?? '-' }}</td>
+
+                                <td>{{ $user->email }}</td>
+
+                                <td>{{ $user->mobile }}</td>
+
+                                <td>
+
+                                    @if($user->status == 'Active')
+
+                                        <span class="badge bg-success">
+                                            Active
+                                        </span>
+
+                                    @else
+
+                                        <span class="badge bg-danger">
+                                            Inactive
+                                        </span>
+
+                                    @endif
+
+                                </td>
+
+                                <td class="text-center">
+
+                                    <a href="{{ route('users.edit',$user->id) }}"
+                                       class="btn btn-sm btn-warning">
+
+                                        <i class="fas fa-edit"></i>
+
+                                    </a>
+
+                                    <form action="{{ route('users.destroy',$user->id) }}"
+                                          method="POST"
+                                          class="d-inline">
+
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button type="submit"
+                                                class="btn btn-sm btn-danger"
+                                                onclick="return confirm('Are you sure you want to delete this user?')">
+
+                                            <i class="fas fa-trash"></i>
+
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+
+                        @empty
+
+                            <tr>
+
+                                <td colspan="9" class="text-center py-5">
+
+                                    No users found.
+
+                                </td>
+
+                            </tr>
+
+                        @endforelse
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="mt-3">
+
+                {{ $users->links() }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+@endsection
