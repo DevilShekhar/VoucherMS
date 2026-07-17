@@ -1261,6 +1261,45 @@
         .swal2-toast {
             border-radius: 12px !important;
         }
+
+        .timeline {
+            position: relative;
+          padding-left: 20px;
+        }
+        .timeline:before {
+            content: "";
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e5e5e5;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 25px;
+        }
+
+        .timeline-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            position: absolute;
+            left: 2px;
+            top: 5px;
+            border: 3px solid #fff;
+            box-shadow: 0 0 0 2px #d9a441;
+        }
+
+        .timeline-content h6 {
+            font-weight: 600;
+        }
+
+        .timeline-content small {
+            color: #777;
+        }
     </style>
 </head>
 
@@ -1335,6 +1374,13 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('leads.index') }}"
+                    class="sb-link {{ request()->routeIs('leads.*') ? 'active' : '' }}">
+                    <i class="fas fa-book"></i>
+                    <span>Manage Leads</span>
+                </a>
+            </li>
+            <li>
                 <a href="#" class="sb-link">
                     <i class="fas fa-users"></i>
                     <span>Students</span>
@@ -1403,7 +1449,7 @@
                         <div class="info">
                             <span class="name">{{ Auth::user()->name }}</span>
                             <span class="role-label">
-                                {{ Auth::user()->roles->first()?->name ? ucwords(str_replace('_', ' ', Auth::user()->roles->first()->name)) : 'AdminUser' }}
+                                {{ Auth::user()->roles->first()?->name ? ucwords(str_replace('_', ' ', Auth::user()->roles->first()->name)) : 'System User' }}
                             </span>
                         </div>
                         <i class="fas fa-chevron-down chevron"></i>

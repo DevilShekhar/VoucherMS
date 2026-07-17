@@ -45,7 +45,7 @@ class UserController extends Controller
             'employee_code' => 'required|string|max:50|unique:users,employee_code',
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'mobile'         => 'required|string|max:20|unique:users,mobile|regex:/^[0-9+\-\s]+$/',
+            'mobile' => 'required|string|max:20|unique:users,mobile|regex:/^[0-9+\-\s]+$/',
             'password' => 'required|min:6|confirmed',
             'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
@@ -61,7 +61,10 @@ class UserController extends Controller
 
         $validated['password'] = Hash::make($validated['password']);
 
-        User::create($validated);
+        $newUser = User::create($validated);
+
+        $role = Role::findOrFail($validated['role_id']);
+        $newUser->assignRole($role);
 
         return redirect()
             ->route('users.index')
