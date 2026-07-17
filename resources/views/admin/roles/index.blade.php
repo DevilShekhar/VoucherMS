@@ -55,12 +55,18 @@
                                     @endif
                                 </td>
                                 <td>
+                                    <a href="{{ route('roles.edit', $roleItem->id) }}" class="btn btn-sm btn-warning">
+
+                                        <i class="fas fa-edit"></i>
+
+                                    </a>
                                     @if($roleItem->status == 1)
-                                        <form action="{{ route('roles.destroy', $roleItem->id) }}" method="POST" class="delete-form" style="display:inline;">
+                                        <form action="{{ route('roles.destroy', $roleItem->id) }}" method="POST" class="delete-form"
+                                            style="display:inline;">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-sm btn-danger">
-                                                <i class="fas fa-trash"></i> Delete
+                                                <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
                                     @endif

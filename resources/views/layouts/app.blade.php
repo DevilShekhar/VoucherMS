@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="light">
 
@@ -125,6 +124,15 @@
             box-shadow: var(--shadow);
         }
 
+        .sidebar-icon {
+            color: #d4af37;
+            /* Gold */
+        }
+
+        .sidebar-icon:hover {
+            color: #f4c542;
+        }
+
         .sidebar.collapsed {
             width: 72px;
         }
@@ -141,6 +149,7 @@
             overflow: hidden;
             color: var(--sidebar-ink);
             border-bottom: 1px solid var(--line);
+            color: black;
         }
 
         .sb-brand .dot {
@@ -199,7 +208,7 @@
             margin: 0;
             padding: 0 12px;
             flex: 1;
-            overflow-y: auto;
+            /* overflow-y: auto; */
         }
 
         .sb-nav li {
@@ -220,6 +229,7 @@
             overflow: hidden;
             position: relative;
             transition: all 0.25s ease;
+            color: #2C2218;
         }
 
         .sb-link i {
@@ -228,6 +238,7 @@
             font-size: 15px;
             flex-shrink: 0;
             transition: transform 0.25s ease;
+            color: #d4af37;
         }
 
         .sb-link:hover {
@@ -282,6 +293,7 @@
             gap: 12px;
             white-space: nowrap;
             overflow: hidden;
+            color: black;
         }
 
         .sb-foot .av {
@@ -302,7 +314,7 @@
         .sb-foot .who {
             font-size: 13px;
             font-weight: 600;
-            color: var(--sidebar-ink);
+            color: black;
         }
 
         .sb-foot .role {
@@ -692,8 +704,8 @@
         }
 
         .header-icon {
-            width: 52px;
-            height: 52px;
+            width: 48px;
+            height: 30px;
             border-radius: var(--radius);
             background: var(--gold-gradient);
             color: #1A1410;
@@ -817,7 +829,7 @@
 
         .badge.bg-success {
             background: var(--sage-bg);
-            color: var(--sage);
+            color: white;
         }
 
         .badge.bg-danger {
@@ -1227,6 +1239,26 @@
         .table-responsive::-webkit-scrollbar-thumb:hover {
             background: var(--ember-dark);
         }
+
+        .avatar-placeholder {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #fdee99, #edbd3a);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .colored-toast {
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3);
+        }
+        .swal2-toast {
+            border-radius: 12px !important;
+        }
     </style>
 </head>
 
@@ -1246,55 +1278,74 @@
         </div>
 
         <div class="sb-section">Main</div>
-        <ul class="sb-nav">
+        <ul class="sb-nav text sidebar-icon">
             <li><a href="{{ route('dashboard') }}" class="sb-link"><i
                         class="fas fa-th-large"></i><span>Dashboard</span></a></li>
-            <li><a href="#" class="sb-link"><i class="fas fa-shopping-cart"></i><span>Orders</span><span
-                        class="badge-pill">12</span></a></li>
             <li><a href="#" class="sb-link"><i class="fas fa-star"></i><span>Feedback</span></a></li>
         </ul>
 
-        <div class="sb-section">Management</div>
-        <ul class="sb-nav">
-            <li>
-                <a href="{{ route('roles.index') }}"
-                    class="sb-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">
-                    <i class="fas fa-user-shield"></i>
-                    <span>Roles</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('permissions.index') }}"
-                    class="sb-link {{ request()->routeIs('permissions.*') ? 'active' : '' }}">
-                    <i class="fas fa-key"></i>
-                    <span>Permissions</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="sb-link">
-                    <i class="fas fa-store-alt"></i>
-                    <span>Branches</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="sb-link">
-                    <i class="fas fa-utensils"></i>
-                    <span>Menu</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="sb-link">
-                    <i class="fas fa-users"></i>
-                    <span>Customers</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="sb-link">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>Reports</span>
-                </a>
-            </li>
-        </ul>
+       <div class="sb-section">Management</div>
+<ul class="sb-nav">
+    <li>
+        <a href="{{ route('users.index') }}"
+            class="sb-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
+            <i class="fas fa-user-plus"></i>
+            <span>Manage Users</span>
+        </a>
+    </li>
+    <li>
+        <a href="{{ route('roles.index') }}"
+            class="sb-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">
+            <i class="fas fa-user-shield"></i>
+            <span>Manage Roles</span>
+        </a>
+    </li>
+    {{-- <li>
+        <a href="{{ route('permissions.index') }}"
+            class="sb-link {{ request()->routeIs('permissions.*') ? 'active' : '' }}">
+            <i class="fas fa-key"></i>
+            <span>Manage Permissions</span>
+        </a>
+    </li> --}}
+</ul>
+
+<div class="sb-section">Master Data</div>
+<ul class="sb-nav">
+    <li>
+        <a href="{{ route('voucher-vendors.index') }}"
+            class="sb-link {{ request()->routeIs('voucher-vendors.*') ? 'active' : '' }}">
+            <i class="fas fa-tags"></i>
+            <span>Voucher Vendors</span>
+        </a>
+    </li>
+    <li>
+        <a href="{{ route('centers.index') }}"
+            class="sb-link {{ request()->routeIs('centers.*') ? 'active' : '' }}">
+            <i class="fas fa-store-alt"></i>
+            <span>Manage Centers</span>
+        </a>
+    </li>
+    <li>
+        <a href="{{ route('courses.index') }}"
+            class="sb-link {{ request()->routeIs('courses.*') ? 'active' : '' }}">
+            <i class="fas fa-book"></i>
+            <span>Manage Courses</span>
+        </a>
+    </li>
+    <li>
+        <a href="#" class="sb-link">
+            <i class="fas fa-users"></i>
+            <span>Students</span>
+        </a>
+    </li>
+    <li>
+        <a href="#" class="sb-link">
+            <i class="fas fa-chart-bar"></i>
+            <span>Reports</span>
+        </a>
+    </li>
+</ul>
+
 
         <div class="sb-section">System</div>
         <ul class="sb-nav">
@@ -1350,7 +1401,7 @@
                         <div class="info">
                             <span class="name">{{ Auth::user()->name }}</span>
                             <span class="role-label">
-                                {{ Auth::user()->roles->first()?->name ? ucwords(str_replace('_', ' ', Auth::user()->roles->first()->name)) : 'User' }}
+                                {{ Auth::user()->roles->first()?->name ? ucwords(str_replace('_', ' ', Auth::user()->roles->first()->name)) : 'AdminUser' }}
                             </span>
                         </div>
                         <i class="fas fa-chevron-down chevron"></i>
@@ -1510,6 +1561,54 @@
                 sidebar.classList.remove('open');
                 scrim.classList.remove('show');
             }
+        });
+    </script>
+    <!-- SweetAlert Success -->
+    @if (session('success'))
+    <script>
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: '{{ session('success') }}',
+            showConfirmButton: false,
+            timer: 3500,
+            timerProgressBar: true,
+            background: '#1e2937',
+            color: '#e2e8f0',
+            customClass: {
+                popup: 'colored-toast'
+            },
+            didOpen: (toast) => {
+                toast.style.borderLeft = '5px solid #10b981';
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        });
+    </script>
+@endif
+
+    <!-- Delete Confirmation with SweetAlert -->
+    <script>
+        document.querySelectorAll('.delete-form').forEach(form => {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Delete User?',
+                    text: 'This action cannot be undone.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Delete',
+                    cancelButtonText: 'Cancel',
+                    confirmButtonColor: '#EF4444',
+                    cancelButtonColor: '#6B7A8D'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
         });
     </script>
 
