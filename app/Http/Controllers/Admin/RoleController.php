@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\PermissionRegistrar;
 
 class RoleController extends Controller
@@ -50,12 +49,19 @@ class RoleController extends Controller
             ->with('success', 'Role Created successfully');
     }
 
+    public function edit($id)
+    {
+        $role = Role::findOrFail($id);
+        $permissions = Permission::all();
+
+        return view('admin.roles.edit', compact('role'));
+    }
     public function update(Request $request, $id)
     {
         $role = Role::findOrFail($id);
 
         $request->validate([
-            'name' => 'required|unique:roles,name,' . $id,
+            'name' => 'required|unique:roles,name,'.$id,
         ]);
 
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
@@ -73,49 +79,9 @@ class RoleController extends Controller
         $role = Role::findOrFail($role);
 
         $role->update(['status' => 0]);
+
         return redirect()
             ->route('roles.index')
             ->with('success', 'Role Inactivated successfully');
-    }
-
-    public function managePermissions(Role $role)
-    {
-        $permissions = Permission::all()
-            ->groupBy(function ($permission) {
-
-                $parts = explode('-', $permission->name);
-
-                return ucfirst(end($parts)) . ' Permissions';
-            });
-
-        $rolePermissions = $role->permissions()
-            ->pluck('name')
-            ->toArray();
-
-        return view('admin.roles.permissions', compact(
-            'role',
-            'permissions',
-            'rolePermissions'
-        ));
-    }
-
-
-    public function updatePermissions(Request $request, Role $role)
-    {
-        $role->syncPermissions($request->permissions ?? []);
-
-        return redirect()
-            ->route('roles.index')
-            ->with('success', 'Permissions updated successfully');
-    }
-    public function getPermissionsData($role)
-    {
-        $role = Role::with('permissions')->findOrFail($role);
-
-        return response()->json([
-            'role' => $role,
-            'permissions' => Permission::all(),
-            'rolePermissions' => $role->permissions->pluck('name')->toArray()
-        ]);
     }
 }
