@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 
 class Candidate extends Model
 {
@@ -27,4 +29,33 @@ class Candidate extends Model
         'country',
         'status',
     ];
+    protected $casts = [
+        'dob' => 'date',
+    ];
+
+    // Relationships
+    public function lead(): BelongsTo
+    {
+        return $this->belongsTo(Lead::class);
+    }
+
+    public function center(): BelongsTo
+    {
+        return $this->belongsTo(Center::class);
+    }
+
+    public function executive(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'executive_id');
+    }
+
+    public function course(): BelongsTo
+    {
+        return $this->belongsTo(Course::class);
+    }
+
+    public function certification(): BelongsTo
+    {
+        return $this->belongsTo(Certification::class);
+    }
 }

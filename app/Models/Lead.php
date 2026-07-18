@@ -42,4 +42,19 @@ class Lead extends Model
     {
         return $this->belongsTo(Course::class);
     }
+
+    public function followups()
+    {
+        return $this->hasMany(LeadFollowUp::class)->latest();
+    }
+
+    public function latestFollowup()
+    {
+        return $this->hasOne(LeadFollowUp::class)->latestOfMany();
+    }
+
+    public function candidate()
+    {
+        return $this->hasOne(Candidate::class);
+    }
 }
