@@ -57,7 +57,7 @@
             </button>
 
             @if (session('status') === 'profile-updated')
-                <span style="color: var(--sage); font-size: 13px; display: flex; align-items: center; gap: 6px;">
+                <span style="color: green; font-size: 13px; display: flex; align-items: center; gap: 6px;">
                     <i class="fas fa-check-circle"></i> {{ __('Saved.') }}
                 </span>
             @endif

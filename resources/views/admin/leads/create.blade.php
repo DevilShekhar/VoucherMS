@@ -20,7 +20,7 @@
                 </div>
                 <div class="premium-head-actions">
                     <a href="{{ route('leads.index') }}" class="btn btn-create"
-                       style="background: var(--cloth); color: var(--ink);">
+                        style="background: var(--cloth); color: var(--ink);">
                         <i class="fas fa-arrow-left"></i> Back to Leads
                     </a>
                 </div>
@@ -40,7 +40,7 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Candidate Name <span class="text-danger">*</span></label>
                             <input type="text" name="candidate_name" class="form-control"
-                                   value="{{ old('candidate_name') }}">
+                                value="{{ old('candidate_name') }}">
                             @error('candidate_name')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -48,8 +48,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Mobile <span class="text-danger">*</span></label>
-                            <input type="tel" name="mobile" class="form-control"
-                                   value="{{ old('mobile') }}">
+                            <input type="tel" name="mobile" class="form-control" value="{{ old('mobile') }}">
                             @error('mobile')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -57,8 +56,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Email</label>
-                            <input type="email" name="email" class="form-control"
-                                   value="{{ old('email') }}">
+                            <input type="email" name="email" class="form-control" value="{{ old('email') }}">
                             @error('email')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -66,8 +64,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Company</label>
-                            <input type="text" name="company" class="form-control"
-                                   value="{{ old('company') }}">
+                            <input type="text" name="company" class="form-control" value="{{ old('company') }}">
                             @error('company')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -75,15 +72,14 @@
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">City</label>
-                            <input type="text" name="city" class="form-control"
-                                   value="{{ old('city') }}">
+                            <input type="text" name="city" class="form-control" value="{{ old('city') }}">
                             @error('city')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Course</label>
+                            <label class="form-label">Course <span class="text-danger">*</span></label>
                             <select name="course_id" class="form-select">
                                 <option value="">Select Course</option>
                                 @foreach($courses as $course)
@@ -98,7 +94,7 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Center</label>
+                            <label class="form-label">Center <span class="text-danger">*</span></label>
                             <select name="center_id" class="form-select">
                                 <option value="">Select Center</option>
                                 @foreach($centers as $center)
@@ -111,27 +107,31 @@
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Assign To</label>
-                            <select name="assigned_to" class="form-select">
-                                <option value="">Select Executive</option>
-                                @foreach($users as $user)
-                                    <option value="{{ $user->id }}" {{ old('assigned_to') == $user->id ? 'selected' : '' }}>
-                                        {{ $user->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('assigned_to')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
+                        @if(Auth::user()->role->name == 'Manager')
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Assign To
+                                    <small class="text-muted">(Leave empty for auto assignment)</small>
+                                </label>
+                                <select name="assigned_to" class="form-select">
+                                    <option value="">Auto Assign (Round Robin)</option>
+                                    @foreach($users as $user)
+                                        <option value="{{ $user->id }}" {{ old('assigned_to') == $user->id ? 'selected' : '' }}>
+                                            {{ $user->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('assigned_to')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                        @endif
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Priority</label>
                             <select name="priority" class="form-select">
                                 <option value="Low" {{ old('priority') == 'Low' ? 'selected' : '' }}>Low</option>
-                                <option value="Medium" {{ old('priority', 'Medium') == 'Medium' ? 'selected' : '' }}>Medium</option>
+                                <option value="Medium" {{ old('priority', 'Medium') == 'Medium' ? 'selected' : '' }}>Medium
+                                </option>
                                 <option value="High" {{ old('priority') == 'High' ? 'selected' : '' }}>High</option>
                             </select>
                             @error('priority')
@@ -143,13 +143,19 @@
                             <label class="form-label">Status</label>
                             <select name="status" class="form-select">
                                 <option value="New" {{ old('status', 'New') == 'New' ? 'selected' : '' }}>New</option>
-                                <option value="Interested" {{ old('status') == 'Interested' ? 'selected' : '' }}>Interested</option>
-                                <option value="Follow-up" {{ old('status') == 'Follow-up' ? 'selected' : '' }}>Follow-up</option>
-                                <option value="Quotation Sent" {{ old('status') == 'Quotation Sent' ? 'selected' : '' }}>Quotation Sent</option>
-                                <option value="Payment Pending" {{ old('status') == 'Payment Pending' ? 'selected' : '' }}>Payment Pending</option>
+                                <option value="Interested" {{ old('status') == 'Interested' ? 'selected' : '' }}>Interested
+                                </option>
+                                <option value="Follow-up" {{ old('status') == 'Follow-up' ? 'selected' : '' }}>Follow-up
+                                </option>
+                                <option value="Quotation Sent" {{ old('status') == 'Quotation Sent' ? 'selected' : '' }}>
+                                    Quotation Sent</option>
+                                <option value="Payment Pending" {{ old('status') == 'Payment Pending' ? 'selected' : '' }}>
+                                    Payment Pending</option>
                                 <option value="Paid" {{ old('status') == 'Paid' ? 'selected' : '' }}>Paid</option>
-                                <option value="Exam Scheduled" {{ old('status') == 'Exam Scheduled' ? 'selected' : '' }}>Exam Scheduled</option>
-                                <option value="Completed" {{ old('status') == 'Completed' ? 'selected' : '' }}>Completed</option>
+                                <option value="Exam Scheduled" {{ old('status') == 'Exam Scheduled' ? 'selected' : '' }}>Exam
+                                    Scheduled</option>
+                                <option value="Completed" {{ old('status') == 'Completed' ? 'selected' : '' }}>Completed
+                                </option>
                                 <option value="Lost" {{ old('status') == 'Lost' ? 'selected' : '' }}>Lost</option>
                             </select>
                             @error('status')
@@ -172,7 +178,7 @@
                             <i class="fas fa-save"></i> Save Lead
                         </button>
                         <a href="{{ route('leads.index') }}" class="btn"
-                           style="background: var(--cloth); color: var(--ink);">
+                            style="background: var(--cloth); color: var(--ink);">
                             <i class="fas fa-times"></i> Cancel
                         </a>
                     </div>

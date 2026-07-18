@@ -17,14 +17,23 @@ class LeadController extends Controller
      */
     public function index()
     {
-        $leads = Lead::with([
+        $query = Lead::with([
             'assignedUser',
             'center',
             'course',
             'createdBy',
-        ])
-            ->latest()
-            ->paginate(10);
+        ]);
+
+        // Sales Executive can only see their own assigned leads
+        if (Auth::user()->role_id == 4) {
+
+            $query->where('assigned_to', Auth::id());
+
+        }
+
+        // Super Admin, Admin & Manager will automatically see all leads
+
+        $leads = $query->latest()->paginate(10);
 
         return view('admin.leads.index', compact('leads'));
     }
@@ -47,7 +56,6 @@ class LeadController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'assigned_to' => 'nullable|exists:users,id',
             'center_id' => 'required|exists:centers,id',
             'course_id' => 'required|exists:courses,id',
             'candidate_name' => 'required|string|max:255',
@@ -58,27 +66,36 @@ class LeadController extends Controller
             'priority' => 'required|in:Low,Medium,High',
             'status' => 'required|string',
             'remarks' => 'nullable|string',
+            'assigned_to' => 'nullable|exists:users,id',
         ]);
+
+        $currentUser = Auth::user();
+
+        // === ASSIGNMENT LOGIC ===
+        $assignedTo = $request->assigned_to;
+
+        if ($currentUser->role_id === 4) {
+            // Sales Executive → Always assign to self
+            $assignedTo = $currentUser->id;
+        } elseif (empty($assignedTo)) {
+            // Manager + No selection → Round-Robin Auto Assignment
+            $assignedTo = $this->getNextSalesExecutive();
+        }
+        // Else: Manager selected someone manually → keep as is
 
         // Generate Lead Number
         $date = now()->format('Ymd');
+        $lastLead = Lead::whereDate('created_at', today())->latest('id')->first();
 
-        $lastLead = Lead::whereDate('created_at', today())
-            ->latest('id')
-            ->first();
+        $nextNumber = $lastLead
+            ? str_pad((int) substr($lastLead->lead_no, -3) + 1, 3, '0', STR_PAD_LEFT)
+            : '001';
 
-        if ($lastLead) {
-            $lastNumber = (int) substr($lastLead->lead_no, -3);
-            $nextNumber = str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT);
-        } else {
-            $nextNumber = '001';
-        }
-
-        $leadNo = 'L-'.$date.'-'.$nextNumber;
+        $leadNo = "L-{$date}-{$nextNumber}";
 
         Lead::create([
             'lead_no' => $leadNo,
-            'assigned_to' => $request->assigned_to,
+            'assigned_to' => $assignedTo,
             'center_id' => $request->center_id,
             'course_id' => $request->course_id,
             'candidate_name' => $request->candidate_name,
@@ -94,6 +111,32 @@ class LeadController extends Controller
 
         return redirect()->route('leads.index')
             ->with('success', 'Lead created successfully.');
+    }
+
+    private function getNextSalesExecutive()
+    {
+        $salesExecutives = User::query()->where('role_id', 4)
+            ->orderBy('id')
+            ->pluck('id');
+
+        if ($salesExecutives->isEmpty()) {
+            return null;
+        }
+
+        // Get the last auto-assigned lead
+        $lastAssignedLead = Lead::whereNotNull('assigned_to')
+            ->whereIn('assigned_to', $salesExecutives)
+            ->latest('id')
+            ->first();
+
+        if (! $lastAssignedLead) {
+            return $salesExecutives->first();
+        }
+
+        $currentIndex = $salesExecutives->search($lastAssignedLead->assigned_to);
+        $nextIndex = ($currentIndex + 1) % $salesExecutives->count();
+
+        return $salesExecutives[$nextIndex];
     }
 
     public function edit(Lead $lead)
@@ -116,38 +159,44 @@ class LeadController extends Controller
      * Update Lead
      */
     public function update(Request $request, Lead $lead)
-    {
-        $request->validate([
-            'assigned_to' => 'nullable|exists:users,id',
-            'center_id' => 'nullable|exists:centers,id',
-            'course_id' => 'nullable|exists:courses,id',
-            'candidate_name' => 'required|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'mobile' => 'required|string|max:20',
-            'company' => 'nullable|string|max:255',
-            'city' => 'nullable|string|max:255',
-            'priority' => 'required|in:Low,Medium,High',
-            'status' => 'required|string',
-            'remarks' => 'nullable|string',
-        ]);
+{
+    $request->validate([
+        'assigned_to' => 'nullable|exists:users,id',
+        'center_id' => 'nullable|exists:centers,id',
+        'course_id' => 'nullable|exists:courses,id',
+        'candidate_name' => 'required|string|max:255',
+        'email' => 'nullable|email|max:255',
+        'mobile' => 'required|string|max:20',
+        'company' => 'nullable|string|max:255',
+        'city' => 'nullable|string|max:255',
+        'priority' => 'required|in:Low,Medium,High',
+        'status' => 'required|string',
+        'remarks' => 'nullable|string',
+    ]);
 
-        $lead->update([
-            'assigned_to' => $request->assigned_to,
-            'center_id' => $request->center_id,
-            'course_id' => $request->course_id,
-            'candidate_name' => $request->candidate_name,
-            'email' => $request->email,
-            'mobile' => $request->mobile,
-            'company' => $request->company,
-            'city' => $request->city,
-            'priority' => $request->priority,
-            'status' => $request->status,
-            'remarks' => $request->remarks,
-        ]);
+    $data = [
+        'center_id'      => $request->center_id,
+        'course_id'      => $request->course_id,
+        'candidate_name' => $request->candidate_name,
+        'email'          => $request->email,
+        'mobile'         => $request->mobile,
+        'company'        => $request->company,
+        'city'           => $request->city,
+        'priority'       => $request->priority,
+        'status'         => $request->status,
+        'remarks'        => $request->remarks,
+    ];
 
-        return redirect()->route('leads.index')
-            ->with('success', 'Lead updated successfully.');
+    // Only Super Admin, Admin & Manager can change assignment
+    if (Auth::user()->role_id != 4) {
+        $data['assigned_to'] = $request->assigned_to;
     }
+
+    $lead->update($data);
+
+    return redirect()->route('leads.index')
+        ->with('success', 'Lead updated successfully.');
+}
 
     /**
      * Delete Lead
