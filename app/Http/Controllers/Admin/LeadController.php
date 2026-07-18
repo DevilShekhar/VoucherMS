@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Center;
 use App\Models\Course;
 use App\Models\Lead;
+use App\Models\LeadFollowUp;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,20 +23,39 @@ class LeadController extends Controller
             'center',
             'course',
             'createdBy',
+            'latestFollowup',
         ]);
 
-        // Sales Executive can only see their own assigned leads
         if (Auth::user()->role_id == 4) {
-
             $query->where('assigned_to', Auth::id());
-
         }
 
-        // Super Admin, Admin & Manager will automatically see all leads
+        if ($status = request('status')) {
+            $query->whereHas('latestFollowup', function ($q) use ($status) {
+                $q->where('status', $status);
+            });
+        }
 
         $leads = $query->latest()->paginate(10);
 
-        return view('admin.leads.index', compact('leads'));
+        // Base query for counts
+        $countQuery = Lead::query();
+
+        if (Auth::user()->role_id == 4) {
+            $countQuery->where('assigned_to', Auth::id());
+        }
+
+        $counts = [
+            'all' => (clone $countQuery)->count(),
+            'New' => (clone $countQuery)->whereHas('followups', fn ($q) => $q->where('status', 'New'))->count(),
+            'Contacted' => (clone $countQuery)->whereHas('followups', fn ($q) => $q->where('status', 'Contacted'))->count(),
+            'Interested' => (clone $countQuery)->whereHas('followups', fn ($q) => $q->where('status', 'Interested'))->count(),
+            'Not Interested' => (clone $countQuery)->whereHas('followups', fn ($q) => $q->where('status', 'Not Interested'))->count(),
+            'Converted' => (clone $countQuery)->whereHas('followups', fn ($q) => $q->where('status', 'Converted'))->count(),
+            // 'Closed' => (clone $countQuery)->whereHas('followups', fn ($q) => $q->where('status', 'Closed'))->count(),
+        ];
+
+        return view('admin.leads.index', compact('leads', 'counts'));
     }
 
     /**
@@ -150,53 +170,70 @@ class LeadController extends Controller
 
     public function show(Lead $lead)
     {
-        $lead->load(['assignedUser', 'center', 'course', 'createdBy']);
+        // Authorization
+        if (Auth::user()->role_id == 4 && $lead->assigned_to !== Auth::id()) {
+            abort(403);
+        }
 
-        return view('admin.leads.show', compact('lead'));
+        // Load lead relationships
+        $lead->load([
+            'assignedUser',
+            'center',
+            'course',
+            'createdBy',
+        ]);
+
+        // Paginate followups separately
+        $followups = $lead->followups()
+            ->with('createdBy')
+            ->latest()
+            ->paginate(5);
+
+        return view('admin.leads.show', compact('lead', 'followups'));
     }
 
     /**
      * Update Lead
      */
     public function update(Request $request, Lead $lead)
-{
-    $request->validate([
-        'assigned_to' => 'nullable|exists:users,id',
-        'center_id' => 'nullable|exists:centers,id',
-        'course_id' => 'nullable|exists:courses,id',
-        'candidate_name' => 'required|string|max:255',
-        'email' => 'nullable|email|max:255',
-        'mobile' => 'required|string|max:20',
-        'company' => 'nullable|string|max:255',
-        'city' => 'nullable|string|max:255',
-        'priority' => 'required|in:Low,Medium,High',
-        'status' => 'required|string',
-        'remarks' => 'nullable|string',
-    ]);
+    {
+        $request->validate([
+            'assigned_to' => 'nullable|exists:users,id',
+            'center_id' => 'nullable|exists:centers,id',
+            'course_id' => 'nullable|exists:courses,id',
+            'candidate_name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'mobile' => 'required|string|max:20',
+            'company' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'priority' => 'required|in:Low,Medium,High',
+            'status' => 'required|string',
+            'remarks' => 'nullable|string',
+        ]);
 
-    $data = [
-        'center_id'      => $request->center_id,
-        'course_id'      => $request->course_id,
-        'candidate_name' => $request->candidate_name,
-        'email'          => $request->email,
-        'mobile'         => $request->mobile,
-        'company'        => $request->company,
-        'city'           => $request->city,
-        'priority'       => $request->priority,
-        'status'         => $request->status,
-        'remarks'        => $request->remarks,
-    ];
+        $data = [
+            'center_id' => $request->center_id,
+            'course_id' => $request->course_id,
+            'candidate_name' => $request->candidate_name,
+            'email' => $request->email,
+            'mobile' => $request->mobile,
+            'company' => $request->company,
+            'city' => $request->city,
+            'priority' => $request->priority,
+            'status' => $request->status,
+            'remarks' => $request->remarks,
+        ];
 
-    // Only Super Admin, Admin & Manager can change assignment
-    if (Auth::user()->role_id != 4) {
-        $data['assigned_to'] = $request->assigned_to;
+        // Only Super Admin, Admin & Manager can change assignment
+        if (Auth::user()->role_id != 4) {
+            $data['assigned_to'] = $request->assigned_to;
+        }
+
+        $lead->update($data);
+
+        return redirect()->route('leads.index')
+            ->with('success', 'Lead updated successfully.');
     }
-
-    $lead->update($data);
-
-    return redirect()->route('leads.index')
-        ->with('success', 'Lead updated successfully.');
-}
 
     /**
      * Delete Lead
@@ -207,5 +244,38 @@ class LeadController extends Controller
 
         return redirect()->route('leads.index')
             ->with('success', 'Lead deleted successfully.');
+    }
+    // Inside LeadController class
+
+    public function addFollowup(Request $request, Lead $lead)
+    {
+        // dd($request->all());
+        if (Auth::user()->role_id == 4 && $lead->assigned_to !== Auth::id()) {
+            abort(403, 'You can only add followups to your assigned leads.');
+        }
+
+        $request->validate([
+            'followup_date' => 'required|date',
+            'discussion' => 'required|string',
+            'next_followup' => 'nullable|date|after:today',
+            'status' => 'required|in:Pending,Contacted,Interested,Not Interested,Converted,Closed',
+        ]);
+
+        $followup = LeadFollowUp::create([
+            'lead_id' => $lead->id,
+            'followup_date' => $request->followup_date,
+            'discussion' => $request->discussion,
+            'next_followup' => $request->next_followup,
+            'status' => $request->status,
+            'created_by' => Auth::id(),
+        ]);
+
+        // Optional: Update lead status based on followup
+        if (in_array($request->status, ['Converted', 'Closed'])) {
+            $lead->update(['status' => $request->status]);
+        }
+
+        return redirect()->route('leads.show', $lead)
+            ->with('success', 'Follow-up added successfully.');
     }
 }

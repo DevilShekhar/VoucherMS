@@ -207,7 +207,8 @@
             list-style: none;
             margin: 0;
             padding: 0 12px;
-            flex: 1;
+            margin-bottom: 2rem;
+            /* flex: 1; */
             /* overflow-y: auto; */
         }
 
@@ -859,6 +860,8 @@
             background: var(--gold-gradient);
             color: #1A1410;
             box-shadow: var(--gold-glow);
+            border-color: #ffffff;
+            border-radius: 10px;
         }
 
         .btn-primary:hover {
@@ -1264,8 +1267,9 @@
 
         .timeline {
             position: relative;
-          padding-left: 20px;
+            padding-left: 20px;
         }
+
         .timeline:before {
             content: "";
             position: absolute;
@@ -1378,6 +1382,13 @@
                     class="sb-link {{ request()->routeIs('leads.*') ? 'active' : '' }}">
                     <i class="fas fa-book"></i>
                     <span>Manage Leads</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('candidates.index') }}"
+                    class="sb-link {{ request()->routeIs('candidates.*') ? 'active' : '' }}">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>Manage Candidates</span>
                 </a>
             </li>
             <li>

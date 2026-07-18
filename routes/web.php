@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CandidateController;
 use App\Http\Controllers\Admin\CenterController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\LeadController;
@@ -38,7 +39,12 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('centers', CenterController::class);
     Route::resource('courses', CourseController::class);
-    Route::resource('leads', LeadController::class);    
+    Route::resource('leads', LeadController::class);
+    Route::post('/leads/{lead}/followups', [LeadController::class, 'addFollowup'])
+        ->name('leads.followups.store');
+    Route::resource('candidates', CandidateController::class);
+    Route::get('/candidates/lead/{lead}', [CandidateController::class, 'getLeadDetails'])
+     ->name('candidates.lead.details');
 });
 
 require __DIR__.'/auth.php';

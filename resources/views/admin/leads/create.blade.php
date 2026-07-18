@@ -36,6 +36,31 @@
             <div class="card premium-block">
                 <div class="card-body">
                     <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Mobile <span class="text-danger">*</span></label>
+                            <input type="tel" name="mobile" class="form-control" value="{{ old('mobile') }}">
+                            @error('mobile')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        @if(Auth::user()->hasAnyRole(['Manager', 'Owner', 'SuperAdmin']))
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Assign To
+                                    <small class="text-muted">(Leave empty for auto assignment)</small>
+                                </label>
+                                <select name="assigned_to" class="form-select">
+                                    <option value="">Auto Assign (Round Robin)</option>
+                                    @foreach($users as $user)
+                                        <option value="{{ $user->id }}" {{ old('assigned_to') == $user->id ? 'selected' : '' }}>
+                                            {{ $user->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('assigned_to')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                        @endif
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Candidate Name <span class="text-danger">*</span></label>
@@ -46,13 +71,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Mobile <span class="text-danger">*</span></label>
-                            <input type="tel" name="mobile" class="form-control" value="{{ old('mobile') }}">
-                            @error('mobile')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
+
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Email</label>
@@ -107,24 +126,7 @@
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-                        @if(Auth::user()->role->name == 'Manager')
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Assign To
-                                    <small class="text-muted">(Leave empty for auto assignment)</small>
-                                </label>
-                                <select name="assigned_to" class="form-select">
-                                    <option value="">Auto Assign (Round Robin)</option>
-                                    @foreach($users as $user)
-                                        <option value="{{ $user->id }}" {{ old('assigned_to') == $user->id ? 'selected' : '' }}>
-                                            {{ $user->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('assigned_to')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
-                        @endif
+
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Priority</label>
