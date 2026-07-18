@@ -39,7 +39,9 @@
                                 <th>CAndidate Mobile No.</th>
                                 <th>Course</th>
                                 <th>Center</th>
-                                <th>Assigned To</th>
+                                {{-- @if(auth()->user()->role == 'Manager') --}}
+                                    <th>Assigned To</th>
+                                {{-- @endif --}}
                                 <th>Added By</th>
                                 <th>Priority</th>
                                 <th>Status</th>
@@ -61,18 +63,20 @@
                                     <td>{{ $lead->mobile }}</td>
                                     <td>{{ $lead->course->course_name ?? '-' }}</td>
                                     <td>{{ $lead->center->center_name ?? '-' }}</td>
-                                    <td>
-                                        @if($lead->assignedUser)
-                                            {{ $lead->assignedUser->name }}
-                                            <span class="badge bg-success ms-2">
-                                                <i class="fas fa-user-check me-1"></i> Assigned
-                                            </span>
-                                        @else
-                                            <span class="badge bg-warning text-dark">
-                                                <i class="fas fa-user-clock me-1"></i> Unassigned
-                                            </span>
-                                        @endif
-                                    </td>
+                                    {{-- @if(auth()->user()->role == 'Manager') --}}
+                                        <td>
+                                            @if($lead->assignedUser)
+                                                {{ $lead->assignedUser->name }}
+                                                <span class="badge bg-success ms-2">
+                                                    <i class="fas fa-user-check me-1"></i> Assigned
+                                                </span>
+                                            @else
+                                                <span class="badge bg-warning text-dark">
+                                                    <i class="fas fa-user-clock me-1"></i> Unassigned
+                                                </span>
+                                            @endif
+                                        </td>
+                                    {{-- @endif --}}
                                     <td>
                                         {{ optional($lead->createdBy)->name ?? '-' }}
                                     </td>
@@ -89,17 +93,14 @@
                                         <span class="badge bg-info">{{ $lead->status }}</span>
                                     </td>
                                     <td>
-                                        <a href="{{ route('leads.show', $lead->id) }}"
-                                           class="btn btn-sm btn-info me-1">
+                                        <a href="{{ route('leads.show', $lead->id) }}" class="btn btn-sm btn-info me-1">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('leads.edit', $lead->id) }}"
-                                           class="btn btn-sm btn-warning me-1">
+                                        <a href="{{ route('leads.edit', $lead->id) }}" class="btn btn-sm btn-warning me-1">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('leads.destroy', $lead->id) }}"
-                                              method="POST"
-                                              class="delete-form d-inline">
+                                        <form action="{{ route('leads.destroy', $lead->id) }}" method="POST"
+                                            class="delete-form d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-sm btn-danger">

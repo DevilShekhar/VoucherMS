@@ -38,7 +38,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('centers', CenterController::class);
     Route::resource('courses', CourseController::class);
-    Route::resource('leads', LeadController::class);
+    Route::resource('leads', LeadController::class);    
 });
 
 require __DIR__.'/auth.php';
