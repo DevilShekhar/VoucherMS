@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherVendorController;
+use App\Http\Controllers\Admin\VoucherController;
+
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -59,6 +61,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('candidates.details');
     Route::get('admin/payments/{payment}', [PaymentController::class, 'show'])
         ->name('payments.show');
+    Route::resource('vouchers', VoucherController::class);
 
 });
 
