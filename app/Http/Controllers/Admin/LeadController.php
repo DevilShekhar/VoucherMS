@@ -9,6 +9,7 @@ use App\Models\Lead;
 use App\Models\LeadFollowUp;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\LeadNotification;
 use Illuminate\Support\Facades\Auth;
 
 class LeadController extends Controller
@@ -134,21 +135,33 @@ class LeadController extends Controller
             : '001';
         $leadNo = "L-{$date}-{$nextNumber}";
 
-        Lead::create([
-            'lead_no' => $leadNo,
-            'assigned_to' => $assignedTo,
-            'center_id' => $request->center_id,
-            'course_id' => $courseId,
-            'candidate_name' => $request->candidate_name,
-            'email' => $request->email,
-            'mobile' => $request->mobile,
-            'company' => $request->company,
-            'city' => $request->city,
-            'priority' => $request->priority,
-            'status' => $request->status,
-            'remarks' => $request->remarks,
-            'created_by' => Auth::id(),
+        $lead = Lead::create([
+        'lead_no' => $leadNo,
+        'assigned_to' => $assignedTo,
+        'center_id' => $request->center_id,
+        'course_id' => $courseId,
+        'candidate_name' => $request->candidate_name,
+        'email' => $request->email,
+        'mobile' => $request->mobile,
+        'company' => $request->company,
+        'city' => $request->city,
+        'priority' => $request->priority,
+        'status' => $request->status,
+        'remarks' => $request->remarks,
+        'created_by' => Auth::id(),
+    ]);
+
+    if ($lead->assigned_to) {
+
+        LeadNotification::create([
+            'lead_id'   => $lead->id,
+            'user_id'   => $lead->assigned_to,
+            'title'     => 'New Lead Assigned',
+            'message'   => 'Lead No. '.$lead->lead_no.' has been assigned to you.',
+            'is_read'   => 0,
         ]);
+
+    }
 
         return redirect()->route('leads.index')
             ->with('success', 'Lead created successfully.');
