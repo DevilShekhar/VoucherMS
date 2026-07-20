@@ -1392,6 +1392,13 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('payments.index') }}"
+                    class="sb-link {{ request()->routeIs('payments.*') ? 'active' : '' }}">
+                    <i class="fas fa-money-check-alt"></i>
+                    <span>Manage Payment</span>
+                </a>
+            </li>
+            <li>
                 <a href="#" class="sb-link">
                     <i class="fas fa-users"></i>
                     <span>Students</span>

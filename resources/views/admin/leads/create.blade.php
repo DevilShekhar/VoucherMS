@@ -30,6 +30,15 @@
 
     <!-- Form -->
     <section class="section premium-dashboard pt-0">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <form action="{{ route('leads.store') }}" method="POST">
             @csrf
 
@@ -99,18 +108,35 @@
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Course <span class="text-danger">*</span></label>
-                            <select name="course_id" class="form-select">
+                            <select name="course_id" id="course_id" class="form-select" required>
                                 <option value="">Select Course</option>
                                 @foreach($courses as $course)
                                     <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
                                         {{ $course->course_name }}
                                     </option>
                                 @endforeach
+                                <option value="other">Other</option>
                             </select>
-                            @error('course_id')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
                         </div>
+
+                        <div class="col-md-6 mb-3" id="other_course_div" style="display: none;">
+                            <label class="form-label">New Course Name <span class="text-danger">*</span></label>
+                            <input type="text" name="other_course_name" id="other_course_name" class="form-control"
+                                value="{{ old('other_course_name') }}" placeholder="Enter new course name">
+                        </div>
+
+                        <script>
+                            document.getElementById('course_id').addEventListener('change', function () {
+                                const div = document.getElementById('other_course_div');
+                                div.style.display = (this.value === 'other') ? 'block' : 'none';
+                            });
+
+                            // Trigger on page load if "other" was selected
+                            if (document.getElementById('course_id').value === 'other') {
+                                document.getElementById('other_course_div').style.display = 'block';
+                            }
+                        </script>
+
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Center <span class="text-danger">*</span></label>

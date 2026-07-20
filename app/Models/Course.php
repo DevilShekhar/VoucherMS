@@ -8,9 +8,9 @@ class Course extends Model
 {
     //
     protected $fillable = [
-    'course_code',
-    'course_name',
-    'description',
-    'status',
-];
+        'course_code',
+        'course_name',
+        'description',
+        'status',
+    ];
 }

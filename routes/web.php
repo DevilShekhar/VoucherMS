@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\CandidateController;
 use App\Http\Controllers\Admin\CenterController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\LeadController;
+use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
@@ -44,7 +45,21 @@ Route::middleware(['auth'])->group(function () {
         ->name('leads.followups.store');
     Route::resource('candidates', CandidateController::class);
     Route::get('/candidates/lead/{lead}', [CandidateController::class, 'getLeadDetails'])
-     ->name('candidates.lead.details');
+        ->name('candidates.lead.details');
+
+    Route::post('candidates/documents', [CandidateController::class, 'storeDocument'])
+        ->name('candidates.documents.store');
+
+    // Payment Routes
+    Route::get('admin/payments', [PaymentController::class, 'index'])->name('payments.index');
+    Route::get('admin/payments/create', [PaymentController::class, 'create'])->name('payments.create');
+    Route::post('admin/payments', [PaymentController::class, 'store'])->name('payments.store');
+
+    Route::get('admin/candidates/{candidate}/details', [CandidateController::class, 'getDetails'])
+        ->name('candidates.details');
+    Route::get('admin/payments/{payment}', [PaymentController::class, 'show'])
+        ->name('payments.show');
+
 });
 
 require __DIR__.'/auth.php';

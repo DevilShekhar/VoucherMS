@@ -24,6 +24,7 @@
                 <button class="btn btn-dark mb-2" data-bs-toggle="modal" data-bs-target="#addFollowupModal">
                     <i class="fas fa-phone"></i> Add Follow Up
                 </button>
+                
             </div>
         </div>
     </div>

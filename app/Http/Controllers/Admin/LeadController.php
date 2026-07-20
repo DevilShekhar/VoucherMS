@@ -77,7 +77,7 @@ class LeadController extends Controller
     {
         $request->validate([
             'center_id' => 'required|exists:centers,id',
-            'course_id' => 'required|exists:courses,id',
+            'course_id' => 'required',
             'candidate_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'mobile' => 'required|string|max:20',
@@ -87,37 +87,58 @@ class LeadController extends Controller
             'status' => 'required|string',
             'remarks' => 'nullable|string',
             'assigned_to' => 'nullable|exists:users,id',
+            'other_course_name' => 'nullable|string|max:255|required_if:course_id,other',
         ]);
+
 
         $currentUser = Auth::user();
 
+        // === Handle "Other" Course ===
+        $courseId = $request->course_id;
+
+        if ($request->course_id === 'other' && $request->other_course_name) {
+
+            $courseName = trim($request->other_course_name);
+
+            // Generate Course Code (e.g., CRS-20260720-001)
+            $date = now()->format('Ymd');
+            $lastCourse = Course::latest('id')->first();
+            $next = $lastCourse
+                ? str_pad(((int) substr($lastCourse->course_code ?? '', -4)) + 1, 4, '0', STR_PAD_LEFT)
+                : '0001';
+
+            $courseCode = "CRS-{$date}-{$next}";
+
+            $newCourse = Course::create([
+                'course_code' => $courseCode,
+                'course_name' => $courseName,
+                'status' => 1,
+            ]);
+
+            $courseId = $newCourse->id;
+        }
+
         // === ASSIGNMENT LOGIC ===
         $assignedTo = $request->assigned_to;
-
         if ($currentUser->role_id === 4) {
-            // Sales Executive → Always assign to self
             $assignedTo = $currentUser->id;
         } elseif (empty($assignedTo)) {
-            // Manager + No selection → Round-Robin Auto Assignment
             $assignedTo = $this->getNextSalesExecutive();
         }
-        // Else: Manager selected someone manually → keep as is
 
         // Generate Lead Number
         $date = now()->format('Ymd');
         $lastLead = Lead::whereDate('created_at', today())->latest('id')->first();
-
         $nextNumber = $lastLead
             ? str_pad((int) substr($lastLead->lead_no, -3) + 1, 3, '0', STR_PAD_LEFT)
             : '001';
-
         $leadNo = "L-{$date}-{$nextNumber}";
 
         Lead::create([
             'lead_no' => $leadNo,
             'assigned_to' => $assignedTo,
             'center_id' => $request->center_id,
-            'course_id' => $request->course_id,
+            'course_id' => $courseId,
             'candidate_name' => $request->candidate_name,
             'email' => $request->email,
             'mobile' => $request->mobile,

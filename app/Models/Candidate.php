@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-
 class Candidate extends Model
 {
     //
@@ -29,6 +28,7 @@ class Candidate extends Model
         'country',
         'status',
     ];
+
     protected $casts = [
         'dob' => 'date',
     ];
@@ -57,5 +57,10 @@ class Candidate extends Model
     public function certification(): BelongsTo
     {
         return $this->belongsTo(Certification::class);
+    }
+
+    public function documents()
+    {
+        return $this->hasMany(CandidateDocument::class);
     }
 }
