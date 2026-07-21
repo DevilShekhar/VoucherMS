@@ -13,11 +13,11 @@
                     <h2>All Payments</h2>
                 </div>
             </div>
-            <div class="premium-head-actions">
+            {{-- <div class="premium-head-actions">
                 <a href="{{ route('payments.create') }}" class="btn btn-success">
                     <i class="fas fa-plus"></i> Add Payment
                 </a>
-            </div>
+            </div> --}}
         </div>
     </div>
 </section>
