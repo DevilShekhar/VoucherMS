@@ -8,6 +8,7 @@ use App\Models\Course;
 use App\Models\Lead;
 use App\Models\LeadFollowUp;
 use App\Models\User;
+use App\Models\Candidate;
 use Illuminate\Http\Request;
 use App\Models\LeadNotification;
 use Illuminate\Support\Facades\Auth;
@@ -281,35 +282,104 @@ class LeadController extends Controller
     }
     // Inside LeadController class
 
-    public function addFollowup(Request $request, Lead $lead)
+ public function addFollowup(Request $request, Lead $lead)
     {
-        // dd($request->all());
-        if (Auth::user()->role_id == 4 && $lead->assigned_to !== Auth::id()) {
+        // Executive can only add follow-up to assigned leads
+        if (Auth::user()->role_id == 4 && $lead->assigned_to != Auth::id()) {
             abort(403, 'You can only add followups to your assigned leads.');
         }
 
         $request->validate([
             'followup_date' => 'required|date',
-            'discussion' => 'required|string',
+            'discussion'    => 'required|string',
             'next_followup' => 'nullable|date|after:today',
-            'status' => 'required|in:Pending,Contacted,Interested,Not Interested,Converted,Closed',
+            'status'        => 'required|in:Pending,Contacted,Interested,Not Interested,Converted,Closed',
         ]);
 
-        $followup = LeadFollowUp::create([
-            'lead_id' => $lead->id,
-            'followup_date' => $request->followup_date,
-            'discussion' => $request->discussion,
-            'next_followup' => $request->next_followup,
+        // Save Follow-up
+        LeadFollowUp::create([
+            'lead_id'        => $lead->id,
+            'followup_date'  => $request->followup_date,
+            'discussion'     => $request->discussion,
+            'next_followup'  => $request->next_followup,
+            'status'         => $request->status,
+            'created_by'     => Auth::id(),
+        ]);
+
+        // Update Lead Status
+        $lead->update([
             'status' => $request->status,
-            'created_by' => Auth::id(),
         ]);
 
-        // Optional: Update lead status based on followup
-        if (in_array($request->status, ['Converted', 'Closed'])) {
-            $lead->update(['status' => $request->status]);
+        // Create Candidate when Converted
+        if ($request->status == 'Converted') {
+
+            // Prevent duplicate candidate
+            $candidate = Candidate::where('lead_id', $lead->id)->first();
+
+            if (!$candidate) {
+
+                // Generate Candidate Code
+                $date = now()->format('Ymd');
+
+                $last = Candidate::latest('id')->first();
+
+                if ($last && $last->candidate_code) {
+                    $next = str_pad(
+                        ((int) substr($last->candidate_code, -4)) + 1,
+                        4,
+                        '0',
+                        STR_PAD_LEFT
+                    );
+                } else {
+                    $next = '0001';
+                }
+
+                $candidateCode = "C-{$date}-{$next}";
+
+                $name = explode(' ', trim($lead->candidate_name), 2);
+
+                Candidate::create([
+                    'candidate_code'   => $candidateCode,
+                    'lead_id'          => $lead->id,
+                    'center_id'        => null,
+                    'executive_id'     => $lead->assigned_to,
+                    'course_id'        => $lead->course_id,
+                    'certification_id' => null,
+
+                    'first_name'       => $name[0] ?? '',
+                    'last_name'        => $name[1] ?? '',
+
+                    'gender'           => null,
+                    'dob'              => null,
+
+                    'email'            => $lead->email,
+                    'mobile'           => $lead->mobile,
+
+                    'company'          => $lead->company,
+                    'gst_number'       => null,
+
+                    'address'          => null,
+                    'city'             => $lead->city,
+                    'state'            => null,
+                    'country'          => null,
+
+                    'status'           => 'Active',
+                ]);
+            }
+
+            // Redirect to Candidate List
+            return redirect()
+                ->route('candidates.index')
+                ->with('success', 'Lead converted to Candidate successfully.');
         }
 
-        return redirect()->route('leads.show', $lead)
+        // Default redirect for other statuses
+        return redirect()
+            ->route('leads.show', $lead->id)
+            ->with('success', 'Follow-up added successfully.');
+        return redirect()
+            ->route('leads.show', $lead->id)
             ->with('success', 'Follow-up added successfully.');
     }
 }
