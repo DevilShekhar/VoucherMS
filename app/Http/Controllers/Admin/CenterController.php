@@ -19,13 +19,13 @@ class CenterController extends Controller
 
     public function create()
     {
-        $managerRole = Role::query()->where('name', 'manager')->first();
+        $centerExecutive = Role::query()->where('name', 'Center Executive')->first();
 
-        $managers = User::query()->where('role_id', $managerRole->id)
+        $centerexes = User::query()->where('role_id', $centerExecutive->id)
             ->where('status', 1)
             ->get();
 
-        return view('admin.centers.create', compact('managers'));
+        return view('admin.centers.create', compact('centerexes'));
     }
 
     public function store(Request $request)
@@ -33,7 +33,7 @@ class CenterController extends Controller
         $validated = $request->validate([
             'center_code' => 'required|string|max:255',
             'center_name' => 'nullable|string|max:255',
-             'manager_id'  => 'nullable|exists:users,id',
+            'center_exe_id' => 'nullable|exists:users,id',
             'address' => 'nullable|string|max:20',
             'city' => 'nullable',
             'state' => 'nullable',
@@ -53,11 +53,11 @@ class CenterController extends Controller
 
     public function edit(Center $center)
     {
-        $managers = User::query()->where('status', 1)
+        $centerexes = User::query()->where('status', 1)
             ->orderBy('name')
             ->get();
 
-        return view('admin.centers.edit', compact('center', 'managers'));
+        return view('admin.centers.edit', compact('center', 'centerexes'));
     }
 
     public function update(Request $request, Center $center)
@@ -65,7 +65,7 @@ class CenterController extends Controller
         $validated = $request->validate([
             'center_code' => 'required|string|max:50|unique:centers,center_code,'.$center->id,
             'center_name' => 'required|string|max:255',
-            'manager_id' => 'nullable|exists:users,id',
+            'center_exe_id' => 'nullable|exists:users,id',
             'address' => 'nullable|string',
             'city' => 'nullable|string|max:100',
             'state' => 'nullable|string|max:100',
@@ -81,5 +81,16 @@ class CenterController extends Controller
         return redirect()
             ->route('centers.index')
             ->with('success', 'Center updated successfully.');
+    }
+
+    public function destroy(Center $center)
+    {
+        $center->update([
+            'status' => 0,
+        ]);
+
+        return redirect()
+            ->route('centers.index')
+            ->with('success', 'Center deactivated successfully.');
     }
 }

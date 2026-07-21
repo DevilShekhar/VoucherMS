@@ -52,7 +52,7 @@
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-                        @if(Auth::user()->hasAnyRole(['Manager', 'Owner', 'SuperAdmin']))
+                        @if(Auth::user()->hasAnyRole(['Manager', 'Owner', 'Super Admin']))
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Assign To
                                     <small class="text-muted">(Leave empty for auto assignment)</small>

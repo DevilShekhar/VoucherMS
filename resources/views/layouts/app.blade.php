@@ -207,7 +207,7 @@
             list-style: none;
             margin: 0;
             padding: 0 12px;
-            
+
             /* flex: 1; */
             overflow-y: auto;
         }
@@ -1311,7 +1311,15 @@
 
     <!-- Scrim for mobile -->
     <div class="scrim" id="scrim"></div>
-
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sb-brand">
@@ -1320,12 +1328,12 @@
                 {{ config('app.name', 'Admin Panal') }}
                 <span class="brand-sub">Admin Panel</span>
             </span>
-        </div>       
-        
+        </div>
+
         <ul class="sb-nav">
-             <li><a href="{{ route('dashboard') }}" class="sb-link"><i
+            <li><a href="{{ route('dashboard') }}" class="sb-link"><i
                         class="fas fa-th-large"></i><span>Dashboard</span></a></li>
-             <li>
+            <li>
                 <a href="{{ route('users.index') }}"
                     class="sb-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
                     <i class="fas fa-user-plus"></i>
