@@ -16,9 +16,12 @@ class CandidateController extends Controller
 {
     public function index()
     {
-        $candidates = Candidate::with(['lead', 'center', 'executive', 'course', 'documents'])
-            ->latest()
-            ->paginate(15);
+        $candidates = Candidate::with([
+            'course',
+            'center',
+            'executive',
+            'voucherRequest',
+        ])->get();
 
         return view('admin.candidates.index', compact('candidates'));
     }
@@ -198,15 +201,15 @@ class CandidateController extends Controller
     }
 
     public function getDetails(Candidate $candidate)
-{
-    return response()->json([
-        'first_name' => $candidate->first_name,
-        'last_name' => $candidate->last_name,
-        'candidate_code' => $candidate->candidate_code,
-        'mobile' => $candidate->mobile,
-        'email' => $candidate->email,
-        'course_name' => $candidate->course->course_name ?? '-',
-        'center_name' => $candidate->center->center_name ?? '-',
-    ]);
-}
+    {
+        return response()->json([
+            'first_name' => $candidate->first_name,
+            'last_name' => $candidate->last_name,
+            'candidate_code' => $candidate->candidate_code,
+            'mobile' => $candidate->mobile,
+            'email' => $candidate->email,
+            'course_name' => $candidate->course->course_name ?? '-',
+            'center_name' => $candidate->center->center_name ?? '-',
+        ]);
+    }
 }

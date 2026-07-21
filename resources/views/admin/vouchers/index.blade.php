@@ -2,176 +2,179 @@
 
 @section('content')
 
-<section class="section premium-dashboard">
+    <section class="section premium-dashboard">
 
-    <div class="premium-floating-header">
+        <div class="premium-floating-header">
 
-        <div class="header-content">
+            <div class="header-content">
 
-            <div class="header-left">
+                <div class="header-left">
 
-                <div class="header-icon">
-                    <i class="fas fa-ticket-alt"></i>
+                    <div class="header-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+
+                    <div>
+
+                        <span class="header-badge">
+                            Voucher Management
+                        </span>
+
+                        <h2>Vouchers</h2>
+
+                        <p>Manage all vouchers</p>
+
+                    </div>
+
                 </div>
 
-                <div>
+                <div class="premium-head-actions">
 
-                    <span class="header-badge">
-                        Voucher Management
-                    </span>
-
-                    <h2>Vouchers</h2>
-
-                    <p>Manage all vouchers</p>
+                    <a href="{{ route('vouchers.create') }}" class="btn btn-create">
+                        <i class="fas fa-plus-circle"></i>
+                        Add Voucher
+                    </a>
 
                 </div>
 
             </div>
 
-            <div class="premium-head-actions">
+        </div>
 
-                <a href="{{ route('vouchers.create') }}" class="btn btn-create">
-                    <i class="fas fa-plus-circle"></i>
-                    Add Voucher
-                </a>
+    </section>
 
+    <section class="section premium-dashboard pt-0">
+
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
             </div>
+        @endif
 
-        </div>
+        <div class="card premium-block">
 
-    </div>
+            <div class="card-body">
 
-</section>
+                <div class="table-responsive">
 
-<section class="section premium-dashboard pt-0">
+                    <table class="table table-hover align-middle">
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    <div class="card premium-block">
-
-        <div class="card-body">
-
-            <div class="table-responsive">
-
-                <table class="table table-hover align-middle">
-
-                    <thead>
-
-                        <tr>
-
-                            <th width="60">#</th>
-                            <th>Voucher Code</th>
-                            <th>Vendor</th>
-                            <th>Certification</th>
-                            <th>Purchase Date</th>
-                            <th>Expiry Date</th>
-                            <th>Purchase Price</th>
-                            <th>Cost</th>
-                            <th>Status</th>
-                            <th width="180" class="text-center">Action</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        @forelse($vouchers as $key => $voucher)
+                        <thead>
 
                             <tr>
 
-                                <td>{{ $vouchers->firstItem() + $key }}</td>
+                                <th width="60">#</th>
+                                <th>Voucher Code</th>
+                                <th>Vendor</th>
+                                <th>Purchase Date</th>
+                                <th>Expiry Date</th>
+                                <th>Purchase Price</th>
+                                <th>Cost</th>
+                                <th>Status</th>
+                                <th width="180" class="text-center">Action</th>
 
-                                <td>{{ $voucher->voucher_code }}</td>
+                            </tr>
 
-                                <td>{{ $voucher->vendor->vendor_name ?? '-' }}</td>
+                        </thead>
 
-                                <td>{{ $voucher->certification->name ?? '-' }}</td>
+                        <tbody>
 
-                                <td>
-                                    {{ $voucher->purchase_date ? \Carbon\Carbon::parse($voucher->purchase_date)->format('d M Y') : '-' }}
-                                </td>
+                            @forelse($vouchers as $key => $voucher)
 
-                                <td>
-                                    {{ $voucher->expiry_date ? \Carbon\Carbon::parse($voucher->expiry_date)->format('d M Y') : '-' }}
-                                </td>
+                                <tr>
 
-                                <td>
-                                    ₹{{ number_format($voucher->purchase_price,2) }}
-                                </td>
+                                    <td>{{ $vouchers->firstItem() + $key }}</td>
 
-                                <td>
-                                    ₹{{ number_format($voucher->cost,2) }}
-                                </td>
+                                    <td>
+                                        <span class="voucher-code-display" style="cursor: pointer;"
+                                            onclick="toggleVoucherCode(this)">
+                                            <span class="voucher-code-hidden">••••••••</span>
+                                            <span class="voucher-code-visible"
+                                                style="display: none;">{{ $voucher->voucher_code }}</span>
+                                            <i class="fas fa-eye voucher-eye-icon"
+                                                style="margin-left: 5px; font-size: 0.8rem; color: #6c757d;"></i>
+                                        </span>
+                                    </td>
 
-                                <td>
-                                    @if($voucher->status)
-                                        <span class="badge bg-success">Active</span>
-                                    @else
-                                        <span class="badge bg-danger">Inactive</span>
-                                    @endif
-                                </td>
+                                    <td>{{ $voucher->vendor->vendor_name ?? '-' }}</td>
 
-                                <td class="text-center">
+                                    <td>
+                                        {{ $voucher->purchase_date ? \Carbon\Carbon::parse($voucher->purchase_date)->format('d M Y') : '-' }}
+                                    </td>
 
-                                    <a href="{{ route('vouchers.edit',$voucher->id) }}"
-                                       class="btn btn-sm btn-warning">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
+                                    <td>
+                                        {{ $voucher->expiry_date ? \Carbon\Carbon::parse($voucher->expiry_date)->format('d M Y') : '-' }}
+                                    </td>
 
-                                    <form action="{{ route('vouchers.destroy',$voucher->id) }}"
-                                          method="POST"
-                                          class="d-inline">
+                                    <td>
+                                        ₹{{ number_format($voucher->purchase_price, 2) }}
+                                    </td>
 
-                                        @csrf
-                                        @method('DELETE')
+                                    <td>
+                                        ₹{{ number_format($voucher->cost, 2) }}
+                                    </td>
 
-                                        <button type="submit"
-                                                class="btn btn-sm btn-danger"
+                                    <td>
+                                        @if($voucher->status)
+                                            <span class="badge bg-success">Active</span>
+                                        @else
+                                            <span class="badge bg-danger">Inactive</span>
+                                        @endif
+                                    </td>
+
+                                    <td class="text-center">
+
+                                        <a href="{{ route('vouchers.edit', $voucher->id) }}" class="btn btn-sm btn-warning">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+
+                                        <form action="{{ route('vouchers.destroy', $voucher->id) }}" method="POST"
+                                            class="d-inline">
+
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit" class="btn btn-sm btn-danger"
                                                 onclick="return confirm('Are you sure you want to delete this voucher?')">
 
-                                            <i class="fas fa-trash"></i>
+                                                <i class="fas fa-trash"></i>
 
-                                        </button>
+                                            </button>
 
-                                    </form>
+                                        </form>
 
-                                </td>
+                                    </td>
 
-                            </tr>
+                                </tr>
 
-                        @empty
+                            @empty
 
-                            <tr>
+                                <tr>
 
-                                <td colspan="10" class="text-center py-4">
-                                    No vouchers found.
-                                </td>
+                                    <td colspan="10" class="text-center py-4">
+                                        No vouchers found.
+                                    </td>
 
-                            </tr>
+                                </tr>
 
-                        @endforelse
+                            @endforelse
 
-                    </tbody>
+                        </tbody>
 
-                </table>
+                    </table>
 
-            </div>
+                </div>
 
-            <div class="mt-3">
+                <div class="mt-3">
 
-                {{ $vouchers->links() }}
+                    {{ $vouchers->links() }}
+
+                </div>
 
             </div>
 
         </div>
 
-    </div>
-
-</section>
+    </section>
 
 @endsection

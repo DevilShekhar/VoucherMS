@@ -63,4 +63,14 @@ class Candidate extends Model
     {
         return $this->hasMany(CandidateDocument::class);
     }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function voucherRequest()
+    {
+        return $this->hasOne(VoucherRequest::class, 'candidate_id', 'id');
+    }
 }

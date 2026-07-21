@@ -16,7 +16,7 @@ class Voucher extends Model
         'purchase_price',
         'cost',
         'status',
-        'remarks'
+        'remarks',
     ];
 
     /**
@@ -47,5 +47,10 @@ class Voucher extends Model
     public function certification()
     {
         return $this->belongsTo(Certification::class);
+    }
+
+    public function voucherRequests()
+    {
+        return $this->hasMany(VoucherRequest::class);
     }
 }
