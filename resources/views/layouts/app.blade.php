@@ -207,9 +207,9 @@
             list-style: none;
             margin: 0;
             padding: 0 12px;
-            margin-bottom: 2rem;
+            
             /* flex: 1; */
-            /* overflow-y: auto; */
+            overflow-y: auto;
         }
 
         .sb-nav li {
@@ -1320,18 +1320,12 @@
                 {{ config('app.name', 'Admin Panal') }}
                 <span class="brand-sub">Admin Panel</span>
             </span>
-        </div>
-
-        <div class="sb-section">Main</div>
-        <ul class="sb-nav text sidebar-icon">
-            <li><a href="{{ route('dashboard') }}" class="sb-link"><i
-                        class="fas fa-th-large"></i><span>Dashboard</span></a></li>
-            <li><a href="#" class="sb-link"><i class="fas fa-star"></i><span>Feedback</span></a></li>
-        </ul>
-
-        <div class="sb-section">Management</div>
+        </div>       
+        
         <ul class="sb-nav">
-            <li>
+             <li><a href="{{ route('dashboard') }}" class="sb-link"><i
+                        class="fas fa-th-large"></i><span>Dashboard</span></a></li>
+             <li>
                 <a href="{{ route('users.index') }}"
                     class="sb-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
                     <i class="fas fa-user-plus"></i>
@@ -1352,10 +1346,6 @@
                     <span>Manage Permissions</span>
                 </a>
             </li> --}}
-        </ul>
-
-        <div class="sb-section">Master Data</div>
-        <ul class="sb-nav">
             <li>
                 <a href="{{ route('voucher-vendors.index') }}"
                     class="sb-link {{ request()->routeIs('voucher-vendors.*') ? 'active' : '' }}">
