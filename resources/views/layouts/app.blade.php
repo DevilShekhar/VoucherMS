@@ -208,8 +208,8 @@
             margin: 0;
             padding: 0 12px;
             margin-bottom: 2rem;
-            /* flex: 1; */
-            /* overflow-y: auto; */
+            flex: 1;
+            overflow-y: auto;
         }
 
         .sb-nav li {
