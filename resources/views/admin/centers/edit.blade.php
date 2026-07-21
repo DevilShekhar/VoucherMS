@@ -92,17 +92,17 @@
 
                         <div class="col-md-6 mb-3">
 
-                            <label class="form-label">Manager</label>
+                            <label class="form-label">Center Executive</label>
 
                             <select name="center_exe_id" class="form-control">
 
-                                <option value="">Select Manager</option>
+                                <option value="">Select Executive</option>
 
                                 @foreach($centerexes as $centerexe)
 
                                     <option value="{{ $centerexe->id }}" {{ old('center_exe_id', $center->centerexe) == $centerexe->id ? 'selected' : '' }}>
 
-                                        {{ $centerexe->name }}
+                                        {{ $centerexe->name }} ({{ $centerexe->email }})
 
                                     </option>
 
