@@ -53,8 +53,9 @@ class CenterController extends Controller
 
     public function edit(Center $center)
     {
-        $centerexes = User::query()->where('status', 1)
-            ->orderBy('name')
+        $centerExecutive = Role::query()->where('name', 'Center Executive')->first();
+         $centerexes = User::query()->where('role_id', $centerExecutive->id)
+            ->where('status', 1)
             ->get();
 
         return view('admin.centers.edit', compact('center', 'centerexes'));
