@@ -2,271 +2,310 @@
 
 @section('content')
 
-<section class="section premium-dashboard">
-    <div class="premium-floating-header">
-        <div class="header-content">
-            <div class="header-left">
-                <div class="header-icon">
-                    <i class="fas fa-receipt"></i>
+    <section class="section premium-dashboard">
+        <div class="premium-floating-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="header-icon">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <div>
+                        <span class="header-badge">Payment Management</span>
+                        <h2>Payment Details</h2>
+                        <small class="text-muted">{{ $payment->payment_no }}</small>
+                    </div>
                 </div>
+
                 <div>
-                    <span class="header-badge">Payment Management</span>
-                    <h2>Payment Details</h2>
-                    <small class="text-muted">{{ $payment->payment_no }}</small>
+                    <a href="{{ route('payments.index') }}" class="btn btn-create">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div>
-                <a href="{{ route('payments.index') }}" class="btn btn-create">
-                    <i class="fas fa-arrow-left"></i> Back
-                </a>
+    <section class="section premium-dashboard pt-0">
+
+        {{-- Candidate Information --}}
+        <div class="card premium-block mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-user"></i>
+                    Candidate Information
+                </h5>
             </div>
-        </div>
-    </div>
-</section>
 
-<section class="section premium-dashboard pt-0">
+            <div class="card-body">
 
-    {{-- Candidate Information --}}
-    <div class="card premium-block mb-4">
-        <div class="card-header">
-            <h5 class="mb-0">
-                <i class="fas fa-user"></i>
-                Candidate Information
-            </h5>
-        </div>
+                <div class="row">
 
-        <div class="card-body">
+                    <div class="col-md-4 mb-3">
+                        <strong>Candidate</strong><br>
+                        {{ $payment->candidate->first_name }}
+                        {{ $payment->candidate->last_name }}
+                    </div>
 
-            <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <strong>Candidate Code</strong><br>
+                        {{ $payment->candidate->candidate_code }}
+                    </div>
 
-                <div class="col-md-4 mb-3">
-                    <strong>Candidate</strong><br>
-                    {{ $payment->candidate->first_name }}
-                    {{ $payment->candidate->last_name }}
-                </div>
+                    <div class="col-md-4 mb-3">
+                        <strong>Mobile</strong><br>
+                        {{ $payment->candidate->mobile }}
+                    </div>
 
-                <div class="col-md-4 mb-3">
-                    <strong>Candidate Code</strong><br>
-                    {{ $payment->candidate->candidate_code }}
-                </div>
+                    <div class="col-md-4 mb-3">
+                        <strong>Course</strong><br>
+                        {{ $payment->candidate->course->course_name ?? '-' }}
+                    </div>
 
-                <div class="col-md-4 mb-3">
-                    <strong>Mobile</strong><br>
-                    {{ $payment->candidate->mobile }}
-                </div>
+                    <div class="col-md-4 mb-3">
+                        <strong>Center</strong><br>
+                        {{ $payment->candidate->center->center_name ?? '-' }}
+                    </div>
 
-                <div class="col-md-4 mb-3">
-                    <strong>Course</strong><br>
-                    {{ $payment->candidate->course->course_name ?? '-' }}
-                </div>
+                    <div class="col-md-4 mb-3">
+                        <strong>Email</strong><br>
+                        {{ $payment->candidate->email ?? '-' }}
+                    </div>
 
-                <div class="col-md-4 mb-3">
-                    <strong>Center</strong><br>
-                    {{ $payment->candidate->center->center_name ?? '-' }}
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <strong>Email</strong><br>
-                    {{ $payment->candidate->email ?? '-' }}
                 </div>
 
             </div>
-
-        </div>
-    </div>
-
-    {{-- Payment Summary --}}
-    <div class="card premium-block mb-4">
-
-        <div class="card-header">
-            <h5 class="mb-0">
-                <i class="fas fa-money-check-alt"></i>
-                Payment Summary
-            </h5>
         </div>
 
-        <div class="card-body">
+        {{-- Payment Summary --}}
+        <div class="card premium-block mb-4">
 
-            <div class="row">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-money-check-alt"></i>
+                    Payment Summary
+                </h5>
+            </div>
 
-                <div class="col-md-3 mb-3">
-                    <strong>Total Amount</strong><br>
-                    ₹ {{ number_format($payment->total_amount,2) }}
-                </div>
+            <div class="card-body">
 
-                <div class="col-md-3 mb-3">
-                    <strong>Discount</strong><br>
-                    ₹ {{ number_format($payment->discount_amount,2) }}
-                </div>
+                <div class="row">
 
-                <div class="col-md-3 mb-3">
-                    <strong>Tax</strong><br>
-                    ₹ {{ number_format($payment->tax_amount,2) }}
-                </div>
+                    <div class="col-md-3 mb-3">
+                        <strong>Total Amount</strong><br>
+                        ₹ {{ number_format($payment->total_amount, 2) }}
+                    </div>
 
-                <div class="col-md-3 mb-3">
-                    <strong>Net Amount</strong><br>
-                    ₹ {{ number_format($payment->net_amount,2) }}
-                </div>
+                    <div class="col-md-3 mb-3">
+                        <strong>Discount</strong><br>
+                        ₹ {{ number_format($payment->discount_amount, 2) }}
+                    </div>
 
-                <div class="col-md-3 mb-3">
-                    <strong>Paid</strong><br>
-                    ₹ {{ number_format($payment->paid_amount,2) }}
-                </div>
+                    <div class="col-md-3 mb-3">
+                        <strong>Tax</strong><br>
+                        ₹ {{ number_format($payment->tax_amount, 2) }}
+                    </div>
 
-                <div class="col-md-3 mb-3">
-                    <strong>Pending</strong><br>
-                    ₹ {{ number_format($payment->pending_amount,2) }}
-                </div>
+                    <div class="col-md-3 mb-3">
+                        <strong>Net Amount</strong><br>
+                        ₹ {{ number_format($payment->net_amount, 2) }}
+                    </div>
 
-                <div class="col-md-3 mb-3">
-                    <strong>Status</strong><br>
+                    <div class="col-md-3 mb-3">
+                        <strong>Paid</strong><br>
+                        ₹ {{ number_format($payment->paid_amount, 2) }}
+                    </div>
 
-                    @if($payment->payment_status=='Paid')
-                        <span class="badge bg-success">Paid</span>
+                    <div class="col-md-3 mb-3">
+                        <strong>Pending</strong><br>
+                        ₹ {{ number_format($payment->pending_amount, 2) }}
+                    </div>
 
-                    @elseif($payment->payment_status=='Partial')
+                    <div class="col-md-3 mb-3">
+                        <strong>Status</strong><br>
 
-                        <span class="badge bg-warning">
-                            Partial
-                        </span>
+                        @if($payment->payment_status == 'Paid')
+                            <span class="badge bg-success">Paid</span>
 
-                    @else
+                        @elseif($payment->payment_status == 'Partial')
 
-                        <span class="badge bg-danger">
-                            Pending
-                        </span>
+                            <span class="badge bg-warning">
+                                Partial
+                            </span>
 
-                    @endif
+                        @else
 
-                </div>
+                            <span class="badge bg-danger">
+                                Pending
+                            </span>
 
-                <div class="col-md-3 mb-3">
-                    <strong>Date</strong><br>
-                    {{ \Carbon\Carbon::parse($payment->payment_date)->format('d M Y') }}
+                        @endif
+
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <strong>Date</strong><br>
+                        {{ \Carbon\Carbon::parse($payment->payment_date)->format('d M Y') }}
+                    </div>
+
                 </div>
 
             </div>
 
         </div>
 
-    </div>
+        {{-- Transaction History --}}
+        <div class="card premium-block">
 
-    {{-- Transaction History --}}
-    <div class="card premium-block">
+            <div class="card-header">
 
-        <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-history"></i>
+                    Payment History
+                </h5>
 
-            <h5 class="mb-0">
-                <i class="fas fa-history"></i>
-                Payment History
-            </h5>
+            </div>
 
-        </div>
+            <div class="card-body p-0">
 
-        <div class="card-body p-0">
+                <div class="table-responsive">
 
-            <div class="table-responsive">
+                    <table class="table table-hover mb-0">
 
-                <table class="table table-hover mb-0">
-
-                    <thead>
-
-                        <tr>
-
-                            <th>#</th>
-
-                            <th>Date</th>
-
-                            <th>Amount</th>
-
-                            <th>Mode</th>
-
-                            <th>Transaction No.</th>
-
-                            <th>Bank</th>
-
-                            <th>Receipt</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        @forelse($payment->transactions as $transaction)
+                        <thead>
 
                             <tr>
 
-                                <td>{{ $loop->iteration }}</td>
-
-                                <td>
-                                    {{ \Carbon\Carbon::parse($transaction->transaction_date)->format('d M Y h:i A') }}
-                                </td>
-
-                                <td>
-                                    ₹ {{ number_format($transaction->amount,2) }}
-                                </td>
-
-                                <td>
-                                    {{ $transaction->payment_mode }}
-                                </td>
-
-                                <td>
-                                    {{ $transaction->transaction_no ?? '-' }}
-                                </td>
-
-                                <td>
-                                    {{ $transaction->bank_name ?? '-' }}
-                                </td>
-
-                                <td>
-
-                                    @if($transaction->receipt)
-
-                                        <a href="{{ asset('storage/'.$transaction->receipt) }}"
-                                           target="_blank"
-                                           class="btn btn-sm btn-success">
-
-                                            <i class="fas fa-download"></i>
-
-                                        </a>
-
-                                    @else
-
-                                        -
-
-                                    @endif
-
-                                </td>
+                                <th>#</th>
+                                <th>Date</th>
+                                <th>Payment No.</th>
+                                <th>Net Amount</th>
+                                <th>Paid</th>
+                                <th>Pending</th>
+                                <th>Status</th>
+                                <th>Mode</th>
+                                <th>Transaction No.</th>
+                                <th>Bank</th>
+                                <th>Receipt</th>
 
                             </tr>
 
-                        @empty
+                        </thead>
 
-                            <tr>
+                        <tbody>
 
-                                <td colspan="7" class="text-center py-4">
+                            @forelse($paymentHistory as $history)
 
-                                    No Payment Transactions Found
+                                <tr>
 
-                                </td>
+                                    <td>{{ $loop->iteration }}</td>
 
-                            </tr>
+                                    <td>
+                                        {{ \Carbon\Carbon::parse($history->payment_date)->format('d M Y') }}
+                                    </td>
 
-                        @endforelse
+                                    <td>
+                                        {{ $history->payment_no }}
+                                    </td>
 
-                    </tbody>
+                                    <td>
+                                        ₹ {{ number_format($history->net_amount, 2) }}
+                                    </td>
 
-                </table>
+                                    <td>
+                                        ₹ {{ number_format($history->paid_amount, 2) }}
+                                    </td>
+
+                                    <td>
+                                        ₹ {{ number_format($history->pending_amount, 2) }}
+                                    </td>
+
+                                    <td>
+
+                                        @if($history->payment_status == 'Paid')
+
+                                            <span class="badge bg-success">
+                                                Paid
+                                            </span>
+
+                                        @elseif($history->payment_status == 'Partial')
+
+                                            <span class="badge bg-warning">
+                                                Partial
+                                            </span>
+
+                                        @else
+
+                                            <span class="badge bg-danger">
+                                                Pending
+                                            </span>
+
+                                        @endif
+
+                                    </td>
+
+                                    <td>
+
+                                        {{ $history->transactions->first()->payment_mode ?? '-' }}
+
+                                    </td>
+
+                                    <td>
+
+                                        {{ $history->transactions->first()->transaction_no ?? '-' }}
+
+                                    </td>
+
+                                    <td>
+
+                                        {{ $history->transactions->first()->bank_name ?? '-' }}
+
+                                    </td>
+
+                                    <td>
+
+                                        @if(optional($history->transactions->first())->receipt)
+
+                                            <a href="{{ asset('storage/' . $history->transactions->first()->receipt) }}"
+                                                target="_blank" class="btn btn-success btn-sm">
+
+                                                <i class="fas fa-download"></i>
+
+                                            </a>
+
+                                        @else
+
+                                            -
+
+                                        @endif
+
+                                    </td>
+
+                                </tr>
+
+                            @empty
+
+                                <tr>
+
+                                    <td colspan="7" class="text-center py-4">
+
+                                        No Payment Transactions Found
+
+                                    </td>
+
+                                </tr>
+
+                            @endforelse
+
+                        </tbody>
+
+                    </table>
+
+                </div>
 
             </div>
 
         </div>
 
-    </div>
-
-</section>
+    </section>
 
 @endsection

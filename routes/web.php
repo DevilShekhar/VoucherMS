@@ -8,9 +8,9 @@ use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\VoucherVendorController;
 use App\Http\Controllers\Admin\VoucherController;
-
+use App\Http\Controllers\Admin\VoucherRequestController;
+use App\Http\Controllers\Admin\VoucherVendorController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -62,6 +62,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/payments/{payment}', [PaymentController::class, 'show'])
         ->name('payments.show');
     Route::resource('vouchers', VoucherController::class);
+    Route::resource('voucher-requests', VoucherRequestController::class);
+
+    Route::get('voucher-requests/create/{candidate}', [VoucherRequestController::class, 'create'])->name('voucher-requests.create');
+    Route::post('voucher-requests', [VoucherRequestController::class, 'store'])->name('voucher-requests.store');
+    Route::post('voucher-requests/{voucherRequest}/approve-admin', [VoucherRequestController::class, 'approveByAdmin'])->name('voucher-requests.approve.admin');
+
+    Route::post('voucher-requests/{voucherRequest}/approve-superadmin', [VoucherRequestController::class, 'approveBySuperAdmin'])->name('voucher-requests.approve.superadmin');
+
+    Route::post('voucher-requests/{voucherRequest}/reject', [VoucherRequestController::class, 'reject'])->name('voucher-requests.reject');
 
 });
 

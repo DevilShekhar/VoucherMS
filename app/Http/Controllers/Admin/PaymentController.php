@@ -20,17 +20,6 @@ class PaymentController extends Controller
         return view('admin.payment.index', compact('payments'));
     }
 
-    //     public function create()
-    // {
-
-    //     $candidates = Candidate::with(['lead', 'course', 'center', 'executive'])
-    //     ->orderBy('first_name')
-    //     ->get();
-    //         // dd($candidates->count(), $candidates->pluck('first_name'));
-
-    //     return view('admin.payment.create', compact('candidates'));
-    // }
-
     public function create()
     {
         $candidates = Candidate::with(['lead', 'course', 'center', 'executive'])
@@ -108,7 +97,16 @@ class PaymentController extends Controller
             'receipt' => $receiptPath,
         ]);
 
-        return redirect()->route('payments.index')
+        if ($request->ajax()) {
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Payment recorded successfully.',
+            ]);
+        }
+
+        return redirect()
+            ->route('payments.index')
             ->with('success', 'Payment recorded successfully.');
     }
 
@@ -121,6 +119,15 @@ class PaymentController extends Controller
             'createdBy',
         ]);
 
-        return view('admin.payment.show', compact('payment'));
+        // Complete payment history of this candidate
+        $paymentHistory = Payment::with('transactions')
+            ->where('candidate_id', $payment->candidate_id)
+            ->latest()
+            ->get();
+
+        return view('admin.payment.show', compact(
+            'payment',
+            'paymentHistory'
+        ));
     }
 }

@@ -1399,6 +1399,13 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('vouchers.index') }}"
+                    class="sb-link {{ request()->routeIs('vouchers.*') ? 'active' : '' }}">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span>Manage Voucher</span>
+                </a>
+            </li>
+            <li>
                 <a href="#" class="sb-link">
                     <i class="fas fa-users"></i>
                     <span>Students</span>
@@ -1676,6 +1683,32 @@
                 });
             });
         });
+
+    </script>
+    <script>
+        function toggleVoucherCode(element) {
+            const hidden = element.querySelector('.voucher-code-hidden');
+            const visible = element.querySelector('.voucher-code-visible');
+            const icon = element.querySelector('.voucher-eye-icon');
+
+            if (hidden.style.display === 'none') {
+                // Currently showing - hide it
+                hidden.style.display = 'inline';
+                visible.style.display = 'none';
+                icon.className = 'fas fa-eye voucher-eye-icon';
+                icon.style.marginLeft = '5px';
+                icon.style.fontSize = '0.8rem';
+                icon.style.color = '#6c757d';
+            } else {
+                // Currently hidden - show it
+                hidden.style.display = 'none';
+                visible.style.display = 'inline';
+                icon.className = 'fas fa-eye-slash voucher-eye-icon';
+                icon.style.marginLeft = '5px';
+                icon.style.fontSize = '0.8rem';
+                icon.style.color = '#0d6efd';
+            }
+        }
     </script>
 
 </body>
