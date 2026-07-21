@@ -29,6 +29,7 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::query()->where('status', 1)
+            ->where('name', '!=', 'Super Admin')
             ->orderBy('name')
             ->get();
 
@@ -97,7 +98,7 @@ class UserController extends Controller
             'password' => 'nullable|min:6|confirmed',
             'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-        $validated['status'] = 1;
+        $validated['status'] = $request->status;
 
         if ($request->hasFile('profile_photo')) {
 
