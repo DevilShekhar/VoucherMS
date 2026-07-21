@@ -9,8 +9,11 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
+
 use App\Http\Controllers\Admin\VoucherRequestController;
 use App\Http\Controllers\Admin\VoucherVendorController;
+use App\Http\Controllers\Admin\LeadNotificationController;
+
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -45,6 +48,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('leads', LeadController::class);
     Route::post('/leads/{lead}/followups', [LeadController::class, 'addFollowup'])
         ->name('leads.followups.store');
+    Route::get('/lead-notifications', [LeadNotificationController::class, 'latest'])->name('lead.notifications');
+    Route::post('/lead-notifications/{id}/read', [LeadNotificationController::class, 'markRead'])->name('lead.notifications.read');
     Route::resource('candidates', CandidateController::class);
     Route::get('/candidates/lead/{lead}', [CandidateController::class, 'getLeadDetails'])
         ->name('candidates.lead.details');
@@ -62,6 +67,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/payments/{payment}', [PaymentController::class, 'show'])
         ->name('payments.show');
     Route::resource('vouchers', VoucherController::class);
+
     Route::resource('voucher-requests', VoucherRequestController::class);
 
     Route::get('voucher-requests/create/{candidate}', [VoucherRequestController::class, 'create'])->name('voucher-requests.create');

@@ -1542,6 +1542,138 @@
             </div>
         </footer>
     </div>
+ <audio id="notificationSound" preload="auto">
+    <source src="{{ asset('assets/sounds/notification.mp3') }}" type="audio/mpeg">
+</audio>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+let shownNotifications = [];
+const notificationAudio = document.getElementById('notificationSound');
+
+notificationAudio.loop = true;
+notificationAudio.volume = 1.0;
+
+/* ============================================================
+   Enable Notification Sound (Only Once)
+============================================================ */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    if (!localStorage.getItem("audioEnabled")) {
+
+        Swal.fire({
+            title: "Enable Notification Sound",
+            text: "Click Enable to allow notification sounds.",
+            icon: "question",
+            confirmButtonText: "Enable",
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        }).then((result) => {
+
+            if(result.isConfirmed){
+
+                localStorage.setItem("audioEnabled","1");
+
+                notificationAudio.play()
+                .then(() => {
+                    notificationAudio.pause();
+                    notificationAudio.currentTime = 0;
+                })
+                .catch((err)=>{
+                    console.log(err);
+                });
+
+            }
+
+        });
+
+    }
+
+});
+
+
+/* ============================================================
+   Check Notification
+============================================================ */
+
+function checkLeadNotifications(){
+
+    fetch("{{ route('lead.notifications') }}")
+    .then(response => response.json())
+    .then(data => {
+
+        if(data.length === 0){
+            return;
+        }
+
+        let notification = data[0];
+
+        if(shownNotifications.includes(notification.id)){
+            return;
+        }
+
+        shownNotifications.push(notification.id);
+
+        Swal.fire({
+
+            icon:'info',
+            title:notification.title,
+            html:"<b>"+notification.message+"</b>",
+            confirmButtonText:"Open Lead",
+            allowOutsideClick:false,
+            allowEscapeKey:false,
+
+            didOpen:()=>{
+
+                if(localStorage.getItem("audioEnabled")=="1"){
+
+                    notificationAudio.currentTime = 0;
+                    notificationAudio.loop = true;
+
+                    notificationAudio.play()
+                    .then(()=>{
+                        console.log("Audio Playing");
+                    })
+                    .catch((err)=>{
+                        console.log("Play Error",err);
+                    });
+
+                }
+
+            }
+
+        }).then(()=>{
+
+            notificationAudio.pause();
+            notificationAudio.currentTime = 0;
+
+            fetch("/lead-notifications/"+notification.id+"/read",{
+                method:"POST",
+                headers:{
+                    "X-CSRF-TOKEN":"{{ csrf_token() }}",
+                    "Content-Type":"application/json"
+                }
+            })
+            .then(()=>{
+
+                window.location.href="/leads/"+notification.lead_id;
+
+            });
+
+        });
+
+    });
+
+}
+
+checkLeadNotifications();
+
+setInterval(checkLeadNotifications,5000);
+
+</script>
 
     <!-- Scripts -->
     @yield('scripts')
