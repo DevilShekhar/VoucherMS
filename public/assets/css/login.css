@@ -1,0 +1,948 @@
+/*==================================================
+    RESET
+==================================================*/
+
+*,
+*::before,
+*::after{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+}
+
+body{
+
+    font-family:'Poppins',sans-serif;
+
+    background:#edf3fb;
+
+    color:#1d2b53;
+
+    overflow:hidden;
+
+}
+
+
+/*==================================================
+    MAIN CONTAINER
+==================================================*/
+
+.login-container{
+
+    display:flex;
+
+    width:100%;
+
+    height:100vh;
+
+}
+
+
+/*==================================================
+    LEFT PANEL
+==================================================*/
+
+.left-panel{
+
+    width:50%;
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+    linear-gradient(
+        135deg,
+        #082c84 0%,
+        #0d47a1 35%,
+        #1565c0 70%,
+        #1f7cf0 100%
+    );
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+
+/*==================================================
+    BACKGROUND GLOW
+==================================================*/
+
+.left-panel::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:900px;
+
+    height:900px;
+
+    border-radius:50%;
+
+    background:
+
+    radial-gradient(circle,
+    rgba(255,255,255,.09),
+    transparent 70%);
+
+    top:-350px;
+
+    right:-350px;
+
+}
+
+.left-panel::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:700px;
+
+    height:700px;
+
+    border-radius:50%;
+
+    background:
+
+    radial-gradient(circle,
+    rgba(255,255,255,.05),
+    transparent 70%);
+
+    bottom:-280px;
+
+    left:-280px;
+
+}
+
+
+/*==================================================
+    FLOATING CIRCLES
+==================================================*/
+
+.bg-circle{
+
+    position:absolute;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.05);
+
+    animation:floatCircle 18s linear infinite;
+
+}
+
+.circle1{
+
+    width:420px;
+
+    height:420px;
+
+    top:-120px;
+
+    left:-120px;
+
+}
+
+.circle2{
+
+    width:250px;
+
+    height:250px;
+
+    right:80px;
+
+    top:150px;
+
+}
+
+.circle3{
+
+    width:160px;
+
+    height:160px;
+
+    bottom:60px;
+
+    right:120px;
+
+}
+
+@keyframes floatCircle{
+
+0%{
+
+transform:translateY(0);
+
+}
+
+50%{
+
+transform:translateY(-20px);
+
+}
+
+100%{
+
+transform:translateY(0);
+
+}
+
+}
+
+
+/*==================================================
+    LEFT CONTENT
+==================================================*/
+
+.left-wrapper{
+
+    width:100%;
+
+    max-width:700px;
+
+    padding:10px;
+
+    position:relative;
+
+    z-index:5;
+
+    text-align:center;
+
+}
+
+
+/*==================================================
+    LOGO
+==================================================*/
+
+.logo{
+
+    margin-bottom:10px;
+
+}
+
+.logo-icon{
+
+    width:115px;
+
+    height:115px;
+
+    margin:auto;
+
+    background:white;
+
+    border-radius:28px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    box-shadow:
+
+    0 15px 45px rgba(0,0,0,.25);
+
+}
+
+.logo-icon i{
+
+    color:#0d47a1;
+
+    font-size:58px;
+
+}
+
+
+/*==================================================
+    TITLE
+==================================================*/
+
+.left-wrapper h1{
+    color:white;
+    font-size:25px;
+    line-height:1.1;
+    font-weight:700;
+}
+
+
+/*==================================================
+    TAGLINE
+==================================================*/
+
+.left-wrapper p{
+
+    color:rgba(255,255,255,.92);
+
+    font-size:20px;
+
+    font-weight:300;
+
+    letter-spacing:.5px;
+
+}
+
+
+/*==================================================
+    ILLUSTRATION
+==================================================*/
+
+.illustration{
+
+    width:100%;
+    display:flex;
+    justify-content:center;
+}
+
+.illustration img{
+
+    width:92%;
+
+    max-width:400px;
+
+    animation:floatImage 5s ease-in-out infinite;
+
+    filter:
+
+    drop-shadow(0 20px 45px rgba(0,0,0,.35));
+
+}
+
+@keyframes floatImage{
+
+0%{
+
+transform:translateY(0);
+
+}
+
+50%{
+
+transform:translateY(-12px);
+
+}
+
+100%{
+
+transform:translateY(0);
+
+}
+
+}
+
+
+/*==================================================
+    FEATURE SECTION
+==================================================*/
+
+.bottom-features{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:18px;
+
+     
+
+}
+
+
+/*==================================================
+    FEATURE CARD
+==================================================*/
+
+.feature{
+
+    background:
+
+    rgba(255,255,255,.08);
+
+    backdrop-filter:blur(20px);
+
+    border:
+
+    1px solid rgba(255,255,255,.10);
+
+    border-radius:22px;
+
+    padding:15px 5px;
+
+    transition:.35s;
+
+}
+
+.feature:hover{
+
+    transform:translateY(-8px);
+
+    background:rgba(255,255,255,.13);
+
+}
+
+
+/*==================================================
+    FEATURE ICON
+==================================================*/
+
+.feature-icon{
+
+    width:50px;
+
+    height:50px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    background:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    box-shadow:
+
+    0 12px 30px rgba(0,0,0,.25);
+
+}
+
+.feature-icon i{
+
+    color:#1565c0;
+
+    font-size:20px;
+
+}
+
+.feature span{
+
+    display:block;
+
+
+    color:white;
+
+    font-weight:500;
+
+    font-size:13px;
+
+    line-height:1.5;
+
+}
+
+
+/*==================================================
+    COPYRIGHT
+==================================================*/
+
+.copyright{
+
+    margin-top:45px;
+
+    color:rgba(255,255,255,.75);
+
+    font-size:14px;
+
+}
+/*==================================================
+    RIGHT PANEL
+==================================================*/
+
+.right-panel{
+
+    width:50%;
+
+    background:#f6f8fd;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+/* Soft background glow */
+
+.right-panel::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:700px;
+
+    height:700px;
+
+    border-radius:50%;
+
+    background:
+    radial-gradient(circle,
+    rgba(13,71,161,.08),
+    transparent 70%);
+
+    top:-300px;
+
+    right:-250px;
+
+}
+
+.right-panel::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:500px;
+
+    height:500px;
+
+    border-radius:50%;
+
+    background:
+    radial-gradient(circle,
+    rgba(13,71,161,.05),
+    transparent 70%);
+
+    bottom:-180px;
+
+    left:-180px;
+
+}
+
+
+/*==================================================
+    LOGIN CARD
+==================================================*/
+
+.login-card{
+
+    position:relative;
+
+    z-index:10;
+
+    width:520px;
+
+    background:#ffffff;
+
+    border-radius:35px;
+
+    padding:30px 30px 30px 30px;
+
+    box-shadow:
+
+    0 25px 70px rgba(0,0,0,.08),
+
+    0 8px 30px rgba(13,71,161,.05);
+
+    border:1px solid rgba(255,255,255,.80);
+
+}
+
+
+/*==================================================
+    LOCK ICON
+==================================================*/
+
+.login-lock{
+
+    width:95px;
+
+    height:95px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    background:
+    linear-gradient(
+    135deg,
+    #1f7cf0,
+    #0d47a1);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    box-shadow:
+    0 15px 40px rgba(13,71,161,.30);
+
+}
+
+.login-lock i{
+
+    color:white;
+
+    font-size:40px;
+
+}
+
+
+/*==================================================
+    HEADING
+==================================================*/
+
+.login-card h2{
+
+    margin-top:5px;
+
+    text-align:center;
+
+    font-size:26px;
+
+    font-weight:700;
+
+    color:#1c2953;
+
+}
+
+.login-card p{
+
+    text-align:center;
+
+     
+
+    margin-bottom:5px;
+
+    color:#6f7f9d;
+
+    font-size:12px;
+
+}
+
+
+/*==================================================
+    ALERT
+==================================================*/
+
+.alert{
+
+    border-radius:12px;
+
+    padding:15px;
+
+    margin-bottom:25px;
+
+    font-size:14px;
+
+}
+
+.success{
+
+    background:#d1fae5;
+
+    color:#065f46;
+
+}
+
+.danger{
+
+    background:#fee2e2;
+
+    color:#991b1b;
+
+}
+
+
+/*==================================================
+    FORM GROUP
+==================================================*/
+
+.form-group{
+
+    margin-bottom:28px;
+
+}
+
+.form-group label{
+
+    display:block;
+
+    font-weight:600;
+
+    margin-bottom:10px;
+
+    color:#27314f;
+
+}
+
+
+/*==================================================
+    INPUT BOX
+==================================================*/
+
+.input-box{
+
+    position:relative;
+
+}
+
+.input-box input{
+
+    width:100%;
+
+    height:48px;
+
+    border:1px solid #d9e2ef;
+
+    border-radius:16px;
+
+    padding-left:58px;
+
+    padding-right:60px;
+
+    font-size:15px;
+
+    transition:.30s;
+
+    outline:none;
+
+    background:#fff;
+
+}
+
+.input-box input:focus{
+
+    border-color:#1565c0;
+
+    box-shadow:
+
+    0 0 0 4px rgba(21,101,192,.08);
+
+}
+
+
+/*==================================================
+    INPUT ICON
+==================================================*/
+
+.input-box>i{
+
+    position:absolute;
+
+    left:20px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#7b8aa8;
+
+    font-size:22px;
+
+}
+
+
+/*==================================================
+    PASSWORD BUTTON
+==================================================*/
+
+#togglePassword{
+
+    position:absolute;
+
+    top:50%;
+
+    right:18px;
+
+    transform:translateY(-50%);
+
+    background:none;
+
+    border:none;
+
+    color:#6b7b99;
+
+    cursor:pointer;
+
+    font-size:22px;
+
+}
+
+#togglePassword:hover{
+
+    color:#1565c0;
+
+}
+
+
+/*==================================================
+    REMEMBER
+==================================================*/
+
+.remember-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-top:5px;
+
+    margin-bottom:8px;
+
+}
+
+.remember{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    font-size:12px;
+
+    color:#45506d;
+
+}
+
+.remember input{
+
+    width:12px;
+
+    height:12px;
+
+    accent-color:#1565c0;
+
+}
+
+.remember-row a{
+
+    color:#1565c0;
+
+    text-decoration:none;
+
+    font-weight:500;
+    font-size: 12px;
+
+}
+
+.remember-row a:hover{
+
+    text-decoration:underline;
+
+}
+
+
+/*==================================================
+    LOGIN BUTTON
+==================================================*/
+
+.login-btn{
+
+    width:100%;
+
+    height:50px;
+
+    border:none;
+
+    border-radius:16px;
+
+    background:
+
+    linear-gradient(
+    90deg,
+    #0d47a1,
+    #1f7cf0);
+
+    color:white;
+
+    font-size:20px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.35s;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    box-shadow:
+
+    0 12px 30px rgba(13,71,161,.30);
+
+}
+
+.login-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+
+    0 20px 40px rgba(13,71,161,.35);
+
+}
+
+
+
+
+/*==================================================
+    SECURITY
+==================================================*/
+
+.security{
+
+    display:flex;
+margin-top: 5px;
+    justify-content:center;
+
+    align-items:center;
+
+    gap:8px;
+
+    color:#7b879d;
+
+    font-size:15px;
+
+}
+
+.security i{
+
+    color:#1565c0;
+
+}
+
+
+/*==================================================
+    VERSION
+==================================================*/
+
+.version{
+
+    text-align:center;
+
+    margin-top:25px;
+
+    color:#99a5bb;
+
+    font-size:14px;
+
+}
