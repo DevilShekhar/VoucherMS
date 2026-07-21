@@ -137,48 +137,6 @@
                                    class="btn btn-sm btn-info">
                                     <i class="fas fa-eye"></i>
                                 </a>
-
-                                @role('admin')
-
-                                    @if($request->admin_approval=='Pending')
-
-                                        <form action="{{ route('voucher-requests.admin-approve',$request) }}"
-                                              method="POST"
-                                              class="d-inline">
-
-                                            @csrf
-
-                                            <button class="btn btn-sm btn-success">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-
-                                        </form>
-
-                                    @endif
-
-                                @endrole
-
-
-                                @role('super_admin')
-
-                                    @if($request->admin_approval=='Approved' && $request->superadmin_approval=='Pending')
-
-                                        <form action="{{ route('voucher-requests.superadmin-approve',$request) }}"
-                                              method="POST"
-                                              class="d-inline">
-
-                                            @csrf
-
-                                            <button class="btn btn-sm btn-success">
-                                                <i class="fas fa-check-double"></i>
-                                            </button>
-
-                                        </form>
-
-                                    @endif
-
-                                @endrole
-
                             </td>
 
                         </tr>

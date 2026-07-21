@@ -15,13 +15,31 @@
                         <p>{{ $voucherRequest->request_no }}</p>
                     </div>
                 </div>
-                <div>
+                <div class="d-flex align-items-center gap-2">
+
                     <a href="{{ route('voucher-requests.index') }}" class="btn btn-create">
                         <i class="fas fa-arrow-left"></i> Back
                     </a>
+
+                    @if($voucherRequest->status == 'Approved')
+    <form id="allocateForm" action="{{ route('voucher-requests.allocate', $voucherRequest) }}" method="POST" class="m-0">
+        @csrf
+
+        <button type="button"
+                id="allocateBtn"
+                class="btn btn-primary"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Allocate voucher to this candidate">
+            <i class="fas fa-ticket-alt"></i> Allocate Voucher
+        </button>
+    </form>
+@endif
+
                 </div>
             </div>
         </div>
+
     </section>
 
     <section class="section premium-dashboard pt-0">
@@ -68,20 +86,10 @@
                         @endif
                     </div>
                     <div class="col-md-3 mb-3">
-                        <strong>Admin Approval</strong><br>
+                        <strong>Approval</strong><br>
                         @if($voucherRequest->admin_approval == 'Approved')
                             <span class="badge bg-success">Approved</span>
                         @elseif($voucherRequest->admin_approval == 'Rejected')
-                            <span class="badge bg-danger">Rejected</span>
-                        @else
-                            <span class="badge bg-warning">Pending</span>
-                        @endif
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <strong>Super Admin Approval</strong><br>
-                        @if($voucherRequest->superadmin_approval == 'Approved')
-                            <span class="badge bg-success">Approved</span>
-                        @elseif($voucherRequest->superadmin_approval == 'Rejected')
                             <span class="badge bg-danger">Rejected</span>
                         @else
                             <span class="badge bg-warning">Pending</span>
@@ -170,41 +178,92 @@
             </div>
         </div>
 
-        @if($voucherRequest->status == 'Pending')
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="card premium-block">
-                        <div class="card-header">
-                            <h5 class="mb-0">
-                                <i class="fas fa-check-circle"></i> Approval
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <form action="{{ route('voucher-requests.approve.admin', $voucherRequest) }}" method="POST">
-                                @csrf
-                                <div class="mb-3">
-                                    <label class="form-label">Action</label>
-                                    <select class="form-select" name="action" required>
-                                        <option value="">Select Action</option>
-                                        <option value="Approved">Approve</option>
-                                        <option value="Rejected">Reject</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Remarks</label>
-                                    <textarea name="remarks" class="form-control" rows="4"
-                                        placeholder="Enter remarks..."></textarea>
-                                </div>
-                                <button class="btn btn-success w-100">
-                                    <i class="fas fa-save"></i> Submit Decision
-                                </button>
-                            </form>
+        @if(auth()->user()->hasRole('SuperAdmin'))
+            @if($voucherRequest->status == 'Pending')
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card premium-block">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-check-circle"></i> Approval
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <form action="{{ route('voucher-requests.approve', $voucherRequest) }}" method="POST">
+                                    @csrf
+                                    <div class="mb-3">
+                                        <label class="form-label">Action</label>
+                                        <select class="form-select" name="action" required>
+                                            <option value="">Select Action</option>
+                                            <option value="Approved">Approve</option>
+                                            <option value="Rejected">Reject</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Remarks</label>
+                                        <textarea name="remarks" class="form-control" rows="4"
+                                            placeholder="Enter remarks..."></textarea>
+                                    </div>
+                                    <button class="btn btn-success w-100">
+                                        <i class="fas fa-save"></i> Submit Decision
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endif
         @endif
 
     </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+        document.getElementById('allocateBtn').addEventListener('click', function() {
 
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You are about to allocate a voucher to this candidate.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Allocate'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                // Submit the form
+                document.getElementById('allocateForm').submit();
+
+                // Optional: Show loading toast
+                Swal.fire({
+                    title: 'Allocating...',
+                    text: 'Please wait',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+            }
+        });
+    });
+
+    // Show success toast if redirected back with success message
+    @if(session('success'))
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true
+    });
+    @endif
+    </script>
 @endsection
