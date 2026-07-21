@@ -178,7 +178,7 @@
             </div>
         </div>
 
-        @if(auth()->user()->hasRole('SuperAdmin'))
+        @if(auth()->user()->hasRole('Super Admin'))
             @if($voucherRequest->status == 'Pending')
                 <div class="row">
                     <div class="col-lg-4">
