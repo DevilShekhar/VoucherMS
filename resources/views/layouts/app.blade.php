@@ -1311,15 +1311,7 @@
 
     <!-- Scrim for mobile -->
     <div class="scrim" id="scrim"></div>
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sb-brand">
