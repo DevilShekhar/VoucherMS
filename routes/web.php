@@ -4,16 +4,15 @@ use App\Http\Controllers\Admin\CandidateController;
 use App\Http\Controllers\Admin\CenterController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\LeadController;
+use App\Http\Controllers\Admin\LeadNotificationController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
-
 use App\Http\Controllers\Admin\VoucherRequestController;
+use App\Http\Controllers\Admin\VoucherRequestNotificationController;
 use App\Http\Controllers\Admin\VoucherVendorController;
-use App\Http\Controllers\Admin\LeadNotificationController;
-
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -74,9 +73,28 @@ Route::middleware(['auth'])->group(function () {
     Route::post('voucher-requests', [VoucherRequestController::class, 'store'])->name('voucher-requests.store');
     Route::post('voucher-requests/{voucherRequest}/approve-admin', [VoucherRequestController::class, 'approveByAdmin'])->name('voucher-requests.approve.admin');
 
-    Route::post('voucher-requests/{voucherRequest}/approve-superadmin', [VoucherRequestController::class, 'approveBySuperAdmin'])->name('voucher-requests.approve.superadmin');
+    Route::post(
+        '/voucher-requests/{voucherRequest}/approve-superadmin',
+        [VoucherRequestController::class, 'approveSuperAdmin']
+    )->name('voucher-requests.approve.superadmin');
 
     Route::post('voucher-requests/{voucherRequest}/reject', [VoucherRequestController::class, 'reject'])->name('voucher-requests.reject');
+    Route::post('/voucher-requests/{voucherRequest}/approve', [VoucherRequestController::class, 'approve'])
+        ->name('voucher-requests.approve');
+
+    Route::get(
+        '/voucher-request-notifications/latest',
+        [VoucherRequestNotificationController::class, 'latest']
+    )->name('voucher-request-notifications.latest');
+
+    Route::post(
+        '/voucher-request-notifications/{id}/read',
+        [VoucherRequestNotificationController::class, 'markRead']
+    )->name('voucher-request-notifications.read');
+    Route::post(
+    '/voucher-requests/{voucherRequest}/allocate',
+    [VoucherRequestController::class, 'allocateVoucher']
+)->name('voucher-requests.allocate');
 
 });
 

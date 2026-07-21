@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class VoucherAllocation extends Model
 {
-    //
     protected $fillable = [
         'voucher_id',
         'request_id',

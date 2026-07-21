@@ -858,7 +858,7 @@
 
         .btn-primary {
             background: var(--gold-gradient);
-            color: #1A1410;
+            color: #10131a;
             box-shadow: var(--gold-glow);
             border-color: #ffffff;
             border-radius: 10px;
@@ -1406,6 +1406,13 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('voucher-requests.index') }}"
+                    class="sb-link {{ request()->routeIs('voucher-requests.*') ? 'active' : '' }}">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span>Manage VoucherRequests</span>
+                </a>
+            </li>
+            <li>
                 <a href="#" class="sb-link">
                     <i class="fas fa-users"></i>
                     <span>Students</span>
@@ -1542,138 +1549,212 @@
             </div>
         </footer>
     </div>
- <audio id="notificationSound" preload="auto">
-    <source src="{{ asset('assets/sounds/notification.mp3') }}" type="audio/mpeg">
-</audio>
+    <audio id="notificationSound" preload="auto">
+        <source src="{{ asset('assets/sounds/notification.mp3') }}" type="audio/mpeg">
+    </audio>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
+    <script>
 
-let shownNotifications = [];
-const notificationAudio = document.getElementById('notificationSound');
+        let shownNotifications = [];
+        const notificationAudio = document.getElementById('notificationSound');
 
-notificationAudio.loop = true;
-notificationAudio.volume = 1.0;
+        notificationAudio.loop = true;
+        notificationAudio.volume = 1.0;
 
-/* ============================================================
-   Enable Notification Sound (Only Once)
-============================================================ */
+        /* ============================================================
+           Enable Notification Sound (Only Once)
+        ============================================================ */
 
-document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function () {
 
-    if (!localStorage.getItem("audioEnabled")) {
+            if (!localStorage.getItem("audioEnabled")) {
 
-        Swal.fire({
-            title: "Enable Notification Sound",
-            text: "Click Enable to allow notification sounds.",
-            icon: "question",
-            confirmButtonText: "Enable",
-            allowOutsideClick: false,
-            allowEscapeKey: false
-        }).then((result) => {
+                Swal.fire({
+                    title: "Enable Notification Sound",
+                    text: "Click Enable to allow notification sounds.",
+                    icon: "question",
+                    confirmButtonText: "Enable",
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                }).then((result) => {
 
-            if(result.isConfirmed){
+                    if (result.isConfirmed) {
 
-                localStorage.setItem("audioEnabled","1");
+                        localStorage.setItem("audioEnabled", "1");
 
-                notificationAudio.play()
-                .then(() => {
-                    notificationAudio.pause();
-                    notificationAudio.currentTime = 0;
-                })
-                .catch((err)=>{
-                    console.log(err);
+                        notificationAudio.play()
+                            .then(() => {
+                                notificationAudio.pause();
+                                notificationAudio.currentTime = 0;
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+
+                    }
+
                 });
 
             }
 
         });
 
-    }
 
-});
+        /* ============================================================
+           Check Notification
+        ============================================================ */
 
+        function checkLeadNotifications() {
 
-/* ============================================================
-   Check Notification
-============================================================ */
+            fetch("{{ route('lead.notifications') }}")
+                .then(response => response.json())
+                .then(data => {
 
-function checkLeadNotifications(){
+                    if (data.length === 0) {
+                        return;
+                    }
 
-    fetch("{{ route('lead.notifications') }}")
-    .then(response => response.json())
-    .then(data => {
+                    let notification = data[0];
 
-        if(data.length === 0){
-            return;
-        }
+                    if (shownNotifications.includes(notification.id)) {
+                        return;
+                    }
 
-        let notification = data[0];
+                    shownNotifications.push(notification.id);
 
-        if(shownNotifications.includes(notification.id)){
-            return;
-        }
+                    Swal.fire({
 
-        shownNotifications.push(notification.id);
+                        icon: 'info',
+                        title: notification.title,
+                        html: "<b>" + notification.message + "</b>",
+                        confirmButtonText: "Open Lead",
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
 
-        Swal.fire({
+                        didOpen: () => {
 
-            icon:'info',
-            title:notification.title,
-            html:"<b>"+notification.message+"</b>",
-            confirmButtonText:"Open Lead",
-            allowOutsideClick:false,
-            allowEscapeKey:false,
+                            if (localStorage.getItem("audioEnabled") == "1") {
 
-            didOpen:()=>{
+                                notificationAudio.currentTime = 0;
+                                notificationAudio.loop = true;
 
-                if(localStorage.getItem("audioEnabled")=="1"){
+                                notificationAudio.play()
+                                    .then(() => {
+                                        console.log("Audio Playing");
+                                    })
+                                    .catch((err) => {
+                                        console.log("Play Error", err);
+                                    });
 
-                    notificationAudio.currentTime = 0;
-                    notificationAudio.loop = true;
+                            }
 
-                    notificationAudio.play()
-                    .then(()=>{
-                        console.log("Audio Playing");
-                    })
-                    .catch((err)=>{
-                        console.log("Play Error",err);
+                        }
+
+                    }).then(() => {
+
+                        notificationAudio.pause();
+                        notificationAudio.currentTime = 0;
+
+                        fetch("/lead-notifications/" + notification.id + "/read", {
+                            method: "POST",
+                            headers: {
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                                "Content-Type": "application/json"
+                            }
+                        })
+                            .then(() => {
+
+                                window.location.href = "/leads/" + notification.lead_id;
+
+                            });
+
                     });
 
-                }
+                });
 
-            }
+        }
 
-        }).then(()=>{
+        checkLeadNotifications();
 
-            notificationAudio.pause();
-            notificationAudio.currentTime = 0;
+        setInterval(checkLeadNotifications, 5000);
 
-            fetch("/lead-notifications/"+notification.id+"/read",{
-                method:"POST",
-                headers:{
-                    "X-CSRF-TOKEN":"{{ csrf_token() }}",
-                    "Content-Type":"application/json"
-                }
-            })
-            .then(()=>{
+    </script>
 
-                window.location.href="/leads/"+notification.lead_id;
+    <script>
 
-            });
+        function checkVoucherNotifications() {
 
-        });
+            fetch("{{ route('voucher-request-notifications.latest') }}")
+                .then(response => response.json())
+                .then(data => {
 
-    });
+                    if (data.length === 0) {
+                        return;
+                    }
 
-}
+                    let notification = data[0];
 
-checkLeadNotifications();
+                    if (shownNotifications.includes('voucher-' + notification.id)) {
+                        return;
+                    }
 
-setInterval(checkLeadNotifications,5000);
+                    shownNotifications.push('voucher-' + notification.id);
 
-</script>
+                    Swal.fire({
+
+                        icon: 'info',
+                        title: notification.title,
+                        html: "<b>" + notification.message + "</b>",
+                        confirmButtonText: "Open Request",
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+
+                        didOpen: () => {
+
+                            if (localStorage.getItem("audioEnabled") == "1") {
+
+                                notificationAudio.currentTime = 0;
+                                notificationAudio.loop = true;
+
+                                notificationAudio.play()
+                                    .catch(err => console.log(err));
+
+                            }
+
+                        }
+
+                    }).then(() => {
+
+                        notificationAudio.pause();
+                        notificationAudio.currentTime = 0;
+
+                        fetch("/voucher-request-notifications/" + notification.id + "/read", {
+                            method: "POST",
+                            headers: {
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                                "Content-Type": "application/json"
+                            }
+                        })
+                            .then(() => {
+
+                                window.location.href =
+                                    "/voucher-requests/" + notification.voucher_request_id;
+
+                            });
+
+                    });
+
+                });
+
+        }
+
+        checkVoucherNotifications();
+
+        setInterval(checkVoucherNotifications, 5000);
+
+    </script>
 
     <!-- Scripts -->
     @yield('scripts')
