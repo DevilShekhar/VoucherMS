@@ -1325,83 +1325,115 @@
         <ul class="sb-nav">
             <li><a href="{{ route('dashboard') }}" class="sb-link"><i
                         class="fas fa-th-large"></i><span>Dashboard</span></a></li>
-            <li>
-                <a href="{{ route('users.index') }}"
-                    class="sb-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
-                    <i class="fas fa-user-plus"></i>
-                    <span>Manage Users</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('roles.index') }}"
-                    class="sb-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">
-                    <i class="fas fa-user-shield"></i>
-                    <span>Manage Roles</span>
-                </a>
-            </li>
-            {{-- <li>
-                <a href="{{ route('permissions.index') }}"
-                    class="sb-link {{ request()->routeIs('permissions.*') ? 'active' : '' }}">
-                    <i class="fas fa-key"></i>
-                    <span>Manage Permissions</span>
-                </a>
-            </li> --}}
-            <li>
-                <a href="{{ route('voucher-vendors.index') }}"
-                    class="sb-link {{ request()->routeIs('voucher-vendors.*') ? 'active' : '' }}">
-                    <i class="fas fa-tags"></i>
-                    <span>Voucher Vendors</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('centers.index') }}"
-                    class="sb-link {{ request()->routeIs('centers.*') ? 'active' : '' }}">
-                    <i class="fas fa-store-alt"></i>
-                    <span>Manage Centers</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('courses.index') }}"
-                    class="sb-link {{ request()->routeIs('courses.*') ? 'active' : '' }}">
-                    <i class="fas fa-book"></i>
-                    <span>Manage Courses</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('leads.index') }}"
-                    class="sb-link {{ request()->routeIs('leads.*') ? 'active' : '' }}">
-                    <i class="fas fa-book"></i>
-                    <span>Manage Leads</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('candidates.index') }}"
-                    class="sb-link {{ request()->routeIs('candidates.*') ? 'active' : '' }}">
-                    <i class="fas fa-user-graduate"></i>
-                    <span>Manage Candidates</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('payments.index') }}"
-                    class="sb-link {{ request()->routeIs('payments.*') ? 'active' : '' }}">
-                    <i class="fas fa-money-check-alt"></i>
-                    <span>Manage Payment</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('vouchers.index') }}"
-                    class="sb-link {{ request()->routeIs('vouchers.*') ? 'active' : '' }}">
-                    <i class="fas fa-ticket-alt"></i>
-                    <span>Manage Voucher</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('voucher-requests.index') }}"
-                    class="sb-link {{ request()->routeIs('voucher-requests.*') ? 'active' : '' }}">
-                    <i class="fas fa-ticket-alt"></i>
-                    <span>Manage VoucherRequests</span>
-                </a>
-            </li>
+            @can('users.index')
+                <li>
+                    <a href="{{ route('users.index') }}"
+                        class="sb-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Manage Users</span>
+                    </a>
+                </li>
+            @endcan
+
+            @can('roles.index')
+                <li>
+                    <a href="{{ route('roles.index') }}"
+                        class="sb-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Manage Roles</span>
+                    </a>
+                </li>
+            @endcan
+
+            @can('permissions.index')
+                {{-- <li>
+                    <a href="{{ route('permissions.index') }}"
+                        class="sb-link {{ request()->routeIs('permissions.*') ? 'active' : '' }}">
+                        <i class="fas fa-key"></i>
+                        <span>Manage Permissions</span>
+                    </a>
+                </li> --}}
+            @endcan
+
+            @can('voucher-vendors.index')
+                <li>
+                    <a href="{{ route('voucher-vendors.index') }}"
+                        class="sb-link {{ request()->routeIs('voucher-vendors.*') ? 'active' : '' }}">
+                        <i class="fas fa-tags"></i>
+                        <span>Voucher Vendors</span>
+                    </a>
+                </li>
+            @endcan
+
+            @can('centers.index')
+                <li>
+                    <a href="{{ route('centers.index') }}"
+                        class="sb-link {{ request()->routeIs('centers.*') ? 'active' : '' }}">
+                        <i class="fas fa-store-alt"></i>
+                        <span>Manage Centers</span>
+                    </a>
+                </li>
+            @endcan
+
+            @can('courses.index')
+                <li>
+                    <a href="{{ route('courses.index') }}"
+                        class="sb-link {{ request()->routeIs('courses.*') ? 'active' : '' }}">
+                        <i class="fas fa-book"></i>
+                        <span>Manage Courses</span>
+                    </a>
+                </li>
+            @endcan
+
+            @can('leads.index')
+                <li>
+                    <a href="{{ route('leads.index') }}"
+                        class="sb-link {{ request()->routeIs('leads.*') ? 'active' : '' }}">
+                        <i class="fas fa-book"></i>
+                        <span>Manage Leads</span>
+                    </a>
+                </li>
+            @endcan
+
+            @can('candidates.index')
+                <li>
+                    <a href="{{ route('candidates.index') }}"
+                        class="sb-link {{ request()->routeIs('candidates.*') ? 'active' : '' }}">
+                        <i class="fas fa-user-graduate"></i>
+                        <span>Manage Candidates</span>
+                    </a>
+                </li>
+            @endcan
+
+            @can('payments.index')
+                <li>
+                    <a href="{{ route('payments.index') }}"
+                        class="sb-link {{ request()->routeIs('payments.*') ? 'active' : '' }}">
+                        <i class="fas fa-money-check-alt"></i>
+                        <span>Manage Payment</span>
+                    </a>
+                </li>
+            @endcan
+
+            @can('vouchers.index')
+                <li>
+                    <a href="{{ route('vouchers.index') }}"
+                        class="sb-link {{ request()->routeIs('vouchers.*') ? 'active' : '' }}">
+                        <i class="fas fa-ticket-alt"></i>
+                        <span>Manage Voucher</span>
+                    </a>
+                </li>
+            @endcan
+
+            @can('voucher-requests.index')
+                <li>
+                    <a href="{{ route('voucher-requests.index') }}"
+                        class="sb-link {{ request()->routeIs('voucher-requests.*') ? 'active' : '' }}">
+                        <i class="fas fa-ticket-alt"></i>
+                        <span>Manage VoucherRequests</span>
+                    </a>
+                </li>
+            @endcan
             <li>
                 <a href="#" class="sb-link">
                     <i class="fas fa-users"></i>
