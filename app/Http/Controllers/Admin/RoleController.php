@@ -56,6 +56,7 @@ class RoleController extends Controller
 
         return view('admin.roles.edit', compact('role'));
     }
+
     public function update(Request $request, $id)
     {
         $role = Role::findOrFail($id);
@@ -83,5 +84,33 @@ class RoleController extends Controller
         return redirect()
             ->route('roles.index')
             ->with('success', 'Role Inactivated successfully');
+    }
+
+    public function managePermissions(Role $role)
+    {
+        $permissions = Permission::all();           // ← Flat collection
+        $rolePermissions = $role->permissions->pluck('name')->toArray();
+
+        return view('admin.roles.permissions', compact('role', 'permissions', 'rolePermissions'));
+    }
+
+    public function updatePermissions(Request $request, Role $role)
+    {
+        $role->syncPermissions($request->permissions ?? []);
+
+        return redirect()
+            ->route('roles.index')
+            ->with('success', 'Permissions updated successfully');
+    }
+
+    public function getPermissionsData($role)
+    {
+        $role = Role::with('permissions')->findOrFail($role);
+
+        return response()->json([
+            'role' => $role,
+            'permissions' => Permission::all(),
+            'rolePermissions' => $role->permissions->pluck('name')->toArray(),
+        ]);
     }
 }

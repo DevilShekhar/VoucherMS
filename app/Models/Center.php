@@ -9,7 +9,7 @@ class Center extends Model
     protected $fillable = [
         'center_code',
         'center_name',
-        'manager_id',
+        'center_exe_id',
         'address',
         'city',
         'state',
@@ -22,6 +22,6 @@ class Center extends Model
 
     public function manager()
     {
-        return $this->belongsTo(User::class, 'manager_id');
+        return $this->belongsTo(User::class, 'center_exe_id');
     }
 }

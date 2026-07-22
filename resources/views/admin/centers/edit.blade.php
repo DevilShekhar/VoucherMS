@@ -92,17 +92,17 @@
 
                         <div class="col-md-6 mb-3">
 
-                            <label class="form-label">Manager</label>
+                            <label class="form-label">Center Executive</label>
 
-                            <select name="manager_id" class="form-control">
+                            <select name="center_exe_id" class="form-control">
 
-                                <option value="">Select Manager</option>
+                                <option value="">Select Executive</option>
 
-                                @foreach($managers as $manager)
+                                @foreach($centerexes as $centerexe)
 
-                                    <option value="{{ $manager->id }}" {{ old('manager_id', $center->manager_id) == $manager->id ? 'selected' : '' }}>
+                                    <option value="{{ $centerexe->id }}" {{ old('center_exe_id', $center->centerexe) == $centerexe->id ? 'selected' : '' }}>
 
-                                        {{ $manager->name }}
+                                        {{ $centerexe->name }} ({{ $centerexe->email }})
 
                                     </option>
 
@@ -124,7 +124,8 @@
 
                             <label class="form-label">Email</label>
 
-                            <input type="email" name="email" class="form-control" value="{{ old('email', $center->email) }}">
+                            <input type="email" name="email" class="form-control"
+                                value="{{ old('email', $center->email) }}">
 
                         </div>
 
