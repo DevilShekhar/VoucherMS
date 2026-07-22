@@ -51,7 +51,7 @@
                     <a href="{{ route('users.index') }}"
                         class="sb-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
                         <i class="fas fa-user-plus"></i>
-                        <span>Manage Users</span>
+                        <span>Users</span>
                     </a>
                 </li>
             @endcan
@@ -61,7 +61,7 @@
                     <a href="{{ route('roles.index') }}"
                         class="sb-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">
                         <i class="fas fa-user-shield"></i>
-                        <span>Manage Roles</span>
+                        <span>Roles</span>
                     </a>
                 </li>
             @endcan
@@ -91,7 +91,7 @@
                     <a href="{{ route('centers.index') }}"
                         class="sb-link {{ request()->routeIs('centers.*') ? 'active' : '' }}">
                         <i class="fas fa-store-alt"></i>
-                        <span>Manage Centers</span>
+                        <span> Centers</span>
                     </a>
                 </li>
             @endcan
@@ -101,7 +101,7 @@
                     <a href="{{ route('courses.index') }}"
                         class="sb-link {{ request()->routeIs('courses.*') ? 'active' : '' }}">
                         <i class="fas fa-book"></i>
-                        <span>Manage Courses</span>
+                        <span>Courses</span>
                     </a>
                 </li>
             @endcan
@@ -111,7 +111,7 @@
                     <a href="{{ route('leads.index') }}"
                         class="sb-link {{ request()->routeIs('leads.*') ? 'active' : '' }}">
                         <i class="fas fa-book"></i>
-                        <span>Manage Leads</span>
+                        <span> Leads</span>
                     </a>
                 </li>
             @endcan
@@ -121,7 +121,7 @@
                     <a href="{{ route('candidates.index') }}"
                         class="sb-link {{ request()->routeIs('candidates.*') ? 'active' : '' }}">
                         <i class="fas fa-user-graduate"></i>
-                        <span>Manage Candidates</span>
+                        <span> Candidates</span>
                     </a>
                 </li>
             @endcan
@@ -131,7 +131,7 @@
                     <a href="{{ route('payments.index') }}"
                         class="sb-link {{ request()->routeIs('payments.*') ? 'active' : '' }}">
                         <i class="fas fa-money-check-alt"></i>
-                        <span>Manage Payment</span>
+                        <span>Payment</span>
                     </a>
                 </li>
             @endcan
@@ -141,7 +141,7 @@
                     <a href="{{ route('vouchers.index') }}"
                         class="sb-link {{ request()->routeIs('vouchers.*') ? 'active' : '' }}">
                         <i class="fas fa-ticket-alt"></i>
-                        <span>Manage Voucher</span>
+                        <span>Voucher</span>
                     </a>
                 </li>
             @endcan
@@ -151,7 +151,7 @@
                     <a href="{{ route('voucher-requests.index') }}"
                         class="sb-link {{ request()->routeIs('voucher-requests.*') ? 'active' : '' }}">
                         <i class="fas fa-ticket-alt"></i>
-                        <span>Manage VoucherRequests</span>
+                        <span>VoucherRequests</span>
                     </a>
                 </li>
             @endcan

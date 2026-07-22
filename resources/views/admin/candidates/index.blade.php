@@ -318,8 +318,7 @@
 
                             <!-- Receipt Upload Section - Visible for UPI, Bank Transfer, Card -->
                             <div class="col-md-6 mb-3" id="receipt_section" style="display:none;">
-                                <label>Upload Receipt <span id="receipt_required" style="display:none;"
-                                        class="text-danger">*</span></label>
+                                <label>Upload Receipt </label>
                                 <input type="file" name="receipt" id="receipt" class="form-control"
                                     accept=".jpg,.jpeg,.png,.pdf">
                                 <small class="text-muted">
@@ -567,9 +566,7 @@ $(document).ready(function () {
                 // Reset form
                 $('#paymentForm')[0].reset();
                 $('#receipt_section').hide();
-                $('#receipt').removeAttr('required');
-                $('#receipt_required').hide();
-
+                $('#receipt');
                 $('#paymentModal').modal('show');
             });
 
@@ -578,12 +575,11 @@ $(document).ready(function () {
                 const mode = $(this).val();
                 const receiptSection = $('#receipt_section');
                 const receiptInput = $('#receipt');
-                const receiptRequired = $('#receipt_required');
 
                 // Show receipt upload for UPI, Bank Transfer, Card, Cheque
                 if (mode === 'UPI' || mode === 'Bank Transfer' || mode === 'Card' || mode === 'Cheque') {
                     receiptSection.show('slow');
-                    receiptInput.prop('required', true);
+                    receiptInput.prop('required', false);
                     receiptRequired.show();
                 } else {
                     receiptSection.hide('slow');
@@ -662,8 +658,7 @@ $(document).ready(function () {
             $('#paymentModal').on('hidden.bs.modal', function () {
                 $('#paymentForm')[0].reset();
                 $('#receipt_section').hide();
-                $('#receipt').removeAttr('required');
-                $('#receipt_required').hide();
+                $('#receipt');
                 $('#savePaymentBtn').prop('disabled', false)
                     .html('<i class="fas fa-save"></i> Save Payment');
             });
