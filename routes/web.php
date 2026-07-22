@@ -123,6 +123,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/exam-schedules', [ExamScheduleController::class, 'store'])->name('exam-schedules.store');
 
 
+     Route::resource('locations',\App\Http\Controllers\Admin\LocationController::class);  
+
 });
 
 require __DIR__.'/auth.php';

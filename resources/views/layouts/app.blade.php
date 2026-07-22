@@ -624,7 +624,7 @@
                 e.preventDefault();
 
                 Swal.fire({
-                    title: 'Delete User?',
+                    title: 'Delete?',
                     text: 'This action cannot be undone.',
                     icon: 'warning',
                     showCancelButton: true,
