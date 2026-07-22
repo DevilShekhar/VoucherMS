@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Voucher;
-use Illuminate\Http\Request;
-use App\Models\VoucherVendor;
-
 use App\Http\Controllers\Controller;
-
+use App\Models\Voucher;
+use App\Models\VoucherVendor;
+use Illuminate\Http\Request;
 
 class VoucherController extends Controller
 {
@@ -21,7 +19,6 @@ class VoucherController extends Controller
     public function create()
     {
         $vendors = VoucherVendor::orderBy('vendor_name')->get();
-        
 
         return view('admin.vouchers.create', compact('vendors'));
     }
@@ -31,7 +28,10 @@ class VoucherController extends Controller
         $request->validate([
             'voucher_code' => 'required',
             'vendor_id' => 'required',
-           
+            'purchase_date' => 'required',
+            'expiry_date' => 'required',
+            'purchase_price' => 'required',
+            'cost' => 'required',
         ]);
 
         Voucher::create($request->all());
@@ -48,8 +48,9 @@ class VoucherController extends Controller
 
     public function edit(Voucher $voucher)
     {
-         $vendors = VoucherVendor::orderBy('vendor_name')->get();
-        return view('admin.vouchers.edit', compact('voucher','vendors'));
+        $vendors = VoucherVendor::orderBy('vendor_name')->get();
+
+        return view('admin.vouchers.edit', compact('voucher', 'vendors'));
     }
 
     public function update(Request $request, Voucher $voucher)
@@ -57,7 +58,7 @@ class VoucherController extends Controller
         $request->validate([
             'voucher_code' => 'required',
             'vendor_id' => 'required',
-            
+
         ]);
 
         $voucher->update($request->all());
@@ -74,5 +75,14 @@ class VoucherController extends Controller
         return redirect()
             ->route('vouchers.index')
             ->with('success', 'Voucher deleted successfully.');
+    }
+
+    public function dashboard()
+    {
+        $vouchers = Voucher::with('vendor')
+            ->latest()
+            ->paginate(20);
+
+        return view('dashboard', compact('vouchers'));
     }
 }

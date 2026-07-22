@@ -49,86 +49,83 @@
                         <tbody>
                             @forelse($candidates as $candidate)
 
-                                                                <tr>
-                                                                    <td><strong>{{ $candidate->candidate_code }}</strong></td>
-                                                                    <td>{{ $candidate->first_name }} {{ $candidate->last_name }}</td>
-                                                                    <td>{{ $candidate->mobile }}</td>
-                                                                    <td>{{ $candidate->email ?: '-' }}</td>
-                                                                    <td>{{ $candidate->course->course_name ?? '-' }}</td>
-                                                                    <td>{{ $candidate->center->center_name ?? '-' }}</td>
-                                                                    <td>{{ $candidate->executive->name ?? '-' }}</td>
-                                                                    <td>
-                                                                        <span class="badge bg-{{ $candidate->status == 'Active' ? 'success' : 'warning' }}">
-                                                                            {{ $candidate->status }}
-                                                                        </span>
-                                                                    </td>
-                                                                    <td class="text-nowrap">
-                                                                        <a href="{{ route('candidates.show', $candidate->id) }}" class="btn btn-sm btn-info">
-                                                                            <i class="fas fa-eye"></i>
-                                                                        </a>
-                                                                        <a href="{{ route('candidates.edit', $candidate) }}" class="btn btn-sm btn-primary">
-                                                                            <i class="fas fa-edit"></i>
-                                                                        </a>
+                                <tr>
+                                    <td><strong>{{ $candidate->candidate_code }}</strong></td>
+                                    <td>{{ $candidate->first_name }} {{ $candidate->last_name }}</td>
+                                    <td>{{ $candidate->mobile }}</td>
+                                    <td>{{ $candidate->email ?: '-' }}</td>
+                                    <td>{{ $candidate->course->course_name ?? '-' }}</td>
+                                    <td>{{ $candidate->center->center_name ?? '-' }}</td>
+                                    <td>{{ $candidate->executive->name ?? '-' }}</td>
+                                    <td>
+                                        <span class="badge bg-{{ $candidate->status == 'Active' ? 'success' : 'warning' }}">
+                                            {{ $candidate->status }}
+                                        </span>
+                                    </td>
+                                    <td class="text-nowrap">
+                                        <a href="{{ route('candidates.show', $candidate->id) }}" class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('candidates.edit', $candidate) }}" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
 
-                                                                        <button type="button" class="btn btn-sm btn-success upload-doc-btn"
-                                                                            data-candidate-id="{{ $candidate->id }}"
-                                                                            data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
-                                                                            data-candidate-code="{{ $candidate->candidate_code }}">
-                                                                            <i class="fas fa-upload"></i>
-                                                                        </button>
-                                                                        <button type="button" class="btn btn-sm btn-warning payment-btn"
-                                                                            data-id="{{ $candidate->id }}"
-                                                                            data-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
-                                                                            data-code="{{ $candidate->candidate_code }}"
-                                                                            data-course="{{ $candidate->course->course_name ?? '-' }}"
-                                                                            data-center="{{ $candidate->center->center_name ?? '-' }}">
-                                                                            <i class="fas fa-money-bill-wave"></i>
-                                                                        </button>
-                                                                        {{-- {{ dd($candidate->voucherRequest?->toArray()) }} --}}
-                                                                       @if($candidate->voucherRequest)
+                                        <button type="button" class="btn btn-sm btn-success upload-doc-btn"
+                                            data-candidate-id="{{ $candidate->id }}"
+                                            data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
+                                            data-candidate-code="{{ $candidate->candidate_code }}">
+                                            <i class="fas fa-upload"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-warning payment-btn"
+                                            data-id="{{ $candidate->id }}"
+                                            data-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
+                                            data-code="{{ $candidate->candidate_code }}"
+                                            data-course="{{ $candidate->course->course_name ?? '-' }}"
+                                            data-center="{{ $candidate->center->center_name ?? '-' }}">
+                                            <i class="fas fa-money-bill-wave"></i>
+                                        </button>
+                                        {{-- {{ dd($candidate->voucherRequest?->toArray()) }} --}}
+                                        @if($candidate->voucherRequest)
 
-                                                                        @php
-                                                                            $request = $candidate->voucherRequest;
-                                                                        @endphp
+                                            @php
+                                                $request = $candidate->voucherRequest;
+                                            @endphp
 
-                                                                        @if($request->status == 'Allocated')
-                                                                            <span class="badge bg-success">
-                                                                                <i class="fas fa-check-circle"></i> Voucher Allocated
-                                                                            </span>
+                                            @if($request->status == 'Allocated')
+                                                <span class="badge bg-success">
+                                                    <i class="fas fa-check-circle"></i> Voucher Allocated
+                                                </span>
 
-                                                                        @elseif($request->status == 'Pending')
-                                                                            <span class="badge bg-warning text-dark">
-                                                                                <i class="fas fa-clock"></i> Request Pending
-                                                                            </span>
+                                            @elseif($request->status == 'Pending')
+                                                <span class="badge bg-warning text-dark">
+                                                    <i class="fas fa-clock"></i> Request Pending
+                                                </span>
 
-                                                                        @elseif($request->status == 'Approved')
-                                                                            <span class="badge bg-info">
-                                                                                <i class="fas fa-check"></i> Approved
-                                                                            </span>
+                                            @elseif($request->status == 'Approved')
+                                                <span class="badge bg-info">
+                                                    <i class="fas fa-check"></i> Approved
+                                                </span>
 
-                                                                        @elseif($request->status == 'Rejected')
-                                                                            <span class="badge bg-danger">
-                                                                                <i class="fas fa-times"></i> Rejected
-                                                                            </span>
+                                            @elseif($request->status == 'Rejected')
+                                                <span class="badge bg-danger">
+                                                    <i class="fas fa-times"></i> Rejected
+                                                </span>
 
-                                                                        @endif
+                                            @endif
 
-                                                                    @else
+                                        @else
 
-                                    <button
-                                        type="button"
-                                        class="btn btn-sm btn-dark request-voucher-btn"
-                                        data-candidate-id="{{ $candidate->id }}"
-                                        data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
-                                        data-candidate-code="{{ $candidate->candidate_code }}"
-                                        data-center-id="{{ $candidate->center_id }}"
-                                    >
-                                        <i class="fas fa-paper-plane"></i>
-                                    </button>
+                                            <button type="button" class="btn btn-sm btn-dark request-voucher-btn"
+                                                data-candidate-id="{{ $candidate->id }}"
+                                                data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
+                                                data-candidate-code="{{ $candidate->candidate_code }}"
+                                                data-center-id="{{ $candidate->center_id }}">
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
 
-                                @endif
-                                                                    </td>
-                                                                </tr>
+                                        @endif
+                                    </td>
+                                </tr>
                             @empty
                                 <tr>
                                     <td colspan="9" class="text-center py-5">
@@ -425,6 +422,8 @@
                 });
             });
 
+
+
             $('#uploadDocModal').on('hidden.bs.modal', function () {
                 $('#uploadDocForm')[0].reset();
             });
@@ -570,4 +569,25 @@
             $('#voucherRequestModal').modal('show');
         });
     </script>
+    @if(session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'No vouchers are currently available. Please add a new voucher to assign to this student.',
+                text: "{{ session('error') }}",
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
+
+    @if(session('warning'))
+        <script>
+            Swal.fire({
+                icon: 'warning',
+                title: 'No vouchers are currently available. Please add a new voucher to assign to this student.',
+                text: "{{ session('warning') }}",
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
 @endsection

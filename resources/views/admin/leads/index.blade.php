@@ -97,7 +97,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $lead->lead_no }}</td>
                                 <td>
-                                    <strong>{{ $lead->candidate_name }}</strong>
+                                    <strong>{{ $lead->candidate_name ?? '-'}}</strong>
                                     @if($lead->email)
                                         <br><small class="text-muted">{{ $lead->email }}</small>
                                     @endif

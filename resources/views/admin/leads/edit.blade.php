@@ -41,7 +41,7 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Candidate Name <span class="text-danger">*</span></label>
                             <input type="text" name="candidate_name" class="form-control"
-                                value="{{ old('candidate_name', $lead->candidate_name) }}" required>
+                                value="{{ old('candidate_name', $lead->candidate_name) }}">
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -115,24 +115,7 @@
                             </select>
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Status</label>
-                            <select name="status" class="form-select">
-                                <option value="New" {{ old('status', $lead->status) == 'New' ? 'selected' : '' }}>New</option>
-                                <option value="Interested" {{ old('status', $lead->status) == 'Interested' ? 'selected' : '' }}>Interested</option>
-                                <option value="Follow-up" {{ old('status', $lead->status) == 'Follow-up' ? 'selected' : '' }}>
-                                    Follow-up</option>
-                                <option value="Quotation Sent" {{ old('status', $lead->status) == 'Quotation Sent' ? 'selected' : '' }}>Quotation Sent</option>
-                                <option value="Payment Pending" {{ old('status', $lead->status) == 'Payment Pending' ? 'selected' : '' }}>Payment Pending</option>
-                                <option value="Paid" {{ old('status', $lead->status) == 'Paid' ? 'selected' : '' }}>Paid
-                                </option>
-                                <option value="Exam Scheduled" {{ old('status', $lead->status) == 'Exam Scheduled' ? 'selected' : '' }}>Exam Scheduled</option>
-                                <option value="Completed" {{ old('status', $lead->status) == 'Completed' ? 'selected' : '' }}>
-                                    Completed</option>
-                                <option value="Lost" {{ old('status', $lead->status) == 'Lost' ? 'selected' : '' }}>Lost
-                                </option>
-                            </select>
-                        </div>
+                        <input type="hidden" name="status" value="{{ old('status', $lead->status) }}">
 
                         <div class="col-12 mb-3">
                             <label class="form-label">Remarks</label>

@@ -70,7 +70,6 @@
                                 <th>Expiry Date</th>
                                 <th>Purchase Price</th>
                                 <th>Cost</th>
-                                <th>Status</th>
                                 <th width="180" class="text-center">Action</th>
 
                             </tr>
@@ -113,15 +112,6 @@
                                     <td>
                                         ₹{{ number_format($voucher->cost, 2) }}
                                     </td>
-
-                                    <td>
-                                        @if($voucher->status)
-                                            <span class="badge bg-success">Active</span>
-                                        @else
-                                            <span class="badge bg-danger">Inactive</span>
-                                        @endif
-                                    </td>
-
                                     <td class="text-center">
 
                                         <a href="{{ route('vouchers.edit', $voucher->id) }}" class="btn btn-sm btn-warning">

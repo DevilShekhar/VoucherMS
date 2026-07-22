@@ -53,11 +53,11 @@
                                 </span>
                             </td>
                             <td>{{ $payment->payment_date ? $payment->payment_date->format('d M Y') : '-' }}</td>
-                            {{-- <td>
+                            <td>
                                 <a href="{{ route('candidates.show', $payment->candidate) }}" class="btn btn-sm btn-primary">
                                     View
                                 </a>
-                            </td> --}}
+                            </td>
                         </tr>
                         @empty
                         <tr><td colspan="8" class="text-center py-5">No payments found</td></tr>

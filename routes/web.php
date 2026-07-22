@@ -19,9 +19,16 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login', function () {
     return view('welcome');
 });
+use App\Models\Voucher;
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+
+    $vouchers = Voucher::with('vendor')
+        ->latest()
+        ->paginate(10);
+
+    return view('dashboard', compact('vouchers'));
+
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -106,6 +113,8 @@ Route::middleware(['auth'])->group(function () {
         ->name('roles.permissions.update');
     Route::get('/leads/followups/reminders', [LeadController::class, 'reminders'])->name('leads.followups.reminders');
     Route::post('/lead-followups/{id}/mark-done', [LeadController::class, 'markDone']);
+    Route::get('/voucher-dashboard', [VoucherController::class, 'dashboard'])
+        ->name('vouchers.dashboard');
 
 });
 

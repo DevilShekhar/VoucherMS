@@ -31,19 +31,22 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
+        $request->merge([
+            'status' => $request->input('status', 1),
+        ]);
+
         $validated = $request->validate([
-        'course_code' => 'required|string|max:50|unique:courses,course_code',
-        'course_name' => 'required|string|max:255|unique:courses,course_name',
-        'description' => 'nullable|string',
-        'status'      => 'required|boolean',
-    ]);
+            'course_code' => 'required|string|max:50|unique:courses,course_code',
+            'course_name' => 'required|string|max:255|unique:courses,course_name',
+            'description' => 'nullable|string',
+            'status' => 'required|boolean',
+        ]);
 
         Course::create($validated);
 
         return redirect()
             ->route('courses.index')
             ->with('success', 'Course created successfully.');
-
     }
 
     public function edit(Course $course)
@@ -69,10 +72,12 @@ class CourseController extends Controller
 
     public function destroy(Course $course)
     {
-        $course->delete();
+        $course->update([
+            'status' => 0,
+        ]);
 
         return redirect()
             ->route('courses.index')
-            ->with('success', 'Course deleted successfully.');
+            ->with('success', 'Course deactivated successfully.');
     }
 }

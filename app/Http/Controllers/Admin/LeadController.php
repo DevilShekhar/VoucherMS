@@ -80,14 +80,14 @@ class LeadController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'center_id' => 'required|exists:centers,id',
-            'course_id' => 'required',
-            'candidate_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'center_id' => 'nullable|exists:centers,id',
+            'course_id' => 'nullable',
+            'candidate_name' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255',
             'mobile' => 'required|string|max:20',
             'company' => 'nullable|string|max:255',
-            'city' => 'required|string|max:255',
-            'priority' => 'required|in:Low,Medium,High',
+            'city' => 'nullable|string|max:255',
+            'priority' => 'nullable|in:Low,Medium,High',
             'status' => 'required|string',
             'remarks' => 'nullable|string',
             'assigned_to' => 'nullable|exists:users,id',
@@ -237,13 +237,13 @@ class LeadController extends Controller
             'assigned_to' => 'nullable|exists:users,id',
             'center_id' => 'nullable|exists:centers,id',
             'course_id' => 'nullable|exists:courses,id',
-            'candidate_name' => 'required|string|max:255',
+            'candidate_name' => 'nullable|string|max:255',
             'email' => 'nullable|email|max:255',
             'mobile' => 'required|string|max:20',
             'company' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:255',
             'priority' => 'required|in:Low,Medium,High',
-            'status' => 'required|string',
+            'status' => 'nullable|string',
             'remarks' => 'nullable|string',
         ]);
 
