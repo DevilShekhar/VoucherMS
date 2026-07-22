@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\VoucherRequestController;
 use App\Http\Controllers\Admin\VoucherRequestNotificationController;
 use App\Http\Controllers\Admin\VoucherVendorController;
+use App\Http\Controllers\Admin\ExamScheduleController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -113,8 +114,14 @@ Route::middleware(['auth'])->group(function () {
         ->name('roles.permissions.update');
     Route::get('/leads/followups/reminders', [LeadController::class, 'reminders'])->name('leads.followups.reminders');
     Route::post('/lead-followups/{id}/mark-done', [LeadController::class, 'markDone']);
+
     Route::get('/voucher-dashboard', [VoucherController::class, 'dashboard'])
         ->name('vouchers.dashboard');
+
+    Route::get('/exam-schedules', [ExamScheduleController::class, 'index'])->name('exam-schedules.index');
+    Route::get('/exam-schedules/{examSchedule}', [ExamScheduleController::class, 'show'])->name('exam-schedules.show');
+    Route::post('/exam-schedules', [ExamScheduleController::class, 'store'])->name('exam-schedules.store');
+
 
 });
 
