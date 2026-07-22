@@ -17,13 +17,14 @@ class CandidateController extends Controller
     public function index()
     {
         $candidates = Candidate::with([
-            'course',
             'center',
-            'executive',
-            'voucherRequest',
-        ])->get();
+            'course',
+            'executive'
+        ])->where('status', 'Active')->get();
 
-        return view('admin.candidates.index', compact('candidates'));
+        $centers = Center::orderBy('center_name')->get();
+
+        return view('admin.candidates.index', compact('candidates', 'centers'));
     }
 
     public function create()
