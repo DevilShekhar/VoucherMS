@@ -104,6 +104,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('roles/{role}/permissions', [RoleController::class, 'updatePermissions'])
         ->name('roles.permissions.update');
+    Route::get('/leads/followups/reminders', [LeadController::class, 'reminders'])->name('leads.followups.reminders');
+    Route::post('/lead-followups/{id}/mark-done', [LeadController::class, 'markDone']);
 
 });
 

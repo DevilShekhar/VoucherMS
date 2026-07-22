@@ -3,15 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Candidate;
 use App\Models\Center;
 use App\Models\Course;
 use App\Models\Lead;
 use App\Models\LeadFollowUp;
-use App\Models\User;
-use App\Models\Candidate;
-use Illuminate\Http\Request;
 use App\Models\LeadNotification;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class LeadController extends Controller
 {
@@ -92,7 +94,6 @@ class LeadController extends Controller
             'other_course_name' => 'nullable|string|max:255|required_if:course_id,other',
         ]);
 
-
         $currentUser = Auth::user();
 
         // === Handle "Other" Course ===
@@ -137,32 +138,32 @@ class LeadController extends Controller
         $leadNo = "L-{$date}-{$nextNumber}";
 
         $lead = Lead::create([
-        'lead_no' => $leadNo,
-        'assigned_to' => $assignedTo,
-        'center_id' => $request->center_id,
-        'course_id' => $courseId,
-        'candidate_name' => $request->candidate_name,
-        'email' => $request->email,
-        'mobile' => $request->mobile,
-        'company' => $request->company,
-        'city' => $request->city,
-        'priority' => $request->priority,
-        'status' => $request->status,
-        'remarks' => $request->remarks,
-        'created_by' => Auth::id(),
-    ]);
-
-    if ($lead->assigned_to) {
-
-        LeadNotification::create([
-            'lead_id'   => $lead->id,
-            'user_id'   => $lead->assigned_to,
-            'title'     => 'New Lead Assigned',
-            'message'   => 'Lead No. '.$lead->lead_no.' has been assigned to you.',
-            'is_read'   => 0,
+            'lead_no' => $leadNo,
+            'assigned_to' => $assignedTo,
+            'center_id' => $request->center_id,
+            'course_id' => $courseId,
+            'candidate_name' => $request->candidate_name,
+            'email' => $request->email,
+            'mobile' => $request->mobile,
+            'company' => $request->company,
+            'city' => $request->city,
+            'priority' => $request->priority,
+            'status' => $request->status,
+            'remarks' => $request->remarks,
+            'created_by' => Auth::id(),
         ]);
 
-    }
+        if ($lead->assigned_to) {
+
+            LeadNotification::create([
+                'lead_id' => $lead->id,
+                'user_id' => $lead->assigned_to,
+                'title' => 'New Lead Assigned',
+                'message' => 'Lead No. '.$lead->lead_no.' has been assigned to you.',
+                'is_read' => 0,
+            ]);
+
+        }
 
         return redirect()->route('leads.index')
             ->with('success', 'Lead created successfully.');
@@ -282,28 +283,26 @@ class LeadController extends Controller
     }
     // Inside LeadController class
 
- public function addFollowup(Request $request, Lead $lead)
+    public function addFollowup(Request $request, Lead $lead)
     {
-        // Executive can only add follow-up to assigned leads
         if (Auth::user()->role_id == 4 && $lead->assigned_to != Auth::id()) {
             abort(403, 'You can only add followups to your assigned leads.');
         }
 
         $request->validate([
             'followup_date' => 'required|date',
-            'discussion'    => 'required|string',
-            'next_followup' => 'nullable|date|after:today',
-            'status'        => 'required|in:Pending,Contacted,Interested,Not Interested,Converted,Closed',
+            'discussion' => 'required|string',
+            'next_followup' => 'nullable|date',
+            'status' => 'required|in:Pending,Contacted,Interested,Not Interested,Converted,Closed',
         ]);
 
-        // Save Follow-up
-        LeadFollowUp::create([
-            'lead_id'        => $lead->id,
-            'followup_date'  => $request->followup_date,
-            'discussion'     => $request->discussion,
-            'next_followup'  => $request->next_followup,
-            'status'         => $request->status,
-            'created_by'     => Auth::id(),
+        $followup = LeadFollowUp::create([
+            'lead_id' => $lead->id,
+            'followup_date' => $request->followup_date,        // ← Fixed
+            'discussion' => $request->discussion,
+            'next_followup' => $request->next_followup,        // ← Must save time
+            'status' => $request->status,
+            'created_by' => Auth::id(),
         ]);
 
         // Update Lead Status
@@ -315,9 +314,9 @@ class LeadController extends Controller
         if ($request->status == 'Converted') {
 
             // Prevent duplicate candidate
-            $candidate = Candidate::where('lead_id', $lead->id)->first();
+            $candidate = Candidate::query()->where('lead_id', $lead->id)->first();
 
-            if (!$candidate) {
+            if (! $candidate) {
 
                 // Generate Candidate Code
                 $date = now()->format('Ymd');
@@ -340,31 +339,31 @@ class LeadController extends Controller
                 $name = explode(' ', trim($lead->candidate_name), 2);
 
                 Candidate::create([
-                    'candidate_code'   => $candidateCode,
-                    'lead_id'          => $lead->id,
-                    'center_id'        => null,
-                    'executive_id'     => $lead->assigned_to,
-                    'course_id'        => $lead->course_id,
+                    'candidate_code' => $candidateCode,
+                    'lead_id' => $lead->id,
+                    'center_id' => null,
+                    'executive_id' => $lead->assigned_to,
+                    'course_id' => $lead->course_id,
                     'certification_id' => null,
 
-                    'first_name'       => $name[0] ?? '',
-                    'last_name'        => $name[1] ?? '',
+                    'first_name' => $name[0] ?? '',
+                    'last_name' => $name[1] ?? '',
 
-                    'gender'           => null,
-                    'dob'              => null,
+                    'gender' => null,
+                    'dob' => null,
 
-                    'email'            => $lead->email,
-                    'mobile'           => $lead->mobile,
+                    'email' => $lead->email,
+                    'mobile' => $lead->mobile,
 
-                    'company'          => $lead->company,
-                    'gst_number'       => null,
+                    'company' => $lead->company,
+                    'gst_number' => null,
 
-                    'address'          => null,
-                    'city'             => $lead->city,
-                    'state'            => null,
-                    'country'          => null,
+                    'address' => null,
+                    'city' => $lead->city,
+                    'state' => null,
+                    'country' => null,
 
-                    'status'           => 'Active',
+                    'status' => 'Active',
                 ]);
             }
 
@@ -378,8 +377,43 @@ class LeadController extends Controller
         return redirect()
             ->route('leads.show', $lead->id)
             ->with('success', 'Follow-up added successfully.');
-        return redirect()
-            ->route('leads.show', $lead->id)
-            ->with('success', 'Follow-up added successfully.');
+    }
+    public function reminders()
+    {
+        $now = Carbon::now();
+        $fiveMinutesLater = $now->copy()->addMinutes(5);
+
+        $reminders = LeadFollowUp::with('lead')
+            ->whereBetween('next_followup', [$now, $fiveMinutesLater])
+            ->where('reminder_sent', 0)
+            ->whereHas('lead', function ($q) {
+                $q->where('assigned_to', Auth::id()); // Only assigned user's reminders
+            })
+            ->get();
+
+        foreach ($reminders as $followup) {
+            $followup->update([
+                'reminder_sent' => 1,
+            ]);
+        }
+
+        return response()->json([
+            'reminders' => $reminders,
+        ]);
+    }
+
+    public function markDone($id)
+    {
+        $followup = LeadFollowUp::findOrFail($id);
+
+        $updated = $followup->update([
+            'reminder_sent' => 1,
+        ]);
+
+        return response()->json([
+            'success' => $updated,
+            'before' => $followup->getOriginal('reminder_sent'),
+            'after' => $followup->fresh()->reminder_sent,
+        ]);
     }
 }

@@ -666,6 +666,68 @@
             }
         }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function checkFollowupReminders() {
+        $.ajax({
+            url: "{{ route('leads.followups.reminders') }}",
+            method: 'GET',
+            success: function(response) {
+                if (response.reminders && response.reminders.length > 0) {
+                    response.reminders.forEach(function(item) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: '⏰ Follow-up Reminder!',
+                            html: `
+                                <strong>${item.lead_name}</strong><br>
+                                <small>${item.followup_time}</small><br><br>
+                                ${item.discussion}
+                            `,
+                            showCancelButton: true,
+                            confirmButtonText: 'Mark as Done',
+                            cancelButtonText: 'Snooze 10 mins',
+                            timer: 90000,
+                            timerProgressBar: true,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                markFollowupDone(item.id);
+                            }
+                        });
+                    });
+                }
+            },
+            error: function() {
+                console.log('Reminder check failed');
+            }
+        });
+    }
+
+    function markFollowupDone(id) {
+        $.ajax({
+            url: `/lead-followups/${id}/mark-done`,
+            method: 'POST',
+            data: { _token: '{{ csrf_token() }}' },
+            success: function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Marked as Done',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            }
+        });
+    }
+
+    // Check every 25 seconds
+    setInterval(checkFollowupReminders, 10000);
+
+    // Check immediately when page loads
+    $(document).ready(function() {
+        checkFollowupReminders();
+    });
+</script>
+
 
 </body>
 

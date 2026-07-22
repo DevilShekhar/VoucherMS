@@ -15,7 +15,12 @@ class LeadFollowUp extends Model
         'next_followup',
         'status',
         'created_by',
+        'reminder_sent'
     ];
+    protected $casts = [
+    'followup_date' => 'datetime',
+    'next_followup' => 'datetime',
+];
 
     public function lead(): BelongsTo
     {
