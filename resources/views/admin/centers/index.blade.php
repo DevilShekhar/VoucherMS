@@ -71,7 +71,7 @@
                             <th>#</th>
                             <th>Center Code</th>
                             <th>Center Name</th>
-                            <th>Manager</th>
+                            <th>Cenetr Executive</th>
                             <th>Phone</th>
                             <th>City</th>
                             <th>Status</th>

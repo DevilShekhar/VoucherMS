@@ -92,9 +92,18 @@ Route::middleware(['auth'])->group(function () {
         [VoucherRequestNotificationController::class, 'markRead']
     )->name('voucher-request-notifications.read');
     Route::post(
-    '/voucher-requests/{voucherRequest}/allocate',
-    [VoucherRequestController::class, 'allocateVoucher']
-)->name('voucher-requests.allocate');
+        '/voucher-requests/{voucherRequest}/allocate',
+        [VoucherRequestController::class, 'allocateVoucher']
+    )->name('voucher-requests.allocate');
+
+    Route::get('roles/{role}/permissions-data', [RoleController::class, 'getPermissionsData'])
+        ->name('roles.permissions.data');
+
+    Route::get('roles/{role}/permissions', [RoleController::class, 'managePermissions'])
+        ->name('roles.permissions');
+
+    Route::post('roles/{role}/permissions', [RoleController::class, 'updatePermissions'])
+        ->name('roles.permissions.update');
 
 });
 

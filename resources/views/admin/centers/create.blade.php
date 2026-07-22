@@ -91,18 +91,18 @@
                         <div class="col-md-6 mb-3">
 
                             <label class="form-label">
-                                Center Manager
+                                Center Executive
                             </label>
 
-                            <select name="manager_id" class="form-control">
+                            <select name="center_exe_id" class="form-control">
 
-                                <option value="">Select Manager</option>
+                                <option value="">Select Cenetr Executive</option>
 
-                                @foreach($managers as $manager)
+                                @foreach($centerexes as $centerexe)
 
-                                    <option value="{{ $manager->id }}" {{ old('manager_id') == $manager->id ? 'selected' : '' }}>
+                                    <option value="{{ $centerexe->id }}" {{ old('center_exe_id') == $centerexe->id ? 'selected' : '' }}>
 
-                                        {{ $manager->name }}
+                                       {{ $centerexe->name }} ({{ $centerexe->email }})
 
                                     </option>
 
@@ -110,7 +110,7 @@
 
                             </select>
 
-                            @error('manager_id')
+                            @error('center_exe_id')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
 
@@ -200,23 +200,6 @@
                                 placeholder="Enter Address">{{ old('address') }}</textarea>
 
                         </div>
-
-                        <div class="col-md-6 mb-3">
-
-                            <label class="form-label">
-                                Status
-                            </label>
-
-                            <select name="status" class="form-control">
-
-                                <option value="1" selected>Active</option>
-
-                                <option value="0">Inactive</option>
-
-                            </select>
-
-                        </div>
-
                     </div>
 
                     <div class="mt-4">
