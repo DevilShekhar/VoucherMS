@@ -105,6 +105,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('roles/{role}/permissions', [RoleController::class, 'updatePermissions'])
         ->name('roles.permissions.update');
 
+     Route::resource('locations',\App\Http\Controllers\Admin\LocationController::class);  
+
 });
 
 require __DIR__.'/auth.php';

@@ -85,7 +85,7 @@
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Phone Number</label>
+                        <label class="form-label">Phone Number<span class="text-danger">*</span></label>
 
                         <input type="text"
                                name="phone"
@@ -99,7 +99,7 @@
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Email Address</label>
+                        <label class="form-label">Email Address<span class="text-danger">*</span></label>
 
                         <input type="email"
                                name="email"
