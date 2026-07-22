@@ -176,11 +176,13 @@ class VoucherRequestController extends Controller
         $request->validate([
             'action' => 'required|in:Approved,Rejected',
             'remarks' => 'nullable|string',
+            // 'selling_price' => 'required_if:action,Approved|nullable|numeric|min:0',
         ]);
 
         $data = [
             'status' => $request->action,
             'remarks' => $request->remarks,
+            //  'selling_price' => $request->selling_price,
         ];
 
         if (Auth::user()->role_id == 1) {

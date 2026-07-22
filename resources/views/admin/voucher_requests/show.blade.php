@@ -22,19 +22,16 @@
                     </a>
 
                     @if($voucherRequest->status == 'Approved')
-    <form id="allocateForm" action="{{ route('voucher-requests.allocate', $voucherRequest) }}" method="POST" class="m-0">
-        @csrf
+                        <form id="allocateForm" action="{{ route('voucher-requests.allocate', $voucherRequest) }}" method="POST"
+                            class="m-0">
+                            @csrf
 
-        <button type="button"
-                id="allocateBtn"
-                class="btn btn-primary"
-                data-bs-toggle="tooltip"
-                data-bs-placement="top"
-                title="Allocate voucher to this candidate">
-            <i class="fas fa-ticket-alt"></i> Allocate Voucher
-        </button>
-    </form>
-@endif
+                            <button type="button" id="allocateBtn" class="btn btn-primary" data-bs-toggle="tooltip"
+                                data-bs-placement="top" title="Allocate voucher to this candidate">
+                                <i class="fas fa-ticket-alt"></i> Allocate Voucher
+                            </button>
+                        </form>
+                    @endif
 
                 </div>
             </div>
@@ -191,6 +188,16 @@
                             <div class="card-body">
                                 <form action="{{ route('voucher-requests.approve', $voucherRequest) }}" method="POST">
                                     @csrf
+
+                                    {{-- <div class="mb-3" id="sellingPriceBox" style="display:none;">
+                                        <label class="form-label">
+                                            Selling Price <span class="text-danger">*</span>
+                                        </label>
+
+                                        <input type="number" class="form-control" name="selling_price" step="0.01" min="0">
+                                    </div> --}}
+
+
                                     <div class="mb-3">
                                         <label class="form-label">Action</label>
                                         <select class="form-select" name="action" required>
@@ -217,53 +224,48 @@
 
     </section>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
+        
+        document.getElementById('allocateBtn').addEventListener('click', function () {
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You are about to allocate a voucher to this candidate.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Allocate'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    // Submit the form
+                    document.getElementById('allocateForm').submit();
+
+                    // Optional: Show loading toast
+                    Swal.fire({
+                        title: 'Allocating...',
+                        text: 'Please wait',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                }
             });
         });
-        document.getElementById('allocateBtn').addEventListener('click', function() {
 
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You are about to allocate a voucher to this candidate.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, Allocate'
-        }).then((result) => {
-            if (result.isConfirmed) {
-
-                // Submit the form
-                document.getElementById('allocateForm').submit();
-
-                // Optional: Show loading toast
-                Swal.fire({
-                    title: 'Allocating...',
-                    text: 'Please wait',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-            }
-        });
-    });
-
-    // Show success toast if redirected back with success message
-    @if(session('success'))
-    Swal.fire({
-        icon: 'success',
-        title: 'Success!',
-        text: "{{ session('success') }}",
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 5000,
-        timerProgressBar: true
-    });
-    @endif
+        // Show success toast if redirected back with success message
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: "{{ session('success') }}",
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 5000,
+                timerProgressBar: true
+            });
+        @endif
     </script>
 @endsection

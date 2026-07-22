@@ -100,7 +100,7 @@
                     </div>
 
                     <!-- Certification -->
-                    
+
 
                     <!-- Purchase Date -->
                     <div class="col-md-6 mb-3">
@@ -171,7 +171,7 @@
                     </div>
 
                     <!-- Status -->
-                    <div class="col-md-6 mb-3">
+                    {{-- <div class="col-md-6 mb-3">
                         <label class="form-label">
                             Status
                         </label>
@@ -188,7 +188,7 @@
                         @error('status')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
-                    </div>
+                    </div> --}}
 
                     <!-- Remarks -->
                     <div class="col-md-12 mb-3">

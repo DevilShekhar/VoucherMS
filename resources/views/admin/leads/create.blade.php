@@ -108,7 +108,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Course <span class="text-danger">*</span></label>
-                            <select name="course_id" id="course_id" class="form-select" required>
+                            <select name="course_id" id="course_id" class="form-select">
                                 <option value="">Select Course</option>
                                 @foreach($courses as $course)
                                     <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
@@ -138,7 +138,7 @@
                         </script>
 
 
-                        <div class="col-md-6 mb-3">
+                        {{-- <div class="col-md-6 mb-3">
                             <label class="form-label">Center <span class="text-danger">*</span></label>
                             <select name="center_id" class="form-select">
                                 <option value="">Select Center</option>
@@ -151,7 +151,7 @@
                             @error('center_id')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
-                        </div>
+                        </div> --}}
 
 
                         <div class="col-md-6 mb-3">
@@ -167,29 +167,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Status</label>
-                            <select name="status" class="form-select">
-                                <option value="New" {{ old('status', 'New') == 'New' ? 'selected' : '' }}>New</option>
-                                <option value="Interested" {{ old('status') == 'Interested' ? 'selected' : '' }}>Interested
-                                </option>
-                                <option value="Follow-up" {{ old('status') == 'Follow-up' ? 'selected' : '' }}>Follow-up
-                                </option>
-                                <option value="Quotation Sent" {{ old('status') == 'Quotation Sent' ? 'selected' : '' }}>
-                                    Quotation Sent</option>
-                                <option value="Payment Pending" {{ old('status') == 'Payment Pending' ? 'selected' : '' }}>
-                                    Payment Pending</option>
-                                <option value="Paid" {{ old('status') == 'Paid' ? 'selected' : '' }}>Paid</option>
-                                <option value="Exam Scheduled" {{ old('status') == 'Exam Scheduled' ? 'selected' : '' }}>Exam
-                                    Scheduled</option>
-                                <option value="Completed" {{ old('status') == 'Completed' ? 'selected' : '' }}>Completed
-                                </option>
-                                <option value="Lost" {{ old('status') == 'Lost' ? 'selected' : '' }}>Lost</option>
-                            </select>
-                            @error('status')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
+                        <input type="hidden" name="status" value="New">
 
                         <div class="col-12 mb-3">
                             <label class="form-label">Remarks</label>

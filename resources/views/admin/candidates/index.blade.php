@@ -138,6 +138,7 @@
                                 @endif
                                                                     </td>
                                                                 </tr>
+
                             @empty
                                 <tr>
                                     <td colspan="9" class="text-center py-5">
@@ -548,6 +549,8 @@ $(document).ready(function () {
                 });
             });
 
+
+
             $('#uploadDocModal').on('hidden.bs.modal', function () {
                 $('#uploadDocForm')[0].reset();
             });
@@ -693,4 +696,25 @@ $(document).ready(function () {
             $('#voucherRequestModal').modal('show');
         });
     </script>
+    @if(session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'No vouchers are currently available. Please add a new voucher to assign to this student.',
+                text: "{{ session('error') }}",
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
+
+    @if(session('warning'))
+        <script>
+            Swal.fire({
+                icon: 'warning',
+                title: 'No vouchers are currently available. Please add a new voucher to assign to this student.',
+                text: "{{ session('warning') }}",
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
 @endsection
