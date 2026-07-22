@@ -2,202 +2,231 @@
 
 @section('content')
 
-<section class="section premium-dashboard">
-    <div class="premium-page-head">
-        <div class="premium-page-title">
-            <span class="mini-badge">Role Management</span>
-            <h2>Manage Permissions</h2>
-            <p>Role: <b>{{ $role->name }}</b></p>
+    <section class="section premium-dashboard">
+        <div class="premium-page-head">
+            <div class="premium-page-title">
+                <span class="mini-badge">Role Management</span>
+                <h2>Manage Permissions</h2>
+                <p>Role: <b>{{ $role->name }}</b></p>
+            </div>
         </div>
-    </div>
-</section>
 
-<section class="section premium-dashboard pt-0">
+    </section>
 
-<form method="POST"
-      action="{{ route('roles.permissions.update', ['role' => $role->id]) }}">
-    @csrf
 
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
-        <input type="text" id="searchPermission"
-               placeholder="Search permissions..."
-               style="padding:10px 14px;width:300px;border:1px solid #ddd;border-radius:10px;">
+    <section class="section premium-dashboard pt-0">
 
-        <button type="button" id="selectAllBtn"
-                style="padding:10px 18px;border:none;border-radius:10px;background:#4f46e5;color:#fff;">
-            Select All
-        </button>
-    </div>
+        <form method="POST" action="{{ route('roles.permissions.update', ['role' => $role->id]) }}">
+            @csrf
 
-    <div class="row">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
 
-        @foreach ($permissions as $groupName => $groupPermissions)
+                <!-- Left Side: Search -->
+                <input type="text"
+                    id="searchPermission"
+                    class="form-control"
+                    style="max-width: 360px;"
+                    placeholder=" Search permissions...">
 
-            @if($groupPermissions->count())
+                <!-- Right Side: Buttons -->
+                <div class="d-flex align-items-center gap-3">
+                    <button type="button" id="selectAllBtn" class="btn btn-primary">
+                        Select All
+                    </button>
 
-            <div class="col-6 mb-4">
-
-                <div style="background:#fff;border-radius:14px;overflow:hidden;border:1px solid #eee;">
-
-                    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:#f8fafc;border-bottom:1px solid #eee;">
-                        <div>
-                            <strong>{{ $groupName }}</strong><br>
-                            <small style="color:#666;">{{ $groupPermissions->count() }} permissions</small>
-                        </div>
-
-                        <button type="button"
-                                class="group-select-btn"
-                                style="padding:6px 12px;border:1px solid #ddd;border-radius:8px;background:#fff;">
-                            Select Group
-                        </button>
-                    </div>
-
-                    <div class="row" style="padding:15px;">
-
-                        @foreach ($groupPermissions as $permission)
-
-                        <div class="col-xl-3 col-lg-4 col-md-6 mb-2 permission-wrapper">
-
-                            <label class="permission-item">
-
-                                <input type="checkbox"
-                                       class="permission-checkbox"
-                                       name="permissions[]"
-                                       value="{{ $permission->name }}"
-                                       {{ in_array($permission->name, $rolePermissions) ? 'checked' : '' }}>
-
-                                <span class="permission-label">
-                                    {{ ucwords(str_replace('_',' ', $permission->name)) }}
-                                </span>
-
-                            </label>
-
-                        </div>
-
-                        @endforeach
-
-                    </div>
-
+                    <a href="{{ route('roles.index') }}" class="btn btn-back" style="color: blue">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Roles
+                    </a>
                 </div>
+
             </div>
 
-            @endif
-        @endforeach
+            <div class="permissions-grid" id="permissionsGrid">
 
-    </div>
+                @foreach ($permissions as $permission)
+                    <div class="permission-card">
+                        <label class="permission-label">
+                            <input type="checkbox" class="permission-checkbox" name="permissions[]"
+                                value="{{ $permission->name }}" {{ in_array($permission->name, $rolePermissions) ? 'checked' : '' }}>
 
-    <div style="position:sticky;bottom:15px;text-align:right;">
-        <button type="submit"
-                style="padding:12px 26px;border:none;border-radius:12px;background:#16a34a;color:#fff;font-weight:600;">
-            Save Permissions
-        </button>
-    </div>
+                            <span class="permission-name">
+                                {{ ucwords(str_replace(['.', '_', '-'], ' ', $permission->name)) }}
+                            </span>
+                        </label>
+                    </div>
+                @endforeach
 
-</form>
+            </div>
 
-</section>
+            <div class="sticky-footer">
+                <button type="submit" class="btn-save">
+                    💾 Save Permissions
+                </button>
+            </div>
+        </form>
 
-<style>
+    </section>
 
-.permission-item{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:10px 12px;
-    border:1px solid #e5e7eb;
-    border-radius:10px;
-    cursor:pointer;
-    transition:.2s ease;
-    background:#fff;
-    min-height:48px;
-}
+    <style>
+        .permissions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+        }
 
-.permission-item:hover{
-    border-color:#cbd5e1;
-}
+        .permission-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 14px 16px;
+            transition: all 0.2s ease;
+        }
 
-.permission-checkbox{
-    width:15px;
-    height:15px;
-    cursor:pointer;
-}
+        .permission-card:hover {
+            border-color: #6366f1;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05);
+        }
 
-.permission-item.active{
-    background:#ecfdf3;
-    border-color:#86efac;
-}
+        .permission-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            margin: 0;
+        }
 
-.permission-item.active .permission-label{
-    color:#166534;
-    font-weight:600;
-}
+        .permission-checkbox {
+            width: 18px;
+            height: 18px;
+            accent-color: #4f46e5;
+            cursor: pointer;
+        }
 
-.permission-label{
-    font-size:13px;
-    color:#374151;
-}
+        .permission-name {
+            font-size: 14.5px;
+            color: #374151;
+            font-weight: 500;
+            line-height: 1.4;
+        }
 
-</style>
+        .permission-card input:checked+.permission-name {
+            color: #1e2937;
+            font-weight: 600;
+        }
 
-<script>
+        .btn-select-all {
+            padding: 10px 20px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
 
-document.addEventListener('DOMContentLoaded', function () {
+        .btn-select-all:hover {
+            background: #4338ca;
+        }
 
-    const updateUI = () => {
-        document.querySelectorAll('.permission-checkbox').forEach(cb => {
-            const item = cb.closest('.permission-item');
-            cb.checked ? item.classList.add('active') : item.classList.remove('active');
+        .btn-save {
+            padding: 14px 32px;
+            background: #16a34a;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .btn-save:hover {
+            background: #15803d;
+        }
+
+        .sticky-footer {
+            position: sticky;
+            bottom: 20px;
+            text-align: right;
+            margin-top: 30px;
+            z-index: 10;
+        }
+
+        .mini-badge {
+            background: #e0e7ff;
+            color: #4338ca;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const checkboxes = document.querySelectorAll('.permission-checkbox');
+            const searchInput = document.getElementById('searchPermission');
+            const selectAllBtn = document.getElementById('selectAllBtn');
+
+            // Toggle active state on checkbox change
+            function updateCardStates() {
+                checkboxes.forEach(cb => {
+                    const card = cb.closest('.permission-card');
+                    if (cb.checked) {
+                        card.style.borderColor = '#6366f1';
+                        card.style.backgroundColor = '#f0f9ff';
+                    } else {
+                        card.style.borderColor = '#e5e7eb';
+                        card.style.backgroundColor = '#fff';
+                    }
+                });
+            }
+
+            updateCardStates();
+
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', updateCardStates);
+            });
+
+            // Search functionality
+            searchInput.addEventListener('input', function () {
+                const term = this.value.toLowerCase().trim();
+
+                document.querySelectorAll('.permission-card').forEach(card => {
+                    const text = card.textContent.toLowerCase();
+                    card.style.display = text.includes(term) ? '' : 'none';
+                });
+            });
+
+            // Select All / Deselect All
+            let allSelected = false;
+
+            selectAllBtn.addEventListener('click', function () {
+                allSelected = !allSelected;
+
+                checkboxes.forEach(cb => {
+                    cb.checked = allSelected;
+                });
+
+                this.textContent = allSelected ? 'Deselect All' : 'Select All';
+                updateCardStates();
+            });
+
+            // Optional: Make entire card clickable
+            document.querySelectorAll('.permission-card').forEach(card => {
+                card.addEventListener('click', function (e) {
+                    if (e.target.type !== 'checkbox') {
+                        const checkbox = this.querySelector('input[type="checkbox"]');
+                        checkbox.checked = !checkbox.checked;
+                        updateCardStates();
+                    }
+                });
+            });
         });
-    };
-
-    updateUI();
-
-    document.querySelectorAll('.permission-checkbox').forEach(cb => {
-        cb.addEventListener('change', updateUI);
-    });
-
-    document.querySelectorAll('.group-select-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-
-            const box = this.closest('div').parentElement;
-            const checkboxes = box.querySelectorAll('.permission-checkbox');
-
-            const allChecked = [...checkboxes].every(c => c.checked);
-
-            checkboxes.forEach(c => c.checked = !allChecked);
-
-            updateUI();
-        });
-    });
-
-    document.getElementById('selectAllBtn').addEventListener('click', function () {
-
-        const all = document.querySelectorAll('.permission-checkbox');
-        const allChecked = [...all].every(c => c.checked);
-
-        all.forEach(c => c.checked = !allChecked);
-
-        this.innerText = allChecked ? 'Select All' : 'Unselect All';
-
-        updateUI();
-    });
-
-    document.getElementById('searchPermission').addEventListener('input', function () {
-
-        const value = this.value.toLowerCase();
-
-        document.querySelectorAll('.permission-wrapper').forEach(el => {
-
-            const text = el.innerText.toLowerCase();
-
-            el.style.display = text.includes(value) ? '' : 'none';
-
-        });
-
-    });
-
-});
-
-</script>
+    </script>
 
 @endsection

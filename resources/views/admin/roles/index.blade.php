@@ -55,6 +55,9 @@
                                     @endif
                                 </td>
                                 <td>
+                                    <a href="{{ route('roles.permissions', $roleItem->id) }}" class="btn btn-sm btn-primary">
+                                        Manage Permission
+                                    </a>
                                     <a href="{{ route('roles.edit', $roleItem->id) }}" class="btn btn-sm btn-warning">
 
                                         <i class="fas fa-edit"></i>
