@@ -599,7 +599,7 @@
             width: 50px;
             height: 46px;
             border-radius: 10px;
-    background: linear-gradient(135deg, #2563eb, #1d4ed8); /* Vibrant Academic Blue */
+            background: linear-gradient(135deg, #2563eb, #1d4ed8); /* Vibrant Academic Blue */
             flex-shrink: 0;
             display: flex;
             align-items: center;
@@ -656,87 +656,87 @@
         }
 
        /* Sidebar Item Spacing */
-.sb-nav li {
-    margin-bottom: 4px;
-}
-
-/* 1. Normal State (Default Link) */
-.sb-link {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 14px;
-    border-radius: 10px;
-    color: #2C2218; /* Dark brown/charcoal text */
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    position: relative;
-    border-left: 3px solid transparent; /* Smooth border transition */
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.sb-link i {
-    width: 20px;
-    text-align: center;
-    font-size: 15px;
-    flex-shrink: 0;
-    /* color: #64748b;  */
-     color: #4d78d2; 
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.sb-link:hover {
-    background: rgba(37, 99, 235, 0.12); /* Soft translucent blue */
-    color: #2563eb; /* Vibrant blue text */
-    transform: translateX(6px);
-    border-left-color: #2563eb; /* Active accent border line */
-}
-
-.sb-link:hover i {
-    color: #2563eb; /* Icon turns blue on hover */
-    transform: scale(1.15); /* Smooth icon popup */
-}
-
-/* 3. Premium Active State (Matches your "Users" UI image) */
-.sb-link.active {
-    background: linear-gradient(135deg, #4f46e5, #3b82f6); /* Modern Indigo-Blue Gradient */
-    color: #ffffff !important; /* Pure white text */
-    font-weight: 600;
-    border-left-color: transparent;
-    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35); /* Subtle blue elevation glow */
-}
-
-/* Icon (Active State) */
-.sb-link.active i {
-    color: #ffffff !important; /* Icon turns white */
-    transform: scale(1.05);
-}
-
-/* 4. Badge Styling */
-.sb-link .badge-pill {
-    margin-left: auto;
-    background: var(--rust, #e11d48);
-    color: #ffffff;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 99px;
-    font-family: 'IBM Plex Mono', monospace;
-    transition: transform 0.25s ease;
-}
-
-.sb-link:hover .badge-pill {
-    transform: scale(1.08);
-}
-
-/* 5. Collapsed Sidebar State */
-.sidebar.collapsed .sb-link span,
-.sidebar.collapsed .sb-link .badge-pill {
-    display: none;
-}
+            .sb-nav li {
+                margin-bottom: 4px;
+            }
+            
+            /* 1. Normal State (Default Link) */
+            .sb-link {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 10px 14px;
+                border-radius: 10px;
+                color: #2C2218; /* Dark brown/charcoal text */
+                text-decoration: none;
+                font-size: 14px;
+                font-weight: 500;
+                white-space: nowrap;
+                overflow: hidden;
+                position: relative;
+                border-left: 3px solid transparent; /* Smooth border transition */
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            
+            .sb-link i {
+                width: 20px;
+                text-align: center;
+                font-size: 15px;
+                flex-shrink: 0;
+                /* color: #64748b;  */
+                 color: #4d78d2; 
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            
+            .sb-link:hover {
+                background: rgba(37, 99, 235, 0.12); /* Soft translucent blue */
+                color: #2563eb; /* Vibrant blue text */
+                transform: translateX(6px);
+                border-left-color: #2563eb; /* Active accent border line */
+            }
+            
+            .sb-link:hover i {
+                color: #2563eb; /* Icon turns blue on hover */
+                transform: scale(1.15); /* Smooth icon popup */
+            }
+            
+            /* 3. Premium Active State (Matches your "Users" UI image) */
+            .sb-link.active {
+                background: linear-gradient(135deg, #4f46e5, #3b82f6); /* Modern Indigo-Blue Gradient */
+                color: #ffffff !important; /* Pure white text */
+                font-weight: 600;
+                border-left-color: transparent;
+                box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35); /* Subtle blue elevation glow */
+            }
+            
+            /* Icon (Active State) */
+            .sb-link.active i {
+                color: #ffffff !important; /* Icon turns white */
+                transform: scale(1.05);
+            }
+            
+            /* 4. Badge Styling */
+            .sb-link .badge-pill {
+                margin-left: auto;
+                background: var(--rust, #e11d48);
+                color: #ffffff;
+                font-size: 10px;
+                font-weight: 700;
+                padding: 2px 8px;
+                border-radius: 99px;
+                font-family: 'IBM Plex Mono', monospace;
+                transition: transform 0.25s ease;
+            }
+            
+            .sb-link:hover .badge-pill {
+                transform: scale(1.08);
+            }
+            
+            /* 5. Collapsed Sidebar State */
+            .sidebar.collapsed .sb-link span,
+            .sidebar.collapsed .sb-link .badge-pill {
+                display: none;
+            }
 
         .sb-foot {
             padding: 16px 20px;
@@ -1696,19 +1696,19 @@
         }
 
        .avatar-placeholder {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    background: #dbeafe; /* Light Pastel Blue */
-    color: #1d4ed8;      /* Vibrant Blue Text */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    font-weight: 700;
-    text-transform: uppercase;
-    border: 1px solid #bfdbfe;
-}
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #dbeafe; /* Light Pastel Blue */
+            color: #1d4ed8;      /* Vibrant Blue Text */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: 1px solid #bfdbfe;
+        }
 
         .colored-toast {
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3);
@@ -1759,25 +1759,6 @@
         }
 
 /* samdhan css */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ==========================================
-   STAT CARDS & TABLE BADGES UI
-   ========================================== */
-
 /* 1. Stat Cards Block */
 
 .stat-card {
