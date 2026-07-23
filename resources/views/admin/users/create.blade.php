@@ -1,5 +1,5 @@
 
-@extends('layouts.app') 
+@extends('layouts.app')
     @section('content')
     <section class="section premium-dashboard">
         <div class="premium-header">
@@ -63,7 +63,7 @@
                                 <input type="text" name="employee_code" class="form-control" value="{{ old('employee_code') }}" placeholder="Enter Employee Code">
                             </div>
                             @error('employee_code')
-                                <small class="text-danger">{{ $message }}</small> 
+                                <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
                         <!-- Full Name -->
@@ -76,7 +76,7 @@
                                 <input type="text" name="name" class="form-control" value="{{ old('name') }}" placeholder="Enter Full Name">
                             </div>
                             @error('name')
-                                <small class="text-danger">{{ $message }}</small> 
+                                <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
                         <!-- Email -->
@@ -89,7 +89,7 @@
                                 <input type="email" name="email" class="form-control" value="{{ old('email') }}" placeholder="Enter Email">
                             </div>
                             @error('email')
-                                <small class="text-danger">{{ $message }}</small> 
+                                <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
                         <!-- Mobile -->
@@ -102,7 +102,7 @@
                                 <input type="text" name="mobile" class="form-control" value="{{ old('mobile') }}" placeholder="Enter Mobile Number">
                             </div>
                             @error('mobile')
-                                <small class="text-danger">{{ $message }}</small> 
+                                <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
                         <!-- Profile Photo -->
@@ -126,7 +126,7 @@
                                 </div>
                             </label>
                             @error('profile_photo')
-                                <small class="text-danger"> {{ $message }}</small> 
+                                <small class="text-danger"> {{ $message }}</small>
                             @enderror
                         </div>
                         <!-- Password -->
@@ -139,7 +139,7 @@
                                 <input type="password" name="password" class="form-control" placeholder="Enter Password">
                             </div>
                             @error('password')
-                                <small class="text-danger">{{ $message }}</small> 
+                                <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
                         <!-- Confirm Password -->
@@ -151,6 +151,26 @@
                                 </span>
                                 <input type="password" name="password_confirmation" class="form-control" placeholder="Confirm Password">
                             </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Location <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-user-tag"></i>
+                                </span>
+                                <select name="location_id" class="form-control">
+                                    <option value="">Select Location</option>
+
+                                    @foreach($locations as $location)
+                                        <option value="{{ $location->id }}"
+                                            @selected(old('location_id') == $location->id)>
+                                            {{ $location->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @error('location_id')
+                            <small class="text-danger">{{ $message }}</small> @enderror
                         </div>
                     </div>
                     <div class="form-footer">

@@ -57,4 +57,9 @@ class Lead extends Model
     {
         return $this->hasOne(Candidate::class);
     }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
+    }
 }

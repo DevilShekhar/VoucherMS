@@ -185,6 +185,26 @@
                             @enderror
 
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Location <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-user-tag"></i>
+                                </span>
+                                <select name="location_id" class="form-control">
+                                    <option value="">Select Location</option>
+
+                                    @foreach($locations as $location)
+                                        <option value="{{ $location->id }}"
+                                            @selected(old('location_id') == $location->id)>
+                                            {{ $location->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @error('location_id')
+                            <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
 
                     </div>
 

@@ -54,6 +54,25 @@
                         </div>
                         @if(Auth::user()->hasAnyRole(['Manager', 'Owner', 'Super Admin']))
                             <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    Location
+                                </label>
+
+                                <select name="location_id" id="location" class="form-select">
+
+                                    <option value="">Select Location</option>
+
+                                    @foreach($locations as $location)
+
+                                        <option value="{{ $location->id }}">
+                                            {{ $location->name }}
+                                        </option>
+
+                                    @endforeach
+
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label">Assign To
                                     <small class="text-muted">(Leave empty for auto assignment)</small>
                                 </label>
@@ -69,7 +88,9 @@
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
+
                         @endif
+
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Candidate Name <span class="text-danger">*</span></label>
@@ -136,24 +157,6 @@
                                 document.getElementById('other_course_div').style.display = 'block';
                             }
                         </script>
-
-
-                        {{-- <div class="col-md-6 mb-3">
-                            <label class="form-label">Center <span class="text-danger">*</span></label>
-                            <select name="center_id" class="form-select">
-                                <option value="">Select Center</option>
-                                @foreach($centers as $center)
-                                    <option value="{{ $center->id }}" {{ old('center_id') == $center->id ? 'selected' : '' }}>
-                                        {{ $center->center_name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('center_id')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div> --}}
-
-
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Priority</label>
                             <select name="priority" class="form-select">
@@ -193,4 +196,29 @@
         </form>
     </section>
 
+    <script>
+        $('#location').on('change', function () {
+
+            let locationId = $(this).val();
+
+            $.ajax({
+                url: "{{ route('sales.executives.by.location') }}",
+                type: "GET",
+                data: {
+                    location_id: locationId
+                },
+                success: function (users) {
+
+                    let options = '<option value="">Auto Assign (Round Robin)</option>';
+
+                    $.each(users, function (i, user) {
+                        options += `<option value="${user.id}">${user.name}</option>`;
+                    });
+
+                    $('select[name="assigned_to"]').html(options); // Replace old options
+                }
+            });
+
+        });
+    </script>
 @endsection

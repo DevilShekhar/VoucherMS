@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\CandidateController;
 use App\Http\Controllers\Admin\CenterController;
 use App\Http\Controllers\Admin\CourseController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ExamScheduleController;
 use App\Http\Controllers\Admin\LeadController;
 use App\Http\Controllers\Admin\LeadNotificationController;
 use App\Http\Controllers\Admin\PaymentController;
@@ -13,24 +15,19 @@ use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\VoucherRequestController;
 use App\Http\Controllers\Admin\VoucherRequestNotificationController;
 use App\Http\Controllers\Admin\VoucherVendorController;
-use App\Http\Controllers\Admin\ExamScheduleController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/login', function () {
     return view('welcome');
 });
+use App\Http\Controllers\Admin\LocationController;
 use App\Models\Voucher;
 
-Route::get('/dashboard', function () {
 
-    $vouchers = Voucher::with('vendor')
-        ->latest()
-        ->paginate(10);
-
-    return view('dashboard', compact('vouchers'));
-
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -121,9 +118,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/exam-schedules', [ExamScheduleController::class, 'index'])->name('exam-schedules.index');
     Route::get('/exam-schedules/{examSchedule}', [ExamScheduleController::class, 'show'])->name('exam-schedules.show');
     Route::post('/exam-schedules', [ExamScheduleController::class, 'store'])->name('exam-schedules.store');
-
-
-     Route::resource('locations',\App\Http\Controllers\Admin\LocationController::class);  
+    Route::get('/locations/{id}/users',
+        [LeadController::class, 'getUsersByLocation']);
+    Route::get('/sales-executives-by-location', [LeadController::class, 'getSalesExecutives'])
+        ->name('sales.executives.by.location');
+    Route::resource('locations', LocationController::class);
 
 });
 

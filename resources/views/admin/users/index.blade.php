@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<section class="section premium-dashboard">
+    <section class="section premium-dashboard">
         <div class="premium-header">
             <div class="premium-header-overlay"></div>
             <div class="premium-header-left">
@@ -14,7 +14,7 @@
                     <p>Manage all system users</p>
                 </div>
             </div>
-            <div class="premium-header-right">                 
+            <div class="premium-header-right">
                 <a href="{{ route('users.create') }}" class="premium-back-btn">
                     <i class="fas fa-plus-circle"></i> Add User
                 </a>
@@ -44,6 +44,7 @@
                                 <th>Name</th>
                                 <th>Role</th>
                                 <th>Email</th>
+                                <th>Location</th>
                                 <th>Mobile</th>
                                 <th>Status</th>
                                 <th width="170" class="text-center">Action</th>
@@ -67,11 +68,12 @@
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->role?->name ?? '-' }}</td>
                                     <td>{{ $user->email }}</td>
+                                    <td>{{ $user->location?->name ?? '-' }}</td>
                                     <td>{{ $user->mobile }}</td>
                                     <td>
                                         @if($user->status == '1')
                                             <span class="badge bg-success">Active</span>
-                                        @else   
+                                        @else
                                             <span class="badge bg-danger text-white">Inactive</span>
                                         @endif
                                     </td>
@@ -99,10 +101,6 @@
                             @endforelse
                         </tbody>
                     </table>
-                </div>
-
-                <div class="mt-3">
-                    {{ $users->links() }}
                 </div>
             </div>
         </div>

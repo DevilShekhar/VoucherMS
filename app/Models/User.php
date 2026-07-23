@@ -29,6 +29,7 @@ class User extends Authenticatable
         'profile_photo',
         'status',
         'last_login',
+        'location_id'
     ];
 
     /**
@@ -61,6 +62,7 @@ class User extends Authenticatable
 
         public function location()
     {
-        return $this->belongsTo(Location::class, 'location_id');
+        return $this->belongsTo(Location::class);
     }
+    
 }

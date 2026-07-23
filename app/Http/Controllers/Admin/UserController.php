@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Location;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -32,8 +33,9 @@ class UserController extends Controller
             ->where('name', '!=', 'Super Admin')
             ->orderBy('name')
             ->get();
+        $locations = Location::orderBy('name')->get();
 
-        return view('admin.users.create', compact('roles'));
+        return view('admin.users.create', compact('roles', 'locations'));
     }
 
     /**
@@ -41,10 +43,12 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $validated = $request->validate([
             'role_id' => 'required|exists:roles,id',
             'employee_code' => 'required|string|max:50|unique:users,employee_code',
             'name' => 'required|string|max:255',
+            'location_id' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'mobile' => 'required|string|max:20|unique:users,mobile|regex:/^[0-9+\-\s]+$/',
             'password' => 'required|min:6|confirmed',
@@ -80,8 +84,9 @@ class UserController extends Controller
         $roles = Role::query()->where('status', 1)
             ->orderBy('name')
             ->get();
+        $locations = Location::orderBy('name')->get();
 
-        return view('admin.users.edit', compact('user', 'roles'));
+        return view('admin.users.edit', compact('user', 'roles','locations'));
     }
 
     /**
@@ -144,5 +149,4 @@ class UserController extends Controller
             ->route('users.index')
             ->with('success', 'User deleted successfully.');
     }
-    
 }

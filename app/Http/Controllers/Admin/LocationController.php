@@ -32,13 +32,13 @@ class LocationController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            
+
         ]);
 
         \App\Models\Location::create($validated);
 
         return redirect()
-            ->route('locations.create')
+            ->route('locations.index')
             ->with('success', 'Location added successfully.');
     }
 
@@ -46,7 +46,7 @@ class LocationController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            
+
         ]);
 
         $location->update($request->all());
@@ -66,7 +66,7 @@ class LocationController extends Controller
             ->route('locations.index')
             ->with('success', 'Location deleted successfully.');
     }
- 
+
 
 }
 
