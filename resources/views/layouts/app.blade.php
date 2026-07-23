@@ -19,11 +19,14 @@
 
     <!-- Include SweetAlert2 and jQuery for your modals -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('assets/js/dataTables.min.js') }}"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Bootstrap 5 CSS for modal -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/dataTables.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
     
 </head>
@@ -51,7 +54,7 @@
                     <a href="{{ route('users.index') }}"
                         class="sb-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
                         <i class="fas fa-user-plus"></i>
-                        <span>Manage Users</span>
+                        <span>Users</span>
                     </a>
                 </li>
             @endcan
@@ -61,7 +64,7 @@
                     <a href="{{ route('roles.index') }}"
                         class="sb-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">
                         <i class="fas fa-user-shield"></i>
-                        <span>Manage Roles</span>
+                        <span>Roles</span>
                     </a>
                 </li>
             @endcan
@@ -91,7 +94,7 @@
                     <a href="{{ route('centers.index') }}"
                         class="sb-link {{ request()->routeIs('centers.*') ? 'active' : '' }}">
                         <i class="fas fa-store-alt"></i>
-                        <span>Manage Centers</span>
+                        <span>Centers</span>
                     </a>
                 </li>
             @endcan
@@ -101,7 +104,7 @@
                     <a href="{{ route('courses.index') }}"
                         class="sb-link {{ request()->routeIs('courses.*') ? 'active' : '' }}">
                         <i class="fas fa-book"></i>
-                        <span>Manage Courses</span>
+                        <span>Courses</span>
                     </a>
                 </li>
             @endcan
@@ -111,7 +114,7 @@
                     <a href="{{ route('leads.index') }}"
                         class="sb-link {{ request()->routeIs('leads.*') ? 'active' : '' }}">
                         <i class="fas fa-book"></i>
-                        <span>Manage Leads</span>
+                        <span>Leads</span>
                     </a>
                 </li>
             @endcan
@@ -121,7 +124,7 @@
                     <a href="{{ route('candidates.index') }}"
                         class="sb-link {{ request()->routeIs('candidates.*') ? 'active' : '' }}">
                         <i class="fas fa-user-graduate"></i>
-                        <span>Manage Candidates</span>
+                        <span>Candidates</span>
                     </a>
                 </li>
             @endcan
@@ -131,7 +134,7 @@
                     <a href="{{ route('payments.index') }}"
                         class="sb-link {{ request()->routeIs('payments.*') ? 'active' : '' }}">
                         <i class="fas fa-money-check-alt"></i>
-                        <span>Manage Payment</span>
+                        <span>Payment</span>
                     </a>
                 </li>
             @endcan
@@ -141,7 +144,7 @@
                     <a href="{{ route('vouchers.index') }}"
                         class="sb-link {{ request()->routeIs('vouchers.*') ? 'active' : '' }}">
                         <i class="fas fa-ticket-alt"></i>
-                        <span>Manage Voucher</span>
+                        <span>Voucher</span>
                     </a>
                 </li>
             @endcan
@@ -151,7 +154,7 @@
                     <a href="{{ route('voucher-requests.index') }}"
                         class="sb-link {{ request()->routeIs('voucher-requests.*') ? 'active' : '' }}">
                         <i class="fas fa-ticket-alt"></i>
-                        <span>Manage VoucherRequests</span>
+                        <span>VoucherRequests</span>
                     </a>
                 </li>
             @endcan
@@ -726,6 +729,21 @@
     $(document).ready(function() {
         checkFollowupReminders();
     });
+</script>
+<script>
+$(document).ready(function () {
+    if ($('#datatable tbody tr').length > 0 &&
+        $('#datatable tbody tr td[colspan]').length === 0) {
+
+        $('#datatable').DataTable({
+            paging: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            pageLength: 10
+        });
+    }
+});
 </script>
 
 
