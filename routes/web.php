@@ -22,8 +22,6 @@ Route::get('/login', function () {
     return view('welcome');
 });
 use App\Http\Controllers\Admin\LocationController;
-use App\Models\Voucher;
-
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
@@ -123,6 +121,27 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/sales-executives-by-location', [LeadController::class, 'getSalesExecutives'])
         ->name('sales.executives.by.location');
     Route::resource('locations', LocationController::class);
+    Route::post('/vouchers/bulk-upload', [VoucherController::class, 'bulkUpload'])
+        ->name('vouchers.bulk-upload');
+    Route::get('/vouchers/sample', function () {
+
+        $headers = [
+            'voucher_code',
+            'vendor_name',
+            'purchase_date',
+            'expiry_date',
+            'purchase_price',
+            'cost',
+        ];
+
+        $callback = function () use ($headers) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $headers);
+            fclose($file);
+        };
+
+        return response()->streamDownload($callback, 'voucher_sample.csv');
+    })->name('vouchers.sample');
 
 });
 
