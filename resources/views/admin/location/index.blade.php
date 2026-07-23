@@ -34,7 +34,6 @@
                         <tr>
                             <th>#</th>
                             <th>Location Name</th>
-                            <th>Status</th>
                             <th width="250">Action</th>
                         </tr>
                     </thead>
@@ -48,20 +47,13 @@
                                     </strong>
                                 </td>
                                 <td>
-                                    @if ($locationItem->status == 1)
-                                        <span class="badge bg-success text-white">Active</span>
-                                    @else
-                                        <span class="badge bg-danger text-white">Inactive</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    
+
                                     <a href="{{ route('locations.edit', $locationItem->id) }}" class="btn btn-sm btn-warning">
 
                                         <i class="fas fa-edit"></i>
 
                                     </a>
-                                   
+
                                         <form action="{{ route('locations.destroy', $locationItem->id) }}" method="POST" class="delete-form"
                                             style="display:inline;">
                                             @csrf
@@ -70,7 +62,7 @@
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
-                                   
+
                                 </td>
                             </tr>
                         @empty

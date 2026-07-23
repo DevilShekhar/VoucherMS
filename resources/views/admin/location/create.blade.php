@@ -41,7 +41,7 @@
                             name="name"
                             id="LocationName"
                             class="form-control"
-                            placeholder="Enter Locations name (e.g., Admin, Manager, Editor)"
+                            placeholder="Enter Locations name"
                             style="width: 100%; padding: 10px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--ink); font-size: 14px; transition: all .2s ease;"
                             required
                         >

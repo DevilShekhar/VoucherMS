@@ -9,11 +9,11 @@ use App\Models\Course;
 use App\Models\Lead;
 use App\Models\LeadFollowUp;
 use App\Models\LeadNotification;
+use App\Models\Location;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 class LeadController extends Controller
 {
@@ -67,11 +67,15 @@ class LeadController extends Controller
      */
     public function create()
     {
+        $locations = Location::query()->get();
         $users = User::query()->where('role_id', 4)->get();
         $centers = Center::query()->where('status', 1)->get();
         $courses = Course::query()->where('status', 1)->get();
 
-        return view('admin.leads.create', compact('users', 'centers', 'courses'));
+        return view(
+            'admin.leads.create',
+            compact('users', 'centers', 'courses', 'locations')
+        );
     }
 
     /**
@@ -126,7 +130,7 @@ class LeadController extends Controller
         if ($currentUser->role_id === 4) {
             $assignedTo = $currentUser->id;
         } elseif (empty($assignedTo)) {
-            $assignedTo = $this->getNextSalesExecutive();
+            $assignedTo = $this->getNextSalesExecutive($request->location_id);
         }
 
         // Generate Lead Number
@@ -150,6 +154,7 @@ class LeadController extends Controller
             'priority' => $request->priority,
             'status' => $request->status,
             'remarks' => $request->remarks,
+            'location_id' => $request->location_id,
             'created_by' => Auth::id(),
         ]);
 
@@ -169,9 +174,16 @@ class LeadController extends Controller
             ->with('success', 'Lead created successfully.');
     }
 
-    private function getNextSalesExecutive()
+    private function getNextSalesExecutive($locationId = null)
     {
-        $salesExecutives = User::query()->where('role_id', 4)
+        $query = User::query()->where('role_id', 4);
+
+        // Filter by selected location
+        if ($locationId) {
+            $query->where('location_id', $locationId);
+        }
+
+        $salesExecutives = $query
             ->orderBy('id')
             ->pluck('id');
 
@@ -179,7 +191,7 @@ class LeadController extends Controller
             return null;
         }
 
-        // Get the last auto-assigned lead
+        // Last assigned lead among executives of THIS location only
         $lastAssignedLead = Lead::whereNotNull('assigned_to')
             ->whereIn('assigned_to', $salesExecutives)
             ->latest('id')
@@ -190,6 +202,7 @@ class LeadController extends Controller
         }
 
         $currentIndex = $salesExecutives->search($lastAssignedLead->assigned_to);
+
         $nextIndex = ($currentIndex + 1) % $salesExecutives->count();
 
         return $salesExecutives[$nextIndex];
@@ -378,6 +391,7 @@ class LeadController extends Controller
             ->route('leads.show', $lead->id)
             ->with('success', 'Follow-up added successfully.');
     }
+
     public function reminders()
     {
         $now = Carbon::now();
@@ -415,5 +429,20 @@ class LeadController extends Controller
             'before' => $followup->getOriginal('reminder_sent'),
             'after' => $followup->fresh()->reminder_sent,
         ]);
+    }
+
+    public function getSalesExecutives(Request $request)
+    {
+        $query = User::query()->where('role_id', 4);
+
+        if ($request->filled('location_id')) {
+            $query->where('location_id', $request->location_id);
+        }
+
+        return response()->json(
+            $query->orderBy('name')
+                ->select('id', 'name')
+                ->get()
+        );
     }
 }

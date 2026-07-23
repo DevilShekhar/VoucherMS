@@ -23,7 +23,7 @@ class ExamScheduleController extends Controller
         // Center Executive
         if ($user->role_id == 5) {
 
-            $centerId = Center::where('center_exe_id', $user->id)->value('id');
+            $centerId = Center::query()->where('center_exe_id', $user->id)->value('id');
             if ($centerId) {
                 $query->where('center_id', $centerId);
             } else {
@@ -38,7 +38,7 @@ class ExamScheduleController extends Controller
     {
         // Center Executive can only view schedules of their own center
         if (Auth::user()->role_id == 5) {
-            $center = Center::where('center_exe_id', Auth::id())->first();
+            $center = Center::query()->where('center_exe_id', Auth::id())->first();
             if (!$center || $examSchedule->center_id != $center->id) {
                 abort(403, 'Unauthorized access.');
             }
@@ -57,7 +57,7 @@ class ExamScheduleController extends Controller
         ]);
 
         // Prevent duplicate exam schedule
-        $exists = ExamSchedule::where('candidate_id', $request->candidate_id)->first();
+        $exists = ExamSchedule::query()->where('candidate_id', $request->candidate_id)->first();
 
         if ($exists) {
             return response()->json([
@@ -78,7 +78,7 @@ class ExamScheduleController extends Controller
                 'created_by'   => Auth::id(),
             ]);
 
-            Candidate::where('id', $request->candidate_id)
+            Candidate::query()->where('id', $request->candidate_id)
                 ->update([
                     'status' => 'Exam Scheduled'
                 ]);

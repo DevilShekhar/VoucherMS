@@ -78,23 +78,23 @@
                                     </td>
 
                                     <td>
-    @if($voucher->expiry_date)
-        {{ \Carbon\Carbon::parse($voucher->expiry_date)->format('d M Y') }}
+                                        @if($voucher->expiry_date)
+                                            {{ \Carbon\Carbon::parse($voucher->expiry_date)->format('d M Y') }}
 
-        @if(\Carbon\Carbon::parse($voucher->expiry_date)->isPast() && $voucher->status != 'Expired')
-            <br>
-            <small class="text-danger fw-bold">Expired</small>
-        @elseif(\Carbon\Carbon::parse($voucher->expiry_date)->diffInDays(now(), false) <= 7 &&
-                 \Carbon\Carbon::parse($voucher->expiry_date)->isFuture())
-            <br>
-            <small class="text-warning fw-bold" style="color:rgb(187 95 255) !important">
-                Expires in {{ floor(now()->diffInDays(\Carbon\Carbon::parse($voucher->expiry_date))) }} day(s)
-            </small>
-        @endif
-    @else
-        -
-    @endif
-</td>
+                                            @if(\Carbon\Carbon::parse($voucher->expiry_date)->isPast() && $voucher->status != 'Expired')
+                                                <br>
+                                                <small class="text-danger fw-bold">Expired</small>
+                                            @elseif(\Carbon\Carbon::parse($voucher->expiry_date)->diffInDays(now(), false) <= 7 &&
+                                                    \Carbon\Carbon::parse($voucher->expiry_date)->isFuture())
+                                                <br>
+                                                <small class="text-warning fw-bold" style="color:rgb(187 95 255) !important">
+                                                    Expires in {{ floor(now()->diffInDays(\Carbon\Carbon::parse($voucher->expiry_date))) }} day(s)
+                                                </small>
+                                            @endif
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
                                 <td>
 
 
@@ -149,6 +149,115 @@
 
             <div class="mt-4">
                 {{ $vouchers->links() }}
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="section premium-dashboard pt-0">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="card premium-block">
+
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-1">
+                            <i class="fas fa-calendar-day text-warning me-2"></i>
+                            Today's Lead Updates
+                        </h5>
+                        <small class="text-muted">
+                            All follow-ups scheduled for today • Updated in real-time
+                        </small>
+                    </div>
+                    <span class="badge bg-warning text-dark px-3 py-2">
+                        TODAY
+                    </span>
+                </div>
+
+                <div class="card-body p-0">
+                    <div class="card-header bg-white">
+
+                        <form method="GET" action="{{ route('dashboard') }}">
+                            <div class="row align-items-end">
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Location</label>
+
+                                    <select name="location_id"
+                                            class="form-select"
+                                            onchange="this.form.submit()">
+
+                                        <option value="">All Locations</option>
+
+                                        @foreach($locations as $location)
+
+                                            <option value="{{ $location->id }}"
+                                                {{ request('location_id') == $location->id ? 'selected' : '' }}>
+
+                                                {{ $location->name }}
+
+                                            </option>
+
+                                        @endforeach
+
+                                    </select>
+                                </div>
+
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="table-responsive" style="max-height: 320px; overflow-y: auto;">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light sticky-top bg-white">
+                                <tr>
+                                    <th>Lead No</th>
+                                    <th>Candidate Name</th>
+                                    <th>Mobile</th>
+                                    <th>Executive</th>
+                                    <th>Course</th>
+                                    <th>Today's Follow-up</th>
+                                    <th>Status</th>
+                                    <th>Next Follow-up</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($todayLeads as $item)
+                                    <tr>
+                                        <td><strong>{{ $item->lead->lead_no ?? '-' }}</strong></td>
+                                        <td>{{ $item->lead->candidate_name }}</td>
+                                        <td>{{ $item->lead->mobile }}</td>
+                                        <td>{{ $item->lead->assignedUser->name ?? '-' }}</td>
+                                        <td>{{ $item->lead->course->course_name ?? '-' }}</td>
+                                        <td class="text-primary">
+                                            <strong>{{ \Carbon\Carbon::parse($item->followup_date)->format('d M Y h:i A') }}</strong>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-info">{{ $item->status }}</span>
+                                        </td>
+                                        <td>
+                                            @if($item->next_followup)
+                                                {{ \Carbon\Carbon::parse($item->next_followup)->format('d M Y h:i A') }}
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="8" class="text-center py-5">
+                                            <i class="fas fa-inbox fa-3x text-muted mb-3 d-block"></i>
+                                            <h6 class="text-muted">No Leads for Today</h6>
+                                            <small class="text-muted">All today's follow-ups will appear here.</small>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
         </div>

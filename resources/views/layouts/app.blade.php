@@ -25,7 +25,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
-    
+
 </head>
 
 <body>
@@ -122,6 +122,15 @@
                         class="sb-link {{ request()->routeIs('candidates.*') ? 'active' : '' }}">
                         <i class="fas fa-user-graduate"></i>
                         <span>Manage Candidates</span>
+                    </a>
+                </li>
+            @endcan
+            @can('exam-schedules.index')
+                <li>
+                    <a href="{{ route('exam-schedules.index') }}"
+                        class="sb-link {{ request()->routeIs('exam-schedules.*') ? 'active' : '' }}">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Exam Schedule</span>
                     </a>
                 </li>
             @endcan

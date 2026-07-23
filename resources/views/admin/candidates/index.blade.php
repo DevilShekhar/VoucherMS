@@ -125,17 +125,18 @@
                                     >
                                         <i class="fas fa-paper-plane"></i>
                                     </button>
-                                    <button
+
+
+                                @endif
+                                <button
                                         type="button"
                                         class="btn btn-sm btn-primary exam-schedule-btn"
                                         data-id="{{ $candidate->id }}"
                                         data-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
-                                        data-center="{{ $candidate->center_id }}"                                    
+                                        data-center="{{ $candidate->center_id }}"
                                         data-voucher="{{ optional($candidate->voucherRequest)->voucher_id }}">
                                         <i class="fas fa-calendar-alt"></i>
                                     </button>
-
-                                @endif
                                                                     </td>
                                                                 </tr>
 
@@ -167,7 +168,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" name="candidate_id" id="exam_candidate_id">                       
+                        <input type="hidden" name="candidate_id" id="exam_candidate_id">
                         <input type="hidden" name="voucher_id" id="exam_voucher_id">
                         <div class="mb-3">
                             <label class="form-label">Candidate</label>
@@ -401,7 +402,7 @@ $(document).ready(function () {
     $(document).on('click', '.exam-schedule-btn', function () {
 
         $('#exam_candidate_id').val($(this).data('id'));
-        $('#exam_candidate_name').val($(this).data('name'));       
+        $('#exam_candidate_name').val($(this).data('name'));
         $('#exam_voucher_id').val($(this).data('voucher'));
 
         let centerId = $(this).data('center');
@@ -456,7 +457,7 @@ $(document).ready(function () {
 
     });
 
-    
+
 
 });
 </script>
