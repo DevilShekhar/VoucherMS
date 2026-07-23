@@ -568,7 +568,7 @@
         }
 
         .sidebar-icon {
-            color: #d4af37;
+            color: #7037d4;
             /* Gold */
         }
 
@@ -596,16 +596,16 @@
         }
 
         .sb-brand .dot {
-            width: 36px;
-            height: 36px;
+            width: 50px;
+            height: 46px;
             border-radius: 10px;
-            background: var(--gold-gradient);
+    background: linear-gradient(135deg, #2563eb, #1d4ed8); /* Vibrant Academic Blue */
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
-            color: #1A1410;
+            font-size: 25px;
+            color: #ffffffff;
             box-shadow: var(--gold-glow);
         }
 
@@ -632,7 +632,7 @@
             font-size: 10px;
             letter-spacing: .08em;
             text-transform: uppercase;
-            color: var(--sidebar-soft);
+            color:#000000;
             padding: 20px 20px 8px;
             white-space: nowrap;
             overflow: hidden;
@@ -655,79 +655,88 @@
             overflow-y: auto;
         }
 
-        .sb-nav li {
-            margin-bottom: 2px;
-        }
+       /* Sidebar Item Spacing */
+.sb-nav li {
+    margin-bottom: 4px;
+}
 
-        .sb-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 14px;
-            border-radius: 10px;
-            color: var(--sidebar-soft);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            white-space: nowrap;
-            overflow: hidden;
-            position: relative;
-            transition: all 0.25s ease;
-            color: #2C2218;
-        }
+/* 1. Normal State (Default Link) */
+.sb-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    color: #2C2218; /* Dark brown/charcoal text */
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+    border-left: 3px solid transparent; /* Smooth border transition */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-        .sb-link i {
-            width: 20px;
-            text-align: center;
-            font-size: 15px;
-            flex-shrink: 0;
-            transition: transform 0.25s ease;
-            color: #d4af37;
-        }
+.sb-link i {
+    width: 20px;
+    text-align: center;
+    font-size: 15px;
+    flex-shrink: 0;
+    /* color: #64748b;  */
+     color: #4d78d2; 
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-        .sb-link:hover {
-            background: #F5E6A8;
-            /* Soft Golden */
-            color: #8B6B00;
-            /* Dark Golden */
-            transform: translateX(4px);
-        }
+.sb-link:hover {
+    background: rgba(37, 99, 235, 0.12); /* Soft translucent blue */
+    color: #2563eb; /* Vibrant blue text */
+    transform: translateX(6px);
+    border-left-color: #2563eb; /* Active accent border line */
+}
 
-        .sb-link:hover i {
-            transform: scale(1.1);
-        }
+.sb-link:hover i {
+    color: #2563eb; /* Icon turns blue on hover */
+    transform: scale(1.15); /* Smooth icon popup */
+}
 
-        .sb-link.active {
-            background: var(--gold-gradient);
-            color: #1A1410;
-            font-weight: 600;
-            box-shadow: var(--gold-glow);
-        }
+/* 3. Premium Active State (Matches your "Users" UI image) */
+.sb-link.active {
+    background: linear-gradient(135deg, #4f46e5, #3b82f6); /* Modern Indigo-Blue Gradient */
+    color: #ffffff !important; /* Pure white text */
+    font-weight: 600;
+    border-left-color: transparent;
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35); /* Subtle blue elevation glow */
+}
 
-        .sb-link.active i {
-            color: #1A1410;
-        }
+/* Icon (Active State) */
+.sb-link.active i {
+    color: #ffffff !important; /* Icon turns white */
+    transform: scale(1.05);
+}
 
-        .sb-link .badge-pill {
-            margin-left: auto;
-            background: var(--rust);
-            color: #fff;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 99px;
-            font-family: 'IBM Plex Mono', monospace;
-            transition: transform 0.25s ease;
-        }
+/* 4. Badge Styling */
+.sb-link .badge-pill {
+    margin-left: auto;
+    background: var(--rust, #e11d48);
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-family: 'IBM Plex Mono', monospace;
+    transition: transform 0.25s ease;
+}
 
-        .sb-link:hover .badge-pill {
-            transform: scale(1.05);
-        }
+.sb-link:hover .badge-pill {
+    transform: scale(1.08);
+}
 
-        .sidebar.collapsed .sb-link span,
-        .sidebar.collapsed .sb-link .badge-pill {
-            display: none;
-        }
+/* 5. Collapsed Sidebar State */
+.sidebar.collapsed .sb-link span,
+.sidebar.collapsed .sb-link .badge-pill {
+    display: none;
+}
 
         .sb-foot {
             padding: 16px 20px;
@@ -744,11 +753,11 @@
             width: 38px;
             height: 38px;
             border-radius: 50%;
-            background: var(--gold-gradient);
+            background: linear-gradient(135deg, #4f46e5, #3b82f6);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #1A1410;
+            color: #ffffff;
             font-weight: 700;
             flex-shrink: 0;
             font-size: 14px;
@@ -763,7 +772,7 @@
 
         .sb-foot .role {
             font-size: 11px;
-            color: var(--sidebar-soft);
+            color: #000000;
         }
 
         .sidebar.collapsed .sb-foot .txt {
@@ -1272,7 +1281,7 @@
         }
 
         .badge.bg-success {
-            background: var(--sage-bg);
+            background: #198754;
             color: white;
         }
 
@@ -1326,7 +1335,7 @@
         }
 
         .btn-success {
-            background: var(--sage);
+            background: #198754;
             color: #fff;
         }
 
@@ -1659,7 +1668,7 @@
         }
 
         *:hover {
-            scrollbar-color: var(--ember) transparent;
+            scrollbar-color: #9fbffa transparent;
         }
 
         /* Table scrollbar - show only on hover */
@@ -1686,19 +1695,20 @@
             background: var(--ember-dark);
         }
 
-        .avatar-placeholder {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #fdee99, #edbd3a);
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
+       .avatar-placeholder {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #dbeafe; /* Light Pastel Blue */
+    color: #1d4ed8;      /* Vibrant Blue Text */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border: 1px solid #bfdbfe;
+}
 
         .colored-toast {
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3);
@@ -1748,3 +1758,104 @@
             color: #777;
         }
 
+/* samdhan css */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==========================================
+   STAT CARDS & TABLE BADGES UI
+   ========================================== */
+
+/* 1. Stat Cards Block */
+
+.stat-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.bg-indigo-light { background: #e0e7ff; color: #4f46e5; }
+.bg-success-light { background: #dcfce7; color: #16a34a; }
+.bg-orange-light { background: #ffedd5; color: #ea580c; }
+.bg-blue-light { background: #dbeafe; color: #2563eb; }
+
+.stat-label { font-size: 12px; font-weight: 600; color: #64748b; }
+.stat-number { font-size: 22px; font-weight: 800; color: #0f172a; margin: 2px 0; }
+.stat-sub { font-size: 11px; color: #94a3b8; }
+
+/* 2. Soft Role Pill */
+.role-pill {
+    background: #f3e8ff;
+    color: #7e22ce;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.code-badge {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 12px;
+}
+
+/* 3. Modern Status Chips (Replacing Bootstrap Badges) */
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-pill .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.status-active {
+    background: #dcfce7;
+    color: #15803d;
+}
+.status-active .dot { background: #16a34a; }
+
+.status-inactive {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+.status-inactive .dot { background: #dc2626; }
+    

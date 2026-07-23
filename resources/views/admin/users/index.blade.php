@@ -26,6 +26,60 @@
             <div class="dots"></div>
         </div>
     </section>
+
+    <!-- NEW STAT CARDS DIV ADDED HERE -->
+    <section class="section pt-0 pb-3">
+        <div class="row g-3">
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon bg-indigo-light text-indigo">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-details">
+                        <span class="stat-label">Total Users</span>
+                        <h3 class="stat-number">{{ $users->total() ?? count($users) }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon bg-success-light text-success">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="stat-details">
+                        <span class="stat-label">Active Users</span>
+                        <h3 class="stat-number">223</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon bg-orange-light text-orange">
+                        <i class="fas fa-user-slash"></i>
+                    </div>
+                    <div class="stat-details">
+                        <span class="stat-label">Inactive Users</span>
+                        <h3 class="stat-number">22</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon bg-blue-light text-blue">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="stat-details">
+                        <span class="stat-label">New This Month</span>
+                        <h3 class="stat-number">18</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="section premium-dashboard pt-0">
         @if(session('success'))
             <div class="alert alert-success">
@@ -64,17 +118,25 @@
                                             </div>
                                         @endif
                                     </td>
-                                    <td>{{ $user->employee_code }}</td>
-                                    <td>{{ $user->name }}</td>
-                                    <td>{{ $user->role?->name ?? '-' }}</td>
+                                    <td><span class="code-badge">{{ $user->employee_code }}</span></td>
+                                    <td class="fw-bold">{{ $user->name }}</td>
+                                    <td>
+                                        <!-- Updated Role Badge UI -->
+                                        <span class="role-pill">{{ $user->role?->name ?? '-' }}</span>
+                                    </td>
                                     <td>{{ $user->email }}</td>
                                     <td>{{ $user->location?->name ?? '-' }}</td>
                                     <td>{{ $user->mobile }}</td>
                                     <td>
+                                        <!-- Updated Status Chip UI -->
                                         @if($user->status == '1')
-                                            <span class="badge bg-success">Active</span>
+                                            <span class="status-pill status-active">
+                                                <span class="dot"></span> Active
+                                            </span>
                                         @else
-                                            <span class="badge bg-danger text-white">Inactive</span>
+                                            <span class="status-pill status-inactive">
+                                                <span class="dot"></span> Inactive
+                                            </span>
                                         @endif
                                     </td>
                                     <td class="text-center">
@@ -94,7 +156,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="9" class="text-center py-5">
+                                    <td colspan="10" class="text-center py-5">
                                         No users found.
                                     </td>
                                 </tr>
@@ -148,16 +210,6 @@
             });
         });
     </script>
-    <script>
-$(document).ready(function () {
-    $('#datatable').DataTable({
-        paging: true,
-        searching: true,
-        ordering: true,
-        info: true,
-        pageLength: 10
-    });
-});
-</script>
-
 @endsection
+
+

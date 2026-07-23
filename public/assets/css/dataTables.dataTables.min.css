@@ -514,7 +514,6 @@ table.dataTable tfoot th {
 table.dataTable>thead>tr>th,
 table.dataTable>thead>tr>td {
     padding: 10px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.3)
 }
 
 table.dataTable>thead>tr>th:active,
@@ -524,8 +523,11 @@ table.dataTable>thead>tr>td:active {
 
 table.dataTable>tfoot>tr>th,
 table.dataTable>tfoot>tr>td {
-    border-top: 1px solid rgba(0, 0, 0, 0.3);
+    border:none !important;
     padding: 10px 10px 6px 10px
+}
+.table>:not(:first-child) {
+    border-top:none !important;
 }
 
 table.dataTable>tbody>tr {
