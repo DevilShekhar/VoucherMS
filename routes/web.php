@@ -143,6 +143,14 @@ Route::middleware(['auth'])->group(function () {
         return response()->streamDownload($callback, 'voucher_sample.csv');
     })->name('vouchers.sample');
 
+    Route::get('/dashboard/export/leads', [DashboardController::class, 'exportLeads'])
+        ->name('dashboard.export.leads');
+
+    Route::get('/dashboard/export/vouchers', [DashboardController::class, 'exportVouchers'])
+        ->name('dashboard.export.vouchers');
+    Route::patch('/vouchers/{voucher}/mark-used',
+        [ExamScheduleController::class, 'markUsed'])
+        ->name('vouchers.mark-used');
 });
 
 require __DIR__.'/auth.php';
