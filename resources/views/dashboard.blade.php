@@ -211,7 +211,7 @@
                     </div>
                     <div class="table-responsive" style="max-height: 320px; overflow-y: auto;">
                         <table class="table table-hover mb-0">
-                            <thead class="table-light sticky-top bg-white">
+                            <thead class="table-light bg-white">
                                 <tr>
                                     <th>Lead No</th>
                                     <th>Candidate Name</th>
