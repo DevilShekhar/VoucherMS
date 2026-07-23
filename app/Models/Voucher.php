@@ -16,15 +16,25 @@ class Voucher extends Model
         'purchase_price',
         'cost',
         'status',
-        'remarks',
+        'remarks','voucher_code_hash'
     ];
 
     /**
      * Encrypt before saving.
      */
+    // public function setVoucherCodeAttribute($value)
+    // {
+    //     $this->attributes['voucher_code'] = Crypt::encryptString($value);
+    // }
+
     public function setVoucherCodeAttribute($value)
     {
+        $value = strtoupper(trim($value));
+
         $this->attributes['voucher_code'] = Crypt::encryptString($value);
+
+        // Used only for duplicate checking
+        $this->attributes['voucher_code_hash'] = hash('sha256', $value);
     }
 
     /**
