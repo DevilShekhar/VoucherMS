@@ -113,7 +113,7 @@
                 <li>
                     <a href="{{ route('leads.index') }}"
                         class="sb-link {{ request()->routeIs('leads.*') ? 'active' : '' }}">
-                        <i class="fas fa-book"></i>
+                        <i class="fa-solid fa-phone-volume"></i>
                         <span>Leads</span>
                     </a>
                 </li>

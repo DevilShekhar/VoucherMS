@@ -659,7 +659,7 @@
             .sb-nav li {
                 margin-bottom: 4px;
             }
-            
+
             /* 1. Normal State (Default Link) */
             .sb-link {
                 display: flex;
@@ -677,29 +677,29 @@
                 border-left: 3px solid transparent; /* Smooth border transition */
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
-            
+
             .sb-link i {
                 width: 20px;
                 text-align: center;
                 font-size: 15px;
                 flex-shrink: 0;
                 /* color: #64748b;  */
-                 color: #4d78d2; 
+                 color: #4d78d2;
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
-            
+
             .sb-link:hover {
                 background: rgba(37, 99, 235, 0.12); /* Soft translucent blue */
                 color: #2563eb; /* Vibrant blue text */
                 transform: translateX(6px);
                 border-left-color: #2563eb; /* Active accent border line */
             }
-            
+
             .sb-link:hover i {
                 color: #2563eb; /* Icon turns blue on hover */
                 transform: scale(1.15); /* Smooth icon popup */
             }
-            
+
             /* 3. Premium Active State (Matches your "Users" UI image) */
             .sb-link.active {
                 background: linear-gradient(135deg, #4f46e5, #3b82f6); /* Modern Indigo-Blue Gradient */
@@ -708,13 +708,13 @@
                 border-left-color: transparent;
                 box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35); /* Subtle blue elevation glow */
             }
-            
+
             /* Icon (Active State) */
             .sb-link.active i {
                 color: #ffffff !important; /* Icon turns white */
                 transform: scale(1.05);
             }
-            
+
             /* 4. Badge Styling */
             .sb-link .badge-pill {
                 margin-left: auto;
@@ -727,11 +727,11 @@
                 font-family: 'IBM Plex Mono', monospace;
                 transition: transform 0.25s ease;
             }
-            
+
             .sb-link:hover .badge-pill {
                 transform: scale(1.08);
             }
-            
+
             /* 5. Collapsed Sidebar State */
             .sidebar.collapsed .sb-link span,
             .sidebar.collapsed .sb-link .badge-pill {
@@ -1122,6 +1122,7 @@
         main {
             flex: 1;
             padding: 32px 32px;
+            background: #E9EEFE;
         }
 
         /* Custom styles for management */
@@ -1794,8 +1795,8 @@
 
 /* 2. Soft Role Pill */
 .role-pill {
-    background: #f3e8ff;
-    color: #7e22ce;
+    background: #dbeafe;
+    color: #1d4ed8;
     padding: 4px 12px;
     border-radius: 8px;
     font-size: 12px;
@@ -1803,7 +1804,7 @@
 }
 
 .code-badge {
-    background: #f1f5f9;
+    background: #dbeafe;
     color: #475569;
     padding: 3px 8px;
     border-radius: 6px;
@@ -1839,4 +1840,4 @@
     color: #b91c1c;
 }
 .status-inactive .dot { background: #dc2626; }
-    
+
