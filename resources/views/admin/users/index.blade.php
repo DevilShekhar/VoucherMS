@@ -35,7 +35,7 @@
         <div class="card premium-block">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle">
+                    <table class="table table-hover align-middle" id="datatable">
                         <thead>
                             <tr>
                                 <th width="60">#</th>
@@ -148,5 +148,16 @@
             });
         });
     </script>
+    <script>
+$(document).ready(function () {
+    $('#datatable').DataTable({
+        paging: true,
+        searching: true,
+        ordering: true,
+        info: true,
+        pageLength: 10
+    });
+});
+</script>
 
 @endsection

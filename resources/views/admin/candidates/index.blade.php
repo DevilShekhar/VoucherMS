@@ -32,7 +32,7 @@
         <div class="card premium-block">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle">
+                    <table class="table table-hover align-middle"  id="datatable">
                         <thead class="table-white">
                             <tr>
                                 <th>Candidate Code</th>

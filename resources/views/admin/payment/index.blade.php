@@ -26,7 +26,7 @@
     <div class="card premium-block">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-hover">
+                <table class="table table-hover" id="datatable">
                     <thead>
                         <tr>
                             <th>Payment No</th>
