@@ -4,30 +4,51 @@
 
 @section('content')
     <section class="section premium-dashboard">
-        <div class="premium-floating-header">
-            <div class="header-content">
-                <div class="header-left">
-                    <div class="header-icon">
-                        <i class="fas fa-chart-pie"></i>
+    <div class="card premium-block shadow-sm">
+
+        <div class="card-body py-4 px-4">
+            <div class="header-content d-flex justify-content-between align-items-start flex-wrap gap-4">
+
+                <!-- Left Side -->
+                <div class="header-left d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="fas fa-chart-pie fa-3x" style="color: #1e40af;"></i>
                     </div>
                     <div>
-                        <span class="header-badge">
+                        <span class="header-badge px-3 py-1"
+                              style="background-color: #1e40af; color: white; border-radius: 30px; font-size: 0.85rem;">
                             Overview
                         </span>
-                        <h2>Dashboard</h2>
-                        <p>Good {{ $timeOfDay ?? 'afternoon' }}, {{ auth()->user()->name ?? 'Admin' }}! Here's what's
-                            happening across your campus today.</p>
+
+                        <h2 class="mb-2 mt-2" style="color: #1e3a8a;">Dashboard</h2>
+                        <!-- Enhanced Greeting -->
+                        <p class="mb-0 fw-medium" style="font-size: 1.1rem; color: #1e3a8a;">
+                           Good {{ $timeOfDay ?? 'afternoon' }}, <strong>Eternal HighTech</strong>!
+                            Here's what's happening across your campus today.
+                        </p>
                     </div>
                 </div>
-                <div class="premium-head-actions">
-                    <span style="font-size: 13px; color: var(--ink-soft); display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-calendar-alt" style="color: var(--ember);"></i>
+
+                <!-- Right Side -->
+                <div class="d-flex flex-column align-items-end gap-3">
+                    <span style="font-size: 13px; color: #334155; display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-calendar-alt" style="color: #f59e0b;"></i>
                         {{ now()->format('l, F j, Y') }}
                     </span>
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('dashboard.export.leads') }}" class="btn btn-outline-success btn-sm">
+                            <i class="fas fa-file-excel"></i> Download Leads
+                        </a>
+
+                        <a href="{{ route('dashboard.export.vouchers') }}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-file-excel"></i> Download Vouchers
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
  <section class="section premium-dashboard pt-0">
     <div class="card premium-block">
         <div class="card-body">
@@ -42,7 +63,7 @@
 
             <div class="table-responsive">
 
-                <table class="table table-hover">
+                <table class="table table-hover" id="datatable">
 
                     <thead>
                         <tr>
@@ -96,8 +117,6 @@
                                         @endif
                                     </td>
                                 <td>
-
-
                                     @switch($voucher->status)
 
                                         @case('Available')
@@ -109,15 +128,15 @@
                                             @break
 
                                         @case('Used')
-                                            <span class="badge bg-secondary">Used</span>
+                                            <span class="badge bg-danger text-white">Used</span>
                                             @break
 
                                         @case('Expired')
-                                            <span class="badge bg-warning text-dark">Expired</span>
+                                            <span class="badge bg-warning text-white">Expired</span>
                                             @break
 
                                         @case('Cancelled')
-                                            <span class="badge bg-danger">Cancelled</span>
+                                            <span class="badge bg-info">Cancelled</span>
                                             @break
 
                                         @default
@@ -145,10 +164,6 @@
 
                 </table>
 
-            </div>
-
-            <div class="mt-4">
-                {{ $vouchers->links() }}
             </div>
 
         </div>

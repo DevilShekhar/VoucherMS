@@ -1,12 +1,15 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
-use App\Models\ExamSchedule;
 use App\Models\Candidate;
 use App\Models\Center;
-use Illuminate\Support\Facades\DB;
+use App\Models\ExamSchedule;
+use App\Models\Voucher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ExamScheduleController extends Controller
 {
@@ -17,7 +20,7 @@ class ExamScheduleController extends Controller
         $query = ExamSchedule::with([
             'candidate.course',
             'center',
-            'createdBy'
+            'createdBy',
         ]);
 
         // Center Executive
@@ -34,26 +37,35 @@ class ExamScheduleController extends Controller
 
         return view('admin.exam-schdule.index', compact('examSchedules'));
     }
+
     public function show(ExamSchedule $examSchedule)
     {
         // Center Executive can only view schedules of their own center
         if (Auth::user()->role_id == 5) {
             $center = Center::query()->where('center_exe_id', Auth::id())->first();
-            if (!$center || $examSchedule->center_id != $center->id) {
+            if (! $center || $examSchedule->center_id != $center->id) {
                 abort(403, 'Unauthorized access.');
             }
         }
-        $examSchedule->load(['candidate.course','center','createdBy',]);
-        return view('admin.exam-schdule.show', compact('examSchedule'));
+        $query = ExamSchedule::with([
+            'candidate.course',
+            'center',
+            'createdBy',
+            'voucher',
+        ]);
+        $examSchedule->load(['candidate.course', 'center', 'createdBy']);
+
+        return view('admin.exam-schdule.show', compact('examSchedule','query'));
     }
+
     public function store(Request $request)
     {
         $request->validate([
             'candidate_id' => 'required|exists:candidates,id',
-            'center_id'    => 'required|exists:centers,id',
-            'voucher_id'   => 'nullable|exists:vouchers,id',
-            'exam_date'    => 'required|date',
-            'exam_time'    => 'required',
+            'center_id' => 'required|exists:centers,id',
+            'voucher_id' => 'nullable|exists:vouchers,id',
+            'exam_date' => 'required|date',
+            'exam_time' => 'required',
         ]);
 
         // Prevent duplicate exam schedule
@@ -62,7 +74,7 @@ class ExamScheduleController extends Controller
         if ($exists) {
             return response()->json([
                 'status' => false,
-                'message' => 'Exam schedule already exists for this candidate.'
+                'message' => 'Exam schedule already exists for this candidate.',
             ], 422);
         }
 
@@ -70,23 +82,37 @@ class ExamScheduleController extends Controller
 
             ExamSchedule::create([
                 'candidate_id' => $request->candidate_id,
-                'center_id'    => $request->center_id,
-                'voucher_id'   => $request->voucher_id,
-                'exam_date'    => $request->exam_date,
-                'exam_time'    => $request->exam_time,
-                'exam_status'  => 'Scheduled',
-                'created_by'   => Auth::id(),
+                'center_id' => $request->center_id,
+                'voucher_id' => $request->voucher_id,
+                'exam_date' => $request->exam_date,
+                'exam_time' => $request->exam_time,
+                'exam_status' => 'Scheduled',
+                'created_by' => Auth::id(),
             ]);
 
             Candidate::query()->where('id', $request->candidate_id)
                 ->update([
-                    'status' => 'Exam Scheduled'
+                    'status' => 'Exam Scheduled',
                 ]);
         });
 
         return response()->json([
             'status' => true,
-            'message' => 'Exam schedule created successfully.'
+            'message' => 'Exam schedule created successfully.',
         ]);
+    }
+
+    public function markUsed(Request $request, Voucher $voucher)
+    {
+        $request->validate([
+            'remarks' => 'required|string|max:1000',
+        ]);
+
+        $voucher->update([
+            'status' => 'Used',
+            'remarks' => $request->remarks,
+        ]);
+
+        return back()->with('success', 'Voucher marked as Used successfully.');
     }
 }

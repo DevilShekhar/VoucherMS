@@ -26,10 +26,13 @@ class ExamSchedule extends Model
         return $this->belongsTo(Center::class, 'center_id');
     }
 
-
-
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function voucher()
+    {
+        return $this->belongsTo(Voucher::class);
     }
 }

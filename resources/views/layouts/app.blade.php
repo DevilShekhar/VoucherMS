@@ -20,7 +20,7 @@
     <!-- Include SweetAlert2 and jQuery for your modals -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('assets/js/dataTables.min.js') }}"></script>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Bootstrap 5 CSS for modal -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -680,80 +680,79 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-    function checkFollowupReminders() {
-        $.ajax({
-            url: "{{ route('leads.followups.reminders') }}",
-            method: 'GET',
-            success: function(response) {
-                if (response.reminders && response.reminders.length > 0) {
-                    response.reminders.forEach(function(item) {
-                        Swal.fire({
-                            icon: 'warning',
-                            title: '⏰ Follow-up Reminder!',
-                            html: `
+    <script>
+        function checkFollowupReminders() {
+            $.ajax({
+                url: "{{ route('leads.followups.reminders') }}",
+                method: 'GET',
+                success: function (response) {
+                    if (response.reminders && response.reminders.length > 0) {
+                        response.reminders.forEach(function (item) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: '⏰ Follow-up Reminder!',
+                                html: `
                                 <strong>${item.lead_name}</strong><br>
                                 <small>${item.followup_time}</small><br><br>
                                 ${item.discussion}
                             `,
-                            showCancelButton: true,
-                            confirmButtonText: 'Mark as Done',
-                            cancelButtonText: 'Snooze 10 mins',
-                            timer: 90000,
-                            timerProgressBar: true,
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                markFollowupDone(item.id);
-                            }
+                                showCancelButton: true,
+                                confirmButtonText: 'Mark as Done',
+                                cancelButtonText: 'Snooze 10 mins',
+                                timer: 90000,
+                                timerProgressBar: true,
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    markFollowupDone(item.id);
+                                }
+                            });
                         });
+                    }
+                },
+                error: function () {
+                    console.log('Reminder check failed');
+                }
+            });
+        }
+
+        function markFollowupDone(id) {
+            $.ajax({
+                url: `/lead-followups/${id}/mark-done`,
+                method: 'POST',
+                data: { _token: '{{ csrf_token() }}' },
+                success: function () {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Marked as Done',
+                        timer: 2000,
+                        showConfirmButton: false
                     });
                 }
-            },
-            error: function() {
-                console.log('Reminder check failed');
-            }
-        });
-    }
+            });
+        }
 
-    function markFollowupDone(id) {
-        $.ajax({
-            url: `/lead-followups/${id}/mark-done`,
-            method: 'POST',
-            data: { _token: '{{ csrf_token() }}' },
-            success: function() {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Marked as Done',
-                    timer: 2000,
-                    showConfirmButton: false
+        setInterval(checkFollowupReminders, 10000);
+
+        // Check immediately when page loads
+        $(document).ready(function () {
+            checkFollowupReminders();
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            if ($('#datatable tbody tr').length > 0 &&
+                $('#datatable tbody tr td[colspan]').length === 0) {
+
+                $('#datatable').DataTable({
+                    paging: true,
+                    searching: true,
+                    ordering: true,
+                    info: true,
+                    pageLength: 10
                 });
             }
         });
-    }
-
-    // Check every 25 seconds
-    setInterval(checkFollowupReminders, 10000);
-
-    // Check immediately when page loads
-    $(document).ready(function() {
-        checkFollowupReminders();
-    });
-</script>
-<script>
-$(document).ready(function () {
-    if ($('#datatable tbody tr').length > 0 &&
-        $('#datatable tbody tr td[colspan]').length === 0) {
-
-        $('#datatable').DataTable({
-            paging: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            pageLength: 10
-        });
-    }
-});
-</script>
+    </script>
 
 
 </body>

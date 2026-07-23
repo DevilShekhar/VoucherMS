@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\LeadsExport;
+use App\Exports\VouchersExport;
 use App\Http\Controllers\Controller;
-use App\Models\Lead;
 use App\Models\LeadFollowUp;
 use App\Models\Location;
 use App\Models\Voucher;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DashboardController extends Controller
 {
@@ -20,7 +22,6 @@ class DashboardController extends Controller
         $today = Carbon::today();
         $locations = Location::orderBy('name')->get();
 
-        // Today's Lead Updates (Latest Follow-up)
         $todayLeads = LeadFollowUp::with([
             'lead.assignedUser',
             'lead.course',
@@ -66,7 +67,25 @@ class DashboardController extends Controller
 
         return view('dashboard', compact(
             'todayLeads',
-            'counts', 'vouchers','locations'
+            'counts', 'vouchers', 'locations'
         ));
     }
+
+    public function exportLeads()
+    {
+        return Excel::download(
+            new LeadsExport,
+            'Leads_'.now()->format('d-m-Y_H-i-s').'.xlsx'
+        );
+    }
+
+    public function exportVouchers()
+    {
+        return Excel::download(
+            new VouchersExport,
+            'Vouchers_'.now()->format('d-m-Y_H-i-s').'.xlsx'
+        );
+    }
+
+   
 }

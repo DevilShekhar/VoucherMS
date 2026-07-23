@@ -150,10 +150,6 @@
                     </tbody>
                 </table>
             </div>
-
-            <div class="mt-3">
-                {{ $leads->links() }}
-            </div>
         </div>
     </div>
 </section>
