@@ -3,48 +3,30 @@
 @section('content')
 
     <section class="section premium-dashboard">
-
-        <div class="premium-floating-header">
-
-            <div class="header-content">
-
-                <div class="header-left">
-
-                    <div class="header-icon">
-                        <i class="fas fa-user-edit"></i>
-                    </div>
-
-                    <div>
-
-                        <span class="header-badge">
-                            User Management
-                        </span>
-
-                        <h2>Edit User</h2>
-
-                        <p>Update user information</p>
-
-                    </div>
-
-                </div>
-
-                <div class="premium-head-actions">
-
-                    <a href="{{ route('users.index') }}" class="btn btn-create"
-                        style="background: var(--cloth); color: var(--ink);">
-
-                        <i class="fas fa-arrow-left"></i>
-                        Back to Users
-
-                    </a>
-
-                </div>
-
+    <div class="premium-header">
+        <div class="premium-header-overlay"></div>
+        <div class="premium-header-left">
+            <div class="premium-header-icon">
+                <i class="fas fa-user-edit"></i>
             </div>
-
+            <div class="premium-header-content">
+                <span class="premium-tag">USER MANAGEMENT</span>
+                <h2 class="text-white">Edit User</h2>
+                <p>Update user information</p>
+            </div>
         </div>
-
-    </section>
+        <div class="premium-header-right">
+            <a href="{{ route('users.index') }}" class="premium-back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Users
+            </a>
+        </div>
+        <!-- Decorative Shapes -->
+        <div class="shape circle-1"></div>
+        <div class="shape circle-2"></div>
+        <div class="shape circle-3"></div>
+        <div class="dots"></div>
+    </div>
+</section>
 
     <section class="section premium-dashboard pt-0">
 
@@ -210,12 +192,9 @@
 
                     <div class="mt-4">
 
-                        <button type="submit" class="btn btn-create">
-
-                            <i class="fas fa-save"></i>
-                            Update User
-
-                        </button>
+                        <button type="submit" class="btn btn-save">
+    <i class="fas fa-save me-2"></i> Update Role
+</button>
 
                         <a href="{{ route('users.index') }}" class="btn"
                             style="background: var(--cloth); color: var(--ink);">
