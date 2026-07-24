@@ -2,21 +2,25 @@
 
 @section('content')
 <section class="section premium-dashboard">
-    <div class="premium-floating-header">
-        <div class="header-content">
-            <div class="header-left">
-                <div class="header-icon">
-                    <i class="fas fa-user-edit"></i>
+        <div class="premium-header">
+            <div class="premium-header-overlay"></div>
+            <div class="premium-header-left">
+                <div class="premium-header-icon">
+                    <i class="fas fa-user-graduate"></i>
                 </div>
-                <div>
-                    <span class="header-badge">Candidate Management</span>
-                    <h2>Edit Candidate</h2>
+                <div class="premium-header-content">                    
+                    <span class="premium-tag">Candidate Management</span>
+                        <h1 class="text-white">Edit</h2>
+                        <p>Manage all converted candidates</p>
                 </div>
-            </div>
+            </div>            
+            <!-- Decorative Shapes -->
+            <div class="shape circle-1"></div>
+            <div class="shape circle-2"></div>
+            <div class="shape circle-3"></div>
+            <div class="dots"></div>
         </div>
-    </div>
-</section>
-
+    </section>
 <section class="section premium-dashboard pt-0">
     <div class="card premium-block">
         <div class="card-body">
