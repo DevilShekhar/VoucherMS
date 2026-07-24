@@ -6,7 +6,7 @@
 
     <!-- Header -->
  <section class="section premium-dashboard">
-        <div class="premium-header">
+    <div class="premium-header">
             <div class="premium-header-overlay"></div>
             <div class="premium-header-left">
                 <div class="premium-header-icon">
