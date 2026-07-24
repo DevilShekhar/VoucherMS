@@ -42,7 +42,7 @@
 
     </div>
 
-</section>
+    </section>
 
     <!-- Form -->
     <section class="section premium-dashboard pt-0">
