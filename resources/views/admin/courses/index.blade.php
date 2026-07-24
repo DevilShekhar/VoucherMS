@@ -2,27 +2,44 @@
 
 @section('content')
 
-    <section class="section premium-dashboard">
-        <div class="premium-floating-header">
-            <div class="header-content">
-                <div class="header-left">
-                    <div class="header-icon">
-                        <i class="fas fa-book"></i>
-                    </div>
-                    <div>
-                        <span class="header-badge">Course Management</span>
-                        <h2>Courses</h2>
-                        <p>Manage all available courses</p>
-                    </div>
-                </div>
-                <div class="premium-head-actions">
-                    <a href="{{ route('courses.create') }}" class="btn btn-create">
-                        <i class="fas fa-plus"></i> Add Course
-                    </a>
-                </div>
+<section class="section premium-dashboard">
+
+    <div class="premium-header">
+
+        <div class="premium-header-overlay"></div>
+
+        <div class="premium-header-left">
+
+            <div class="premium-header-icon">
+                <i class="fas fa-book"></i>
             </div>
+
+            <div class="premium-header-content">
+                <span class="premium-tag">COURSE MANAGEMENT</span>
+                <h2 class="text-white">Courses</h2>
+                <p>Manage all available courses</p>
+            </div>
+
         </div>
-    </section>
+
+        <div class="premium-header-right">
+
+            <a href="{{ route('courses.create') }}" class="premium-back-btn">
+                <i class="fas fa-plus"></i>
+                Add Course
+            </a>
+
+        </div>
+
+        <!-- Decorative Shapes -->
+        <div class="shape circle-1"></div>
+        <div class="shape circle-2"></div>
+        <div class="shape circle-3"></div>
+        <div class="dots"></div>
+
+    </div>
+
+</section>
 
     <section class="section premium-dashboard pt-0">
         <div class="card premium-block">
