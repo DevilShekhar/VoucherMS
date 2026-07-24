@@ -1,3 +1,4 @@
+@can('vouchers.create')
 @extends('layouts.app')
 
 @section('content')
@@ -22,7 +23,7 @@
 
             <div class="premium-header-right">
 
-                <a href="{{ route('vouchers.index') }}" 
+                <a href="{{ route('vouchers.index') }}"
                    class="premium-back-btn">
                     <i class="fas fa-arrow-left"></i>
                     Back to Vouchers
@@ -228,3 +229,8 @@
 </section>
 
 @endsection
+@else
+    @php
+        abort(403);
+    @endphp
+@endcan

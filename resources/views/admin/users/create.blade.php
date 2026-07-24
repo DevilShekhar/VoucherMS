@@ -1,4 +1,4 @@
-
+@can('users.create')
 @extends('layouts.app')
     @section('content')
     <section class="section premium-dashboard">
@@ -186,3 +186,8 @@
         </form>
     </section>
 @endsection
+@else
+    @php
+        abort(403);
+    @endphp
+@endcan

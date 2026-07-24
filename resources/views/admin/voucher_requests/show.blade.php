@@ -148,7 +148,12 @@
 
                                 <div class="col-md-4">
                                     <strong>Voucher Code</strong><br>
-                                    {{ $voucherRequest->voucher->voucher_code }}
+
+                                    @if(in_array(auth()->user()->role_id, [1, 2, 3]))
+                                        {{ $voucherRequest->voucher->voucher_code }}
+                                    @else
+                                        *******
+                                    @endif
                                 </div>
 
                                 <div class="col-md-4">
@@ -171,55 +176,55 @@
             </div>
         </div>
 
-        
-            @if($voucherRequest->status == 'Pending')
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="card premium-block">
-                            <div class="card-header">
-                                <h5 class="mb-0">
-                                    <i class="fas fa-check-circle"></i> Approval
-                                </h5>
-                            </div>
-                            <div class="card-body">
-                                <form action="{{ route('voucher-requests.approve', $voucherRequest) }}" method="POST">
-                                    @csrf                                
+
+        @if($voucherRequest->status == 'Pending')
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card premium-block">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-check-circle"></i> Approval
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <form action="{{ route('voucher-requests.approve', $voucherRequest) }}" method="POST">
+                                @csrf
 
 
-                                    <div class="mb-3">
-                                        <label class="form-label">Action</label>
-                                        <select class="form-select" name="action" required>
-                                            <option value="">Select Action</option>
-                                            <option value="Approved">Approve</option>
-                                            <option value="Rejected">Reject</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3" id="sellingPriceBox">
-                                        <label class="form-label">
-                                            Selling Price <span class="text-danger">*</span>
-                                        </label>
+                                <div class="mb-3">
+                                    <label class="form-label">Action</label>
+                                    <select class="form-select" name="action" required>
+                                        <option value="">Select Action</option>
+                                        <option value="Approved">Approve</option>
+                                        <option value="Rejected">Reject</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3" id="sellingPriceBox">
+                                    <label class="form-label">
+                                        Selling Price <span class="text-danger">*</span>
+                                    </label>
 
-                                        <input type="number" class="form-control" name="selling_price" step="0.01" min="0">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Remarks</label>
-                                        <textarea name="remarks" class="form-control" rows="4"
-                                            placeholder="Enter remarks..."></textarea>
-                                    </div>
-                                    <button class="btn btn-success w-100">
-                                        <i class="fas fa-save"></i> Submit Decision
-                                    </button>
-                                </form>
-                            </div>
+                                    <input type="number" class="form-control" name="selling_price" step="0.01" min="0">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Remarks</label>
+                                    <textarea name="remarks" class="form-control" rows="4"
+                                        placeholder="Enter remarks..."></textarea>
+                                </div>
+                                <button class="btn btn-success w-100">
+                                    <i class="fas fa-save"></i> Submit Decision
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
-            @endif
-        
+            </div>
+        @endif
+
 
     </section>
     <script>
-        
+
         document.getElementById('allocateBtn').addEventListener('click', function () {
 
             Swal.fire({
