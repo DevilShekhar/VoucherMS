@@ -32,6 +32,16 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $user = Auth::user();
+        if ($user->status == 0) {
+            Auth::logout();
+
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return back()->withErrors([
+                'email' => 'Your account is inactive. Please contact the administrator.',
+            ])->onlyInput('email');
+        }
         // Clear previous OTP session
         session()->forget([
             'otp_user_id',
