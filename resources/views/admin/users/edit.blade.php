@@ -178,7 +178,7 @@
 
                                     @foreach($locations as $location)
                                         <option value="{{ $location->id }}"
-                                            @selected(old('location_id') == $location->id)>
+                                            @selected(old('location_id', $user->location_id) == $location->id)>
                                             {{ $location->name }}
                                         </option>
                                     @endforeach
@@ -193,8 +193,8 @@
                     <div class="mt-4">
 
                         <button type="submit" class="btn btn-save">
-    <i class="fas fa-save me-2"></i> Update Role
-</button>
+                            <i class="fas fa-save me-2"></i> Update Role
+                        </button>
 
                         <a href="{{ route('users.index') }}" class="btn"
                             style="background: var(--cloth); color: var(--ink);">
