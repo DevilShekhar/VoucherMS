@@ -94,7 +94,7 @@ class UserController extends Controller
     /**
      * Update user.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user, Location $location)
     {
         $validated = $request->validate([
             'role_id' => 'required|exists:roles,id',
@@ -102,6 +102,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,'.$user->id,
             'mobile' => 'required|string|max:20|unique:users,mobile,'.$user->id,
+            'location_id' => 'required|string|max:255'.$location->id,
             'password' => 'nullable|min:6|confirmed',
             'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
