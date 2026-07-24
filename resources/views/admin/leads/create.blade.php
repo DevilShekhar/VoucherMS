@@ -5,42 +5,42 @@
 @section('content')
 
     <!-- Header -->
- <section class="section premium-dashboard">
+    <section class="section premium-dashboard">
 
-    <div class="premium-header">
+        <div class="premium-header">
 
-        <div class="premium-header-overlay"></div>
+            <div class="premium-header-overlay"></div>
 
-        <div class="premium-header-left">
+            <div class="premium-header-left">
 
-            <div class="premium-header-icon">
-                <i class="fas fa-user-plus"></i>
+                <div class="premium-header-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+
+                <div class="premium-header-content">
+                    <span class="premium-tag">LEAD MANAGEMENT</span>
+                    <h2 class="text-white">Create Lead</h2>
+                    <p>Add a new lead / candidate</p>
+                </div>
+
             </div>
 
-            <div class="premium-header-content">
-                <span class="premium-tag">LEAD MANAGEMENT</span>
-                <h2 class="text-white">Create Lead</h2>
-                <p>Add a new lead / candidate</p>
+            <div class="premium-header-right">
+
+                <a href="{{ route('leads.index') }}" class="premium-back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Leads
+                </a>
+
             </div>
 
-        </div>
-
-        <div class="premium-header-right">
-
-            <a href="{{ route('leads.index') }}" class="premium-back-btn">
-                <i class="fas fa-arrow-left"></i>
-                Back to Leads
-            </a>
+            <!-- Decorative Shapes -->
+            <div class="shape circle-1"></div>
+            <div class="shape circle-2"></div>
+            <div class="shape circle-3"></div>
+            <div class="dots"></div>
 
         </div>
-
-        <!-- Decorative Shapes -->
-        <div class="shape circle-1"></div>
-        <div class="shape circle-2"></div>
-        <div class="shape circle-3"></div>
-        <div class="dots"></div>
-
-    </div>
 
     </section>
 
