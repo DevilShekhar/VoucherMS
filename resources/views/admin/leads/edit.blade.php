@@ -6,27 +6,43 @@
 
     <!-- Header -->
     <section class="section premium-dashboard">
-        <div class="premium-floating-header">
-            <div class="header-content">
-                <div class="header-left">
-                    <div class="header-icon">
-                        <i class="fas fa-user-edit"></i>
-                    </div>
-                    <div>
-                        <span class="header-badge">Lead Management</span>
-                        <h2>Edit Lead</h2>
-                        <p>Update lead information</p>
-                    </div>
-                </div>
-                <div class="premium-head-actions">
-                    <a href="{{ route('leads.index') }}" class="btn btn-create"
-                        style="background: var(--cloth); color: var(--ink);">
-                        <i class="fas fa-arrow-left"></i> Back to Leads
-                    </a>
-                </div>
+
+    <div class="premium-header">
+
+        <div class="premium-header-overlay"></div>
+
+        <div class="premium-header-left">
+
+            <div class="premium-header-icon">
+                <i class="fas fa-user-edit"></i>
             </div>
+
+            <div class="premium-header-content">
+                <span class="premium-tag">LEAD MANAGEMENT</span>
+                <h2 class="text-white">Edit Lead</h2>
+                <p>Update lead information</p>
+            </div>
+
         </div>
-    </section>
+
+        <div class="premium-header-right">
+
+            <a href="{{ route('leads.index') }}" class="premium-back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Leads
+            </a>
+
+        </div>
+
+        <!-- Decorative Shapes -->
+        <div class="shape circle-1"></div>
+        <div class="shape circle-2"></div>
+        <div class="shape circle-3"></div>
+        <div class="dots"></div>
+
+    </div>
+
+</section>
 
     <!-- Form -->
     <section class="section premium-dashboard pt-0">
@@ -126,8 +142,8 @@
                     </div>
 
                     <div class="mt-4 d-flex gap-2">
-                        <button type="submit" class="btn btn-create">
-                            <i class="fas fa-save"></i> Update Lead
+                        <button type="submit" class="btn btn-save">
+                            <i class="fas fa-save me-2"></i> Update Lead
                         </button>
                         <a href="{{ route('leads.index') }}" class="btn"
                             style="background: var(--cloth); color: var(--ink);">
