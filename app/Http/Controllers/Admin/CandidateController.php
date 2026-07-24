@@ -16,11 +16,17 @@ class CandidateController extends Controller
 {
     public function index()
     {
-        $candidates = Candidate::with([
+        $query = Candidate::with([
             'center',
             'course',
-            'executive'
-        ])->where('status', 'Active')->get();
+            'executive',
+        ])->where('status', 'Active');
+        
+        if (Auth::user()->role_id == 4) {
+            $query->where('executive_id', Auth::id());
+        }
+
+        $candidates = $query->get();
 
         $centers = Center::orderBy('center_name')->get();
 

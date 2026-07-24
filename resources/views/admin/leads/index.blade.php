@@ -38,44 +38,70 @@
             <!-- Status Filter Buttons -->
             <div class="d-flex flex-wrap gap-2 mb-4 lead-filters">
                 <a href="{{ request()->url() }}"
-                   class="btn {{ !request('status') ? 'btn-primary' : 'btn-light border' }}">
+                    class="btn {{ !request('status') ? 'btn-primary' : 'btn-light border' }}">
                     <i class="fas fa-list-ul me-2"></i> All Leads
                     <span class="badge bg-white text-dark ms-2">{{ $counts['all'] ?? $leads->total() }}</span>
                 </a>
 
                 <a href="{{ request()->fullUrlWithQuery(['status' => 'New']) }}"
-                   class="btn {{ request('status') == 'New' ? 'btn-primary' : 'btn-light border' }}">
+                    class="btn {{ request('status') == 'New' ? 'btn-primary' : 'btn-light border' }}">
                     <i class="fas fa-plus-circle me-2"></i> New
                     <span class="badge bg-white text-dark ms-2">{{ $counts['New'] ?? 0 }}</span>
                 </a>
 
                 <a href="{{ request()->fullUrlWithQuery(['status' => 'Contacted']) }}"
-                   class="btn {{ request('status') == 'Contacted' ? 'btn-primary' : 'btn-light border' }}">
+                    class="btn {{ request('status') == 'Contacted' ? 'btn-primary' : 'btn-light border' }}">
                     <i class="fas fa-phone me-2"></i> Contacted
                     <span class="badge bg-white text-dark ms-2">{{ $counts['Contacted'] ?? 0 }}</span>
                 </a>
 
                 <a href="{{ request()->fullUrlWithQuery(['status' => 'Interested']) }}"
-                   class="btn {{ request('status') == 'Interested' ? 'btn-primary' : 'btn-light border' }}">
+                    class="btn {{ request('status') == 'Interested' ? 'btn-primary' : 'btn-light border' }}">
                     <i class="fas fa-heart me-2"></i> Interested
                     <span class="badge bg-white text-dark ms-2">{{ $counts['Interested'] ?? 0 }}</span>
                 </a>
 
                 <a href="{{ request()->fullUrlWithQuery(['status' => 'Not Interested']) }}"
-                   class="btn {{ request('status') == 'Not Interested' ? 'btn-primary' : 'btn-light border' }}">
+                    class="btn {{ request('status') == 'Not Interested' ? 'btn-primary' : 'btn-light border' }}">
                     <i class="fas fa-thumbs-down me-2"></i> Not Interested
                     <span class="badge bg-white text-dark ms-2">{{ $counts['Not Interested'] ?? 0 }}</span>
                 </a>
 
                 <a href="{{ request()->fullUrlWithQuery(['status' => 'Converted']) }}"
-                   class="btn {{ request('status') == 'Converted' ? 'btn-primary' : 'btn-light border' }}">
+                    class="btn {{ request('status') == 'Converted' ? 'btn-primary' : 'btn-light border' }}">
+                    <i class="fas fa-check-circle me-2"></i> Converted
+                    <span class="badge bg-white text-dark ms-2">{{ $counts['Converted'] ?? 0 }}</span>
+                </a>
+                <a href="{{ request()->fullUrlWithQuery(['priority' => 'Converted']) }}"
+                    class="btn {{ request('status') == 'Converted' ? 'btn-primary' : 'btn-light border' }}">
                     <i class="fas fa-check-circle me-2"></i> Converted
                     <span class="badge bg-white text-dark ms-2">{{ $counts['Converted'] ?? 0 }}</span>
                 </a>
             </div>
+            <div class="d-flex flex-wrap gap-2 mb-4">
+
+                <a href="{{ request()->fullUrlWithQuery(['priority' => 'High']) }}"
+                    class="btn {{ request('priority') == 'High' ? 'btn-danger' : 'btn-light border' }}">
+                    <i class="fas fa-arrow-up me-2"></i> High
+                    <span class="badge bg-white text-dark ms-2">{{ $counts['High'] ?? 0 }}</span>
+                </a>
+
+                <a href="{{ request()->fullUrlWithQuery(['priority' => 'Medium']) }}"
+                    class="btn {{ request('priority') == 'Medium' ? 'btn-warning' : 'btn-light border' }}">
+                    <i class="fas fa-minus me-2"></i> Medium
+                    <span class="badge bg-white text-dark ms-2">{{ $counts['Medium'] ?? 0 }}</span>
+                </a>
+
+                <a href="{{ request()->fullUrlWithQuery(['priority' => 'Low']) }}"
+                    class="btn {{ request('priority') == 'Low' ? 'btn-success' : 'btn-light border' }}">
+                    <i class="fas fa-arrow-down me-2"></i> Low
+                    <span class="badge bg-white text-dark ms-2">{{ $counts['Low'] ?? 0 }}</span>
+                </a>
+
+            </div>
 
             <div class="table-responsive">
-                <table class="table table-hover align-middle"  id="datatable">
+                <table class="table table-hover align-middle" id="datatable">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -133,7 +159,8 @@
                                     <a href="{{ route('leads.edit', $lead->id) }}" class="btn btn-sm btn-warning me-1 mb-1">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('leads.destroy', $lead->id) }}" method="POST" class="delete-form d-inline">
+                                    <form action="{{ route('leads.destroy', $lead->id) }}" method="POST"
+                                        class="delete-form d-inline">
                                         @csrf
                                         @method('DELETE')
                                         <button class="btn btn-sm btn-danger">
