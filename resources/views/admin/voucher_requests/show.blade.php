@@ -44,7 +44,6 @@
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
-        {{-- Course & Voucher Request Summary (Moved to Top) --}}
         <div class="card premium-block mb-4">
             <div class="card-header bg-white">
                 <h5 class="mb-0">
@@ -107,7 +106,6 @@
             </div>
         </div>
 
-        {{-- Candidate Information --}}
         <div class="card premium-block mb-4">
             <div class="card-header bg-white">
                 <h5 class="mb-0">
@@ -136,7 +134,6 @@
                         <strong>Status</strong><br>
                         <span class="badge bg-success">{{ $voucherRequest->candidate->status }}</span>
                     </div>
-                    {{-- @if($voucherRequest->voucher) --}}
 
                     <div class="card border-success mt-4">
 
@@ -170,12 +167,11 @@
 
                     </div>
 
-                    {{-- @endif --}}
                 </div>
             </div>
         </div>
 
-        @if(auth()->user()->hasRole('Super Admin'))
+        
             @if($voucherRequest->status == 'Pending')
                 <div class="row">
                     <div class="col-lg-4">
@@ -187,15 +183,7 @@
                             </div>
                             <div class="card-body">
                                 <form action="{{ route('voucher-requests.approve', $voucherRequest) }}" method="POST">
-                                    @csrf
-
-                                    {{-- <div class="mb-3" id="sellingPriceBox" style="display:none;">
-                                        <label class="form-label">
-                                            Selling Price <span class="text-danger">*</span>
-                                        </label>
-
-                                        <input type="number" class="form-control" name="selling_price" step="0.01" min="0">
-                                    </div> --}}
+                                    @csrf                                
 
 
                                     <div class="mb-3">
@@ -205,6 +193,13 @@
                                             <option value="Approved">Approve</option>
                                             <option value="Rejected">Reject</option>
                                         </select>
+                                    </div>
+                                    <div class="mb-3" id="sellingPriceBox">
+                                        <label class="form-label">
+                                            Selling Price <span class="text-danger">*</span>
+                                        </label>
+
+                                        <input type="number" class="form-control" name="selling_price" step="0.01" min="0">
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Remarks</label>
@@ -220,7 +215,7 @@
                     </div>
                 </div>
             @endif
-        @endif
+        
 
     </section>
     <script>

@@ -20,13 +20,7 @@ class VoucherRequestController extends Controller
      */
     public function index()
     {
-        // if (
-        //     ! Auth::user()->hasRole('SuperAdmin') &&
-        //     ! Auth::user()->hasRole('Admin')
-        // ) {
-        //     abort(403);
-        // }
-
+         
         $requests = VoucherRequest::with([
             'candidate',
             'center',

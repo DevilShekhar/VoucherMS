@@ -8,6 +8,7 @@ use App\Models\CandidateDocument;
 use App\Models\Center;
 use App\Models\Course;
 use App\Models\Lead;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -19,11 +20,12 @@ class CandidateController extends Controller
         $candidates = Candidate::with([
             'center',
             'course',
-            'executive'
+            'executive',
+            'payments',
+            'voucherRequest',
+            'examSchedule'
         ])->where('status', 'Active')->get();
-
         $centers = Center::orderBy('center_name')->get();
-
         return view('admin.candidates.index', compact('candidates', 'centers'));
     }
 

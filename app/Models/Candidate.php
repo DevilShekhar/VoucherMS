@@ -73,4 +73,8 @@ class Candidate extends Model
     {
         return $this->hasOne(VoucherRequest::class, 'candidate_id', 'id');
     }
+    public function examSchedule()
+    {
+        return $this->hasOne(ExamSchedule::class, 'candidate_id', 'id');
+    }   
 }

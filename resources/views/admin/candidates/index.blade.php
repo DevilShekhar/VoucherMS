@@ -1,27 +1,32 @@
 @extends('layouts.app')
 
 @section('content')
-    <section class="section premium-dashboard">
-        <div class="premium-floating-header">
-            <div class="header-content">
-                <div class="header-left">
-                    <div class="header-icon">
-                        <i class="fas fa-user-graduate"></i>
-                    </div>
-                    <div>
-                        <span class="header-badge">Candidate Management</span>
-                        <h2>Candidates</h2>
-                        <p>Manage all converted candidates</p>
-                    </div>
+<section class="section premium-dashboard">
+        <div class="premium-header">
+            <div class="premium-header-overlay"></div>
+            <div class="premium-header-left">
+                <div class="premium-header-icon">
+                    <i class="fas fa-user-graduate"></i>
                 </div>
-                <div class="premium-head-actions">
-                    <a href="{{ route('candidates.create') }}" class="btn btn-create">
-                        <i class="fas fa-plus"></i> Add New Candidate
-                    </a>
+                <div class="premium-header-content">                    
+                    <span class="premium-tag">Candidate Management</span>
+                        <h1 class="text-white">Candidates</h2>
+                        <p>Manage all converted candidates</p>
                 </div>
             </div>
+            <div class="premium-header-right">
+                <a href="{{ route('candidates.create') }}" class="premium-back-btn">
+                    <i class="fas fa-plus-circle"></i> Add New Candidate
+                </a>
+            </div>
+            <!-- Decorative Shapes -->
+            <div class="shape circle-1"></div>
+            <div class="shape circle-2"></div>
+            <div class="shape circle-3"></div>
+            <div class="dots"></div>
         </div>
     </section>
+   
 
     <section class="section premium-dashboard pt-0">
         @if(session('success'))
@@ -35,111 +40,91 @@
                     <table class="table table-hover align-middle"  id="datatable">
                         <thead class="table-white">
                             <tr>
-                                <th>Candidate Code</th>
-                                <th>Name</th>
-                                <th>Mobile</th>
-                                <th>Email</th>
+                                <th>Candidate Info</th>
+                                <th>Code</th>                            
                                 <th>Course</th>
                                 <th>Center</th>
-                                <th>Executive</th>
-                                <th>Status</th>
+                                <th>Executive</th>                                
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($candidates as $candidate)
+                                <tr>
+                                     <td>                                        
+                                        <div>
+                                            <i class="fas fa-user text-secondary me-1"></i>
+                                            {{ $candidate->first_name }} {{ $candidate->last_name }}
+                                        </div>
 
-                                                                <tr>
-                                                                    <td><strong>{{ $candidate->candidate_code }}</strong></td>
-                                                                    <td>{{ $candidate->first_name }} {{ $candidate->last_name }}</td>
-                                                                    <td>{{ $candidate->mobile }}</td>
-                                                                    <td>{{ $candidate->email ?: '-' }}</td>
-                                                                    <td>{{ $candidate->course->course_name ?? '-' }}</td>
-                                                                    <td>{{ $candidate->center->center_name ?? '-' }}</td>
-                                                                    <td>{{ $candidate->executive->name ?? '-' }}</td>
-                                                                    <td>
-                                                                        <span class="badge bg-{{ $candidate->status == 'Active' ? 'success' : 'warning' }}">
-                                                                            {{ $candidate->status }}
-                                                                        </span>
-                                                                    </td>
-                                                                    <td class="text-nowrap">
-                                                                        <a href="{{ route('candidates.show', $candidate->id) }}" class="btn btn-sm btn-info">
-                                                                            <i class="fas fa-eye"></i>
-                                                                        </a>
-                                                                        <a href="{{ route('candidates.edit', $candidate) }}" class="btn btn-sm btn-primary">
-                                                                            <i class="fas fa-edit"></i>
-                                                                        </a>
+                                        <div>
+                                            <i class="fas fa-phone text-success me-1"></i>
+                                            {{ $candidate->mobile }}
+                                        </div>
 
-                                                                        <button type="button" class="btn btn-sm btn-success upload-doc-btn"
-                                                                            data-candidate-id="{{ $candidate->id }}"
-                                                                            data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
-                                                                            data-candidate-code="{{ $candidate->candidate_code }}">
-                                                                            <i class="fas fa-upload"></i>
-                                                                        </button>
-                                                                        <button type="button" class="btn btn-sm btn-warning payment-btn"
-                                                                            data-id="{{ $candidate->id }}"
-                                                                            data-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
-                                                                            data-code="{{ $candidate->candidate_code }}"
-                                                                            data-course="{{ $candidate->course->course_name ?? '-' }}"
-                                                                            data-center="{{ $candidate->center->center_name ?? '-' }}">
-                                                                            <i class="fas fa-money-bill-wave"></i>
-                                                                        </button>
-                                                                        {{-- {{ dd($candidate->voucherRequest?->toArray()) }} --}}
-                                                                       @if($candidate->voucherRequest)
-
-                                                                        @php
-                                                                            $request = $candidate->voucherRequest;
-                                                                        @endphp
-
-                                                                        @if($request->status == 'Allocated')
-                                                                            <span class="badge bg-success">
-                                                                                <i class="fas fa-check-circle"></i> Voucher Allocated
-                                                                            </span>
-
-                                                                        @elseif($request->status == 'Pending')
-                                                                            <span class="badge bg-warning text-dark">
-                                                                                <i class="fas fa-clock"></i> Request Pending
-                                                                            </span>
-
-                                                                        @elseif($request->status == 'Approved')
-                                                                            <span class="badge bg-info">
-                                                                                <i class="fas fa-check"></i> Approved
-                                                                            </span>
-
-                                                                        @elseif($request->status == 'Rejected')
-                                                                            <span class="badge bg-danger">
-                                                                                <i class="fas fa-times"></i> Rejected
-                                                                            </span>
-
-                                                                        @endif
-
-                                                                    @else
-
-                                    <button
-                                        type="button"
-                                        class="btn btn-sm btn-dark request-voucher-btn"
-                                        data-candidate-id="{{ $candidate->id }}"
-                                        data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
-                                        data-candidate-code="{{ $candidate->candidate_code }}"
-                                        data-center-id="{{ $candidate->center_id }}"
-                                    >
-                                        <i class="fas fa-paper-plane"></i>
-                                    </button>
-
-
-                                @endif
-                                <button
-                                        type="button"
-                                        class="btn btn-sm btn-primary exam-schedule-btn"
-                                        data-id="{{ $candidate->id }}"
-                                        data-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
-                                        data-center="{{ $candidate->center_id }}"
-                                        data-voucher="{{ optional($candidate->voucherRequest)->voucher_id }}">
-                                        <i class="fas fa-calendar-alt"></i>
-                                    </button>
-                                                                    </td>
-                                                                </tr>
-
+                                        <div>
+                                            <i class="fas fa-envelope text-danger me-1"></i>
+                                            {{ $candidate->email ?? '-' }}
+                                        </div>
+                                         
+                                    </td>
+                                    <td>{{ $candidate->candidate_code }}</td>
+                                    <td>{{ $candidate->course->course_name ?? '-' }}</td>
+                                    <td>{{ $candidate->center->center_name ?? '-' }}</td>
+                                    <td>                                       
+                                        {{ optional($candidate->executive)->name ?? '-' }}
+                                    </td>                                   
+                                    @php
+                                        $paymentReceived = $candidate->payments->count() > 0;
+                                        $voucherRequest = $candidate->voucherRequest;
+                                        $examScheduled = $candidate->examSchedule;
+                                    @endphp
+                                    <td class="text-nowrap">                                                                       
+                                        <a href="{{ route('candidates.show', $candidate->id) }}" class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i>
+                                        </a>                                                                        
+                                        <a href="{{ route('candidates.edit', $candidate) }}" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>                                                                       
+                                        <button type="button" class="btn btn-sm btn-success upload-doc-btn" data-candidate-id="{{ $candidate->id }}" data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name }}" data-candidate-code="{{ $candidate->candidate_code }}">
+                                            <i class="fas fa-upload"></i>
+                                        </button>                                                                        
+                                        @if(!$paymentReceived)
+                                            <button type="button" class="btn btn-sm btn-warning payment-btn" data-id="{{ $candidate->id }}"
+                                                    data-name="{{ $candidate->first_name }} {{ $candidate->last_name }}" data-code="{{ $candidate->candidate_code }}"
+                                                    data-course="{{ $candidate->course->course_name ?? '-' }}" data-center="{{ $candidate->center->center_name ?? '-' }}">
+                                                <i class="fas fa-money-bill-wave"></i>
+                                            </button>                                                                        
+                                        @elseif(!$voucherRequest)
+                                            <button type="button"
+                                                class="btn btn-sm btn-dark request-voucher-btn" data-candidate-id="{{ $candidate->id }}" data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
+                                                data-candidate-code="{{ $candidate->candidate_code }}" data-center-id="{{ $candidate->center_id }}">
+                                                <i class="fas fa-paper-plane"></i>                                                                               
+                                            </button>                                                                        
+                                        @elseif($voucherRequest->status == 'Pending')
+                                            <span class="badge bg-warning text-dark">
+                                                <i class="fas fa-clock"></i> Request Pending
+                                            </span>                                                                        
+                                        @elseif($voucherRequest->status == 'Rejected')
+                                            <span class="badge bg-danger">
+                                                <i class="fas fa-times"></i> Rejected
+                                            </span>
+                                            <button type="button" class="btn btn-sm btn-dark request-voucher-btn" data-candidate-id="{{ $candidate->id }}"
+                                                        data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name }}" data-candidate-code="{{ $candidate->candidate_code }}"
+                                                        data-center-id="{{ $candidate->center_id }}">
+                                                    <i class="fas fa-paper-plane"></i>Re-Send
+                                            </button>                                                                        
+                                        @elseif(in_array($voucherRequest->status, ['Approved', 'Allocated']))
+                                            
+                                                <button type="button"
+                                                        class="btn btn-sm btn-primary exam-schedule-btn" data-id="{{ $candidate->id }}"
+                                                        data-name="{{ $candidate->first_name }} {{ $candidate->last_name }}" data-center="{{ $candidate->center_id }}" data-voucher="{{ $voucherRequest->voucher_id }}">
+                                                        <i class="fas fa-calendar-alt"></i>                                                                                   
+                                                </button>
+                                            
+                                        @endif
+                                    </td>
+                                </tr>
                             @empty
                                 <tr>
                                     <td colspan="9" class="text-center py-5">
