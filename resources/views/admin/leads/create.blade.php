@@ -1,10 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Create Lead')
-
 @section('content')
-
-    <!-- Header -->
     <section class="section premium-dashboard">
         <div class="premium-floating-header">
             <div class="header-content">

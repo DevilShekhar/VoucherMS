@@ -3,8 +3,6 @@
 @section('title', 'Edit Lead')
 
 @section('content')
-
-    <!-- Header -->
     <section class="section premium-dashboard">
         <div class="premium-floating-header">
             <div class="header-content">
@@ -13,9 +11,9 @@
                         <i class="fas fa-user-edit"></i>
                     </div>
                     <div>
-                        <span class="header-badge">Lead Management</span>
-                        <h2>Edit Lead</h2>
-                        <p>Update lead information</p>
+                          <span class="header-badge">Lead Management</span>
+                          <h2>Edit Lead</h2>
+                          <p>Update lead information</p>
                     </div>
                 </div>
                 <div class="premium-head-actions">
@@ -27,8 +25,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Form -->
     <section class="section premium-dashboard pt-0">
         <form action="{{ route('leads.update', $lead->id) }}" method="POST">
             @csrf

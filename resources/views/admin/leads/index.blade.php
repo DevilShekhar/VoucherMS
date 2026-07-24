@@ -1,29 +1,27 @@
 @extends('layouts.app')
 
 @section('content')
-<!-- Header -->
-<section class="section premium-dashboard">
-    <div class="premium-floating-header">
-        <div class="header-content">
-            <div class="header-left">
-                <div class="header-icon">
-                    <i class="fas fa-user-plus"></i>
+    <section class="section premium-dashboard">
+        <div class="premium-floating-header">
+            <div class="header-content">
+                <div class="header-left">
+                     <div class="header-icon">
+                        <i class="fas fa-user-plus"></i>
+                     </div>
+                    <div>
+                          <span class="header-badge">Lead Management</span>
+                          <h2>Manage Leads</h2>
+                          <p>View and manage all leads</p>
+                    </div>
                 </div>
-                <div>
-                    <span class="header-badge">Lead Management</span>
-                    <h2>Manage Leads</h2>
-                    <p>View and manage all leads</p>
+                <div class="premium-head-actions">
+                    <a href="{{ route('leads.create') }}" class="btn btn-create">
+                        <i class="fas fa-plus"></i> Add Lead
+                    </a>
                 </div>
-            </div>
-            <div class="premium-head-actions">
-                <a href="{{ route('leads.create') }}" class="btn btn-create">
-                    <i class="fas fa-plus"></i> Add Lead
-                </a>
             </div>
         </div>
-    </div>
-</section>
-
+    </section>
 <!-- Content -->
 <section class="section premium-dashboard pt-0">
     <div class="card premium-block">
