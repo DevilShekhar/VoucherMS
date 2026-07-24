@@ -468,6 +468,7 @@
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+
 /* public/css/custom.css */
 
 /* ---------- Premium Luxury Admin Theme ---------- */
@@ -1772,6 +1773,7 @@ header.bg-white,
     color: #777;
 }
 
+
 /* samdhan css */
 /* 1. Stat Cards Block */
 
@@ -1837,8 +1839,8 @@ header.bg-white,
 
 /* 2. Soft Role Pill */
 .role-pill {
-    background: #f3e8ff;
-    color: #7e22ce;
+    background: #dbeafe;
+    color: #1d4ed8;
     padding: 4px 12px;
     border-radius: 8px;
     font-size: 12px;
@@ -1846,7 +1848,7 @@ header.bg-white,
 }
 
 .code-badge {
-    background: #f1f5f9;
+    background: #dbeafe;
     color: #475569;
     padding: 3px 8px;
     border-radius: 6px;
@@ -1885,6 +1887,9 @@ header.bg-white,
     color: #b91c1c;
 }
 
+
+
 .status-inactive .dot {
     background: #dc2626;
 }
+

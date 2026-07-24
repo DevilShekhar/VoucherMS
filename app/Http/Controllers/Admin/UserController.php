@@ -19,9 +19,11 @@ class UserController extends Controller
     {
         $users = User::with('role')
             ->latest()
-            ->paginate(10);
+            ->paginate(20);
+        $active = User::query()->where('status', 1)->count();
+        $inactive = User::query()->where('status', 0)->count();
 
-        return view('admin.users.index', compact('users'));
+        return view('admin.users.index', compact('users', 'active', 'inactive'));
     }
 
     /**
@@ -86,7 +88,7 @@ class UserController extends Controller
             ->get();
         $locations = Location::orderBy('name')->get();
 
-        return view('admin.users.edit', compact('user', 'roles','locations'));
+        return view('admin.users.edit', compact('user', 'roles', 'locations'));
     }
 
     /**

@@ -22,10 +22,24 @@
 
                         <h2 class="mb-2 mt-2" style="color: #1e3a8a;">Dashboard</h2>
                         <!-- Enhanced Greeting -->
-                        <p class="mb-0 fw-medium" style="font-size: 1.1rem; color: #1e3a8a;">
-                           Good {{ $timeOfDay ?? 'afternoon' }}, <strong>Eternal HighTech</strong>!
-                            Here's what's happening across your campus today.
-                        </p>
+                       @php
+                        $hour = now()->hour;
+
+                        if ($hour >= 5 && $hour < 12) {
+                            $timeOfDay = 'Morning';
+                        } elseif ($hour >= 12 && $hour < 17) {
+                            $timeOfDay = 'Afternoon';
+                        } elseif ($hour >= 17 && $hour < 21) {
+                            $timeOfDay = 'Evening';
+                        } else {
+                            $timeOfDay = 'Night';
+                        }
+                    @endphp
+
+                    <p class="mb-0 fw-medium" style="font-size: 1.1rem; color: #1e3a8a;">
+                        👋 Welcome back! Good {{ $timeOfDay }}, <strong>{{ Auth::user()->name }}</strong>.
+                        We hope you're having a productive day.
+                    </p>
                     </div>
                 </div>
 
@@ -49,6 +63,242 @@
         </div>
     </div>
 </section>
+
+{{-- Super admin --}}
+{{-- <section class="section premium-dashboard pt-0">
+    <!-- Stats Cards -->
+    <div class="stat-grid-container mb-4">
+        <div class="stat-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+
+            <!-- 1. Enrolled Students -->
+            <div class="stat-card" style="background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="icon-wrapper" style="width: 48px; height: 48px; background: #E9EEFE; color: #4F46E5; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px;">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                </div>
+                <div class="num" style="font-size: 32px; font-weight: 700; color: #1e293b; margin-bottom: 4px;">
+                    {{ number_format($totalStudents ?? 0) }}
+                </div>
+                <div class="lbl" style="color: #64748b; font-size: 14px; font-weight: 500;">Enrolled Students</div>
+            </div>
+
+            <!-- 2. Active Courses -->
+            <div class="stat-card" style="background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="icon-wrapper" style="width: 48px; height: 48px; background: #E9EEFE; color: #4F46E5; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px;">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                </div>
+                <div class="num" style="font-size: 32px; font-weight: 700; color: #1e293b; margin-bottom: 4px;">
+                    {{ $activeCourses ?? 0 }}
+                </div>
+                <div class="lbl" style="color: #64748b; font-size: 14px; font-weight: 500;">Active Courses</div>
+            </div>
+
+            <!-- 3. Assignments Pending Review -->
+            <div class="stat-card" style="background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="icon-wrapper" style="width: 48px; height: 48px; background: #E9EEFE; color: #4F46E5; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px;">
+                        <i class="fas fa-file-pen"></i>
+                    </div>
+                </div>
+                <div class="num" style="font-size: 32px; font-weight: 700; color: #1e293b; margin-bottom: 4px;">
+                    {{ $pendingLeads ?? 0 }}
+                </div>
+                <div class="lbl" style="color: #64748b; font-size: 14px; font-weight: 500;">Pending Leads</div>
+                <div class="delta mt-2" style="color: #f59e0b; font-size: 13px; font-weight: 600;">
+                    <i class="fas fa-clock me-1"></i> Requires Follow-up
+                </div>
+            </div>
+
+            <!-- 4. Scheduled Exams -->
+            <div class="stat-card" style="background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="icon-wrapper" style="width: 48px; height: 48px; background: #E9EEFE; color: #4F46E5; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px;">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                </div>
+                <div class="num" style="font-size: 32px; font-weight: 700; color: #1e293b; margin-bottom: 4px;">
+                    {{ $scheduledExams ?? 0 }}
+                </div>
+                <div class="lbl" style="color: #64748b; font-size: 14px; font-weight: 500;">Scheduled Exams</div>
+                <div class="delta up mt-2" style="color: #10b981; font-size: 13px; font-weight: 600;">
+                    <i class="fas fa-check-circle me-1"></i> Active
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Recent Enrollments -->
+    <div class="panel" style="background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); overflow: hidden;">
+        <div class="panel-head d-flex justify-content-between align-items-center px-4 py-3 border-bottom">
+            <h2 style="font-size: 18px; font-weight: 600; margin: 0; color: #1e293b;">Recent Enrollments</h2>
+            <a href="{{ route('candidates.index') }}" class="text-primary fw-semibold text-decoration-none">
+                View All <i class="fas fa-arrow-right ms-1"></i>
+            </a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover mb-0" style="font-size: 14px;">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">Student</th>
+                        <th>Course</th>
+                        <th>Center</th>
+                        <th>Status</th>
+                        <th>Enrolled On</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($recentEnrollments ?? [] as $candidate)
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="avatar-circle" style="width: 32px; height: 32px; background: #E9EEFE; color: #4F46E5; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px;">
+                                        {{ strtoupper(substr($candidate->first_name ?? 'U', 0, 1)) }}
+                                    </div>
+                                    <div>
+                                        <strong>{{ $candidate->first_name }} {{ $candidate->last_name }}</strong>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ $candidate->course->course_name ?? 'N/A' }}</td>
+                            <td>{{ $candidate->center->center_name ?? 'N/A' }}</td>
+                            <td>
+                                <span class="badge bg-success">Converted</span>
+                            </td>
+                            <td>{{ $candidate->created_at->format('d M Y') }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted">No recent enrollments found.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section> --}}
+
+{{-- Other users --}}
+<section class="section premium-dashboard pt-0">
+    <!-- Stats Cards -->
+    <div class="stat-grid-container mb-4">
+        <div class="stat-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(245px, 1fr)); gap: 22px;">
+
+            <!-- 1. Enrolled Students -->
+            <div class="stat-card" style="background: #ffffff; border: 1px solid #e0e7ff; border-radius: 20px; padding: 28px 24px; box-shadow: 0 10px 30px rgba(79, 70, 229, 0.08); transition: all 0.3s ease;">
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div class="icon-wrapper" style="width: 54px; height: 54px; background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                </div>
+                <div class="num" style="font-size: 36px; font-weight: 700; color: #1e293b; margin-bottom: 6px; font-family: 'Inter', system-ui;">
+                    {{ number_format($totalStudents ?? 0) }}
+                </div>
+                <div class="lbl" style="color: #64748b; font-size: 14.5px; font-weight: 500;">Enrolled Students</div>
+            </div>
+
+            <!-- 2. Active Courses -->
+            <div class="stat-card" style="background: #ffffff; border: 1px solid #e0e7ff; border-radius: 20px; padding: 28px 24px; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.08); transition: all 0.3s ease;">
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div class="icon-wrapper" style="width: 54px; height: 54px; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                </div>
+                <div class="num" style="font-size: 36px; font-weight: 700; color: #1e293b; margin-bottom: 6px; font-family: 'Inter', system-ui;">
+                    {{ $activeCourses ?? 0 }}
+                </div>
+                <div class="lbl" style="color: #64748b; font-size: 14.5px; font-weight: 500;">Active Courses</div>
+            </div>
+
+            <!-- 3. Pending Leads -->
+            <div class="stat-card" style="background: #ffffff; border: 1px solid #e0e7ff; border-radius: 20px; padding: 28px 24px; box-shadow: 0 10px 30px rgba(245, 158, 11, 0.08); transition: all 0.3s ease;">
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div class="icon-wrapper" style="width: 54px; height: 54px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);">
+                        <i class="fas fa-file-pen"></i>
+                    </div>
+                </div>
+                <div class="num" style="font-size: 36px; font-weight: 700; color: #1e293b; margin-bottom: 6px; font-family: 'Inter', system-ui;">
+                    {{ $pendingLeads ?? 0 }}
+                </div>
+                <div class="lbl" style="color: #64748b; font-size: 14.5px; font-weight: 500;">Pending Leads</div>
+                <div class="mt-3" style="color: #f59e0b; font-size: 13.5px; font-weight: 600;">
+                    <i class="fas fa-clock me-1"></i> Requires Follow-up
+                </div>
+            </div>
+
+            <!-- 4. Scheduled Exams -->
+            <div class="stat-card" style="background: #ffffff; border: 1px solid #e0e7ff; border-radius: 20px; padding: 28px 24px; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.08); transition: all 0.3s ease;">
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div class="icon-wrapper" style="width: 54px; height: 54px; background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                </div>
+                <div class="num" style="font-size: 36px; font-weight: 700; color: #1e293b; margin-bottom: 6px; font-family: 'Inter', system-ui;">
+                    {{ $scheduledExams ?? 0 }}
+                </div>
+                <div class="lbl" style="color: #64748b; font-size: 14.5px; font-weight: 500;">Scheduled Exams</div>
+                <div class="mt-3" style="color: #10b981; font-size: 13.5px; font-weight: 600;">
+                    <i class="fas fa-check-circle me-1"></i> Active
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Recent Enrollments -->
+    <div class="panel" style="background: #ffffff; border: 1px solid #e0e7ff; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06); overflow: hidden;">
+        <div class="panel-head d-flex justify-content-between align-items-center px-5 py-4 border-bottom">
+            <h2 style="font-size: 19px; font-weight: 600; margin: 0; color: #1e293b;">Recent Enrollments</h2>
+            <a href="{{ route('candidates.index') }}" class="text-indigo-600 fw-semibold text-decoration-none d-flex align-items-center gap-1">
+                View All <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover mb-0" style="font-size: 14.5px;">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-5">Student</th>
+                        <th>Course</th>
+                        <th>Center</th>
+                        <th>Status</th>
+                        <th>Enrolled On</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($recentEnrollments ?? [] as $candidate)
+                        <tr>
+                            <td class="ps-5">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="avatar-circle" style="width: 36px; height: 36px; background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px;">
+                                        {{ strtoupper(substr($candidate->first_name ?? 'U', 0, 1)) }}
+                                    </div>
+                                    <div>
+                                        <strong>{{ $candidate->first_name }} {{ $candidate->last_name }}</strong>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ $candidate->course->course_name ?? 'N/A' }}</td>
+                            <td>{{ $candidate->center->center_name ?? 'N/A' }}</td>
+                            <td>
+                                <span class="badge" style="background: #10b981; color: white; padding: 6px 14px; border-radius: 30px; font-size: 12.5px;">Converted</span>
+                            </td>
+                            <td>{{ $candidate->created_at->format('d M Y') }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center py-5 text-muted">No recent enrollments found.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+@can('view-voucher')
  <section class="section premium-dashboard pt-0">
     <div class="card premium-block">
         <div class="card-body">
@@ -169,6 +419,7 @@
         </div>
     </div>
 </section>
+@endcan
 
 <section class="section premium-dashboard pt-0">
     <div class="row">
@@ -279,225 +530,7 @@
     </div>
 </section>
 
-    <section class="section premium-dashboard pt-0">
-        <!-- Stats Cards - Desktop Grid / Mobile Slider -->
-        <div class="stat-grid-container" style="position: relative;">
-            <div class="stat-grid" id="statGrid"
-                style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 24px; transition: transform 0.3s ease;">
-                <div class="stat-card d1"
-                    style="background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 24px; box-shadow: var(--shadow); min-width: 200px;">
-                    <div class="top" style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div class="icon ember"
-                            style="width: 44px; height: 44px; border-radius: 10px; background: var(--ember-soft); color: var(--ember); display: flex; align-items: center; justify-content: center; font-size: 18px;">
-                            <i class="fas fa-user-graduate"></i>
-                        </div>
-                    </div>
-                    <div class="num"
-                        style="font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600; margin: 12px 0 4px;">1,284
-                    </div>
-                    <div class="lbl" style="font-size: 13px; color: var(--ink-soft);">Enrolled students</div>
-                    <div class="delta up" style="font-size: 12px; font-weight: 600; color: var(--sage); margin-top: 4px;">
-                        <i class="fas fa-arrow-up"></i> 3.1% this term
-                    </div>
-                </div>
 
-                <div class="stat-card d2"
-                    style="background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 24px; box-shadow: var(--shadow); min-width: 200px;">
-                    <div class="top" style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div class="icon sage"
-                            style="width: 44px; height: 44px; border-radius: 10px; background: var(--sage-bg); color: var(--sage); display: flex; align-items: center; justify-content: center; font-size: 18px;">
-                            <i class="fas fa-book-open"></i>
-                        </div>
-                    </div>
-                    <div class="num"
-                        style="font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600; margin: 12px 0 4px;">42
-                    </div>
-                    <div class="lbl" style="font-size: 13px; color: var(--ink-soft);">Active courses</div>
-                    <div class="delta up" style="font-size: 12px; font-weight: 600; color: var(--sage); margin-top: 4px;">
-                        <i class="fas fa-arrow-up"></i> 2 new this month
-                    </div>
-                </div>
-
-                <div class="stat-card d3"
-                    style="background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 24px; box-shadow: var(--shadow); min-width: 200px;">
-                    <div class="top" style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div class="icon rust"
-                            style="width: 44px; height: 44px; border-radius: 10px; background: var(--rust-bg); color: var(--rust); display: flex; align-items: center; justify-content: center; font-size: 18px;">
-                            <i class="fas fa-file-pen"></i>
-                        </div>
-                    </div>
-                    <div class="num"
-                        style="font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600; margin: 12px 0 4px;">17
-                    </div>
-                    <div class="lbl" style="font-size: 13px; color: var(--ink-soft);">Assignments pending review</div>
-                    <div class="delta down" style="font-size: 12px; font-weight: 600; color: var(--rust); margin-top: 4px;">
-                        <i class="fas fa-arrow-down"></i> 5 fewer than last week
-                    </div>
-                </div>
-
-                <div class="stat-card d4"
-                    style="background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 24px; box-shadow: var(--shadow); min-width: 200px;">
-                    <div class="top" style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div class="icon ink"
-                            style="width: 44px; height: 44px; border-radius: 10px; background: var(--cloth); color: var(--ink); display: flex; align-items: center; justify-content: center; font-size: 18px;">
-                            <i class="fas fa-chalkboard-user"></i>
-                        </div>
-                    </div>
-                    <div class="num"
-                        style="font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600; margin: 12px 0 4px;">28
-                    </div>
-                    <div class="lbl" style="font-size: 13px; color: var(--ink-soft);">Instructors</div>
-                    <div class="delta up" style="font-size: 12px; font-weight: 600; color: var(--sage); margin-top: 4px;">
-                        All active
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slider Navigation (visible on mobile) -->
-            <div class="slider-nav" id="sliderNav"
-                style="display: none; justify-content: center; gap: 8px; margin-top: 8px; margin-bottom: 20px;">
-                <button class="slider-dot active" data-index="0"
-                    style="width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--ember); background: var(--ember); cursor: pointer; padding: 0; transition: all 0.3s ease;"></button>
-                <button class="slider-dot" data-index="1"
-                    style="width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--ember); background: transparent; cursor: pointer; padding: 0; transition: all 0.3s ease;"></button>
-                <button class="slider-dot" data-index="2"
-                    style="width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--ember); background: transparent; cursor: pointer; padding: 0; transition: all 0.3s ease;"></button>
-                <button class="slider-dot" data-index="3"
-                    style="width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--ember); background: transparent; cursor: pointer; padding: 0; transition: all 0.3s ease;"></button>
-            </div>
-        </div>
-
-        <!-- Recent Enrollments Table -->
-        <div class="panel d5"
-            style="background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);">
-            <div class="panel-head"
-                style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid var(--line);">
-                <h2 style="font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; margin: 0;">Recent Enrollments
-                </h2>
-                <a href="#" style="font-size: 13px; color: var(--ember); text-decoration: none; font-weight: 600;">
-                    View all <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-            <div style="padding: 0; overflow-x: auto; -webkit-overflow-scrolling: touch;">
-                <table class="table"
-                    style="width: 100%; border-collapse: collapse; font-size: 13px; margin: 0; min-width: 600px;">
-                    <thead>
-                        <tr>
-                            <th
-                                style="text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); font-family: 'IBM Plex Mono', monospace; padding: 14px 20px; border-bottom: 2px solid var(--line); font-weight: 600;">
-                                Student</th>
-                            <th
-                                style="text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); font-family: 'IBM Plex Mono', monospace; padding: 14px 20px; border-bottom: 2px solid var(--line); font-weight: 600;">
-                                Course</th>
-                            <th
-                                style="text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); font-family: 'IBM Plex Mono', monospace; padding: 14px 20px; border-bottom: 2px solid var(--line); font-weight: 600;">
-                                Instructor</th>
-                            <th
-                                style="text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); font-family: 'IBM Plex Mono', monospace; padding: 14px 20px; border-bottom: 2px solid var(--line); font-weight: 600;">
-                                Progress</th>
-                            <th
-                                style="text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); font-family: 'IBM Plex Mono', monospace; padding: 14px 20px; border-bottom: 2px solid var(--line); font-weight: 600;">
-                                Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="padding: 12px 20px; border-bottom: 1px solid var(--line); white-space: nowrap;">
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <div
-                                        style="width: 28px; height: 28px; border-radius: 50%; background: var(--gold-gradient); display: flex; align-items: center; justify-content: center; color: #1A1410; font-weight: 700; font-size: 11px; box-shadow: var(--gold-glow); flex-shrink: 0;">
-                                        A</div>
-                                    Aisha Kapoor
-                                </div>
-                            </td>
-                            <td style="padding: 12px 20px; border-bottom: 1px solid var(--line); white-space: nowrap;">Data
-                                Structures 101</td>
-                            <td style="padding: 12px 20px; border-bottom: 1px solid var(--line); white-space: nowrap;">Dr.
-                                Rao</td>
-                            <td
-                                style="padding: 12px 20px; border-bottom: 1px solid var(--line); font-weight: 600; color: var(--sage); white-space: nowrap;">
-                                82%</td>
-                            <td style="padding: 12px 20px; border-bottom: 1px solid var(--line); white-space: nowrap;">
-                                <span class="status-pill done"
-                                    style="display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; padding: 4px 14px; border-radius: 99px; background: var(--sage-bg); color: var(--sage); font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; letter-spacing: .03em; white-space: nowrap;">
-                                    <i class="fas fa-circle-check"></i> Active
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 12px 20px; border-bottom: 1px solid var(--line); white-space: nowrap;">
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <div
-                                        style="width: 28px; height: 28px; border-radius: 50%; background: var(--gold-gradient); display: flex; align-items: center; justify-content: center; color: #1A1410; font-weight: 700; font-size: 11px; box-shadow: var(--gold-glow); flex-shrink: 0;">
-                                        R</div>
-                                    Rohan Mehta
-                                </div>
-                            </td>
-                            <td style="padding: 12px 20px; border-bottom: 1px solid var(--line); white-space: nowrap;">
-                                Linear Algebra</td>
-                            <td style="padding: 12px 20px; border-bottom: 1px solid var(--line); white-space: nowrap;">Prof.
-                                Iyer</td>
-                            <td
-                                style="padding: 12px 20px; border-bottom: 1px solid var(--line); font-weight: 600; color: var(--ember); white-space: nowrap;">
-                                34%</td>
-                            <td style="padding: 12px 20px; border-bottom: 1px solid var(--line); white-space: nowrap;">
-                                <span class="status-pill pending"
-                                    style="display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; padding: 4px 14px; border-radius: 99px; background: var(--ember-soft); color: var(--ember-dark); font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; letter-spacing: .03em; white-space: nowrap;">
-                                    <i class="fas fa-clock"></i> In Progress
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 12px 20px; border-bottom: 1px solid var(--line); white-space: nowrap;">
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <div
-                                        style="width: 28px; height: 28px; border-radius: 50%; background: var(--gold-gradient); display: flex; align-items: center; justify-content: center; color: #1A1410; font-weight: 700; font-size: 11px; box-shadow: var(--gold-glow); flex-shrink: 0;">
-                                        S</div>
-                                    Sara Iqbal
-                                </div>
-                            </td>
-                            <td style="padding: 12px 20px; border-bottom: 1px solid var(--line); white-space: nowrap;">World
-                                History</td>
-                            <td style="padding: 12px 20px; border-bottom: 1px solid var(--line); white-space: nowrap;">Dr.
-                                Nair</td>
-                            <td
-                                style="padding: 12px 20px; border-bottom: 1px solid var(--line); font-weight: 600; color: var(--sage); white-space: nowrap;">
-                                100%</td>
-                            <td style="padding: 12px 20px; border-bottom: 1px solid var(--line); white-space: nowrap;">
-                                <span class="status-pill done"
-                                    style="display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; padding: 4px 14px; border-radius: 99px; background: var(--sage-bg); color: var(--sage); font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; letter-spacing: .03em; white-space: nowrap;">
-                                    <i class="fas fa-circle-check"></i> Completed
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 12px 20px; border-bottom: 1px solid var(--line); white-space: nowrap;">
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <div
-                                        style="width: 28px; height: 28px; border-radius: 50%; background: var(--gold-gradient); display: flex; align-items: center; justify-content: center; color: #1A1410; font-weight: 700; font-size: 11px; box-shadow: var(--gold-glow); flex-shrink: 0;">
-                                        K</div>
-                                    Kunal Shah
-                                </div>
-                            </td>
-                            <td style="padding: 12px 20px; border-bottom: 1px solid var(--line); white-space: nowrap;">
-                                Organic Chemistry</td>
-                            <td style="padding: 12px 20px; border-bottom: 1px solid var(--line); white-space: nowrap;">Dr.
-                                Rao</td>
-                            <td
-                                style="padding: 12px 20px; border-bottom: 1px solid var(--line); font-weight: 600; color: var(--rust); white-space: nowrap;">
-                                0%</td>
-                            <td style="padding: 12px 20px; border-bottom: 1px solid var(--line); white-space: nowrap;">
-                                <span class="status-pill failed"
-                                    style="display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; padding: 4px 14px; border-radius: 99px; background: var(--rust-bg); color: var(--rust); font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; letter-spacing: .03em; white-space: nowrap;">
-                                    <i class="fas fa-circle-xmark"></i> Withdrawn
-                                </span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
 
     <style>
         /* Mobile Responsive Styles */

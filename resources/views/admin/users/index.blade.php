@@ -10,7 +10,7 @@
                 </div>
                 <div class="premium-header-content">
                     <span class="premium-tag"> USER MANAGEMENT</span>
-                    <h2 class="text-white">Users</h2>
+                    <h1 class="text-white">Users</h1>
                     <p>Manage all system users</p>
                 </div>
             </div>
@@ -49,7 +49,7 @@
                     </div>
                     <div class="stat-details">
                         <span class="stat-label">Active Users</span>
-                        <h3 class="stat-number">223</h3>
+                        <h3 class="stat-number">{{ $active }}</h3>
                     </div>
                 </div>
             </div>
@@ -61,22 +61,11 @@
                     </div>
                     <div class="stat-details">
                         <span class="stat-label">Inactive Users</span>
-                        <h3 class="stat-number">22</h3>
+                        <h3 class="stat-number">{{ $inactive }}</h3>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-3 col-sm-6">
-                <div class="stat-card">
-                    <div class="stat-icon bg-blue-light text-blue">
-                        <i class="fas fa-user-plus"></i>
-                    </div>
-                    <div class="stat-details">
-                        <span class="stat-label">New This Month</span>
-                        <h3 class="stat-number">18</h3>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
