@@ -8,8 +8,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Candidate;
 use App\Models\Course;
 use App\Models\ExamSchedule;
+use App\Models\Lead;
 use App\Models\LeadFollowUp;
 use App\Models\Location;
+use App\Models\User;
 use App\Models\Voucher;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -141,5 +143,70 @@ class DashboardController extends Controller
             new VouchersExport,
             'Vouchers_'.now()->format('d-m-Y_H-i-s').'.xlsx'
         );
+    }
+
+    public function reports()
+    {
+        $report = [
+            'total_leads' => Lead::count(),
+            'new_leads' => Lead::whereHas('latestFollowup', fn ($q) => $q->where('status', 'New'))->count(),
+            'contacted_leads' => Lead::whereHas('latestFollowup', fn ($q) => $q->where('status', 'Contacted'))->count(),
+            'interested_leads' => Lead::whereHas('latestFollowup', fn ($q) => $q->where('status', 'Interested'))->count(),
+            'not_interested_leads' => Lead::whereHas('latestFollowup', fn ($q) => $q->where('status', 'Not Interested'))->count(),
+            'converted_leads' => Lead::whereHas('latestFollowup', fn ($q) => $q->where('status', 'Converted'))->count(),
+            'closed_leads' => Lead::whereHas('latestFollowup', fn ($q) => $q->where('status', 'Closed'))->count(),
+            'total_candidates' => Candidate::count(),
+            'total_vouchers' => Voucher::count(),
+            'available_vouchers' => Voucher::where('status', 'Available')->count(),
+            'used_vouchers' => Voucher::where('status', 'Used')->count(),
+            'expired_vouchers' => Voucher::where('status', 'Expired')->count(),
+        ];
+
+        $executives = User::where('role_id', 4)
+            ->orderBy('name')
+            ->get()
+            ->map(function ($executive) {
+                return [
+                    'id' => $executive->id,
+                    'name' => $executive->name,
+                    'total_leads' => Lead::where('assigned_to', $executive->id)->count(),
+                    'converted' => Lead::where('assigned_to', $executive->id)
+                        ->whereHas('latestFollowup', fn ($q) => $q->where('status', 'Converted'))
+                        ->count(),
+                    'candidates' => Candidate::where('executive_id', $executive->id)->count(),
+                ];
+            });
+
+        $recentCandidates = Candidate::with(['course', 'center', 'executive'])
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $monthlyReport = [];
+
+        for ($i = 5; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+
+            $monthlyReport[] = [
+                'month' => $date->format('M Y'),
+                'leads' => Lead::whereYear('created_at', $date->year)
+                    ->whereMonth('created_at', $date->month)
+                    ->count(),
+                'candidates' => Candidate::whereYear('created_at', $date->year)
+                    ->whereMonth('created_at', $date->month)
+                    ->count(),
+                'converted' => Lead::whereYear('created_at', $date->year)
+                    ->whereMonth('created_at', $date->month)
+                    ->whereHas('latestFollowup', fn ($q) => $q->where('status', 'Converted'))
+                    ->count(),
+            ];
+        }
+
+        return view('admin.reports.index', compact(
+            'report',
+            'executives',
+            'recentCandidates',
+            'monthlyReport'
+        ));
     }
 }

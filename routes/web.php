@@ -146,6 +146,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/export/leads', [DashboardController::class, 'exportLeads'])
         ->name('dashboard.export.leads');
 
+    Route::get('/reports', [DashboardController::class, 'reports'])
+        ->name('reports.index');
     Route::get('/dashboard/export/vouchers', [DashboardController::class, 'exportVouchers'])
         ->name('dashboard.export.vouchers');
     Route::patch('/vouchers/{voucher}/mark-used',

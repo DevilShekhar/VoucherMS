@@ -126,6 +126,9 @@ class PermissionSeeder extends Seeder
             //Exam-schedule
             'exam-schedules.index',
             'exam-schedules.create',
+            
+            //reports
+            'reports.index'
         ];
 
         foreach ($permissions as $permission) {
