@@ -16,7 +16,7 @@
 
             <div class="premium-header-content">
                 <span class="premium-tag">COURSE MANAGEMENT</span>
-                <h2>class="text-white">Create Course</h2>
+                <h2 class="text-white">Create Course</h2>
                 <p>Add a new course</p>
             </div>
 
