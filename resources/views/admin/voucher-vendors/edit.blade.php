@@ -3,30 +3,30 @@
 @section('content')
 
     <section class="section premium-dashboard">
-    <div class="premium-header">
-        <div class="premium-header-overlay"></div>
-        <div class="premium-header-left">
-            <div class="premium-header-icon">
-                <i class="fas fa-edit"></i>
+        <div class="premium-header">
+            <div class="premium-header-overlay"></div>
+            <div class="premium-header-left">
+                <div class="premium-header-icon">
+                    <i class="fas fa-edit"></i>
+                </div>
+                <div class="premium-header-content">
+                    <span class="premium-tag">VOUCHER VENDOR MANAGEMENT</span>
+                    <h2 class="text-white">Edit Voucher Vendor</h2>
+                    <p>Update voucher vendor details</p>
+                </div>
             </div>
-            <div class="premium-header-content">
-                <span class="premium-tag">VOUCHER VENDOR MANAGEMENT</span>
-                <h2 class="text-white">Edit Voucher Vendor</h2>
-                <p>Update voucher vendor details</p>
+            <div class="premium-header-right">
+                <a href="{{ route('voucher-vendors.index') }}" class="premium-back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Vendors
+                </a>
             </div>
+            <!-- Decorative Shapes -->
+            <div class="shape circle-1"></div>
+            <div class="shape circle-2"></div>
+            <div class="shape circle-3"></div>
+            <div class="dots"></div>
         </div>
-        <div class="premium-header-right">
-            <a href="{{ route('voucher-vendors.index') }}" class="premium-back-btn">
-                <i class="fas fa-arrow-left"></i> Back to Vendors
-            </a>
-        </div>
-        <!-- Decorative Shapes -->
-        <div class="shape circle-1"></div>
-        <div class="shape circle-2"></div>
-        <div class="shape circle-3"></div>
-        <div class="dots"></div>
-    </div>
-</section>
+    </section>
 
     <section class="section premium-dashboard pt-0">
 
@@ -100,8 +100,8 @@
                     <div class="mt-4">
 
                         <button type="submit" class="btn btn-save">
-    <i class="fas fa-save me-2"></i> Update Vendor
-</button>
+                            <i class="fas fa-save me-2"></i> Update Vendor
+                        </button>
 
                         <a href="{{ route('voucher-vendors.index') }}" class="btn"
                             style="background: var(--cloth); color: var(--ink);">
