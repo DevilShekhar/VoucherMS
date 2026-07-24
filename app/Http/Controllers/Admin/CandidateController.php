@@ -28,7 +28,7 @@ class CandidateController extends Controller
         if (Auth::user()->role_id == 4) {
             $query->where('executive_id', Auth::id());
         }
-        $candidates = $query->get();
+        $candidates = $query;
         $centers = Center::orderBy('center_name')->get();
         return view('admin.candidates.index', compact('candidates', 'centers'));
     }
