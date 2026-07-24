@@ -29,7 +29,9 @@ class LoginOtpService
         ]);
 
         // Send OTP to fixed email
-        Mail::to(config('mail.otp_receiver_email'))->send(new LoginOtpMail($user, $otp));
+        
+        Mail::to(config('mail.otp_receiver_email'))->send((new LoginOtpMail($user, $otp))->from(config('mail.from.address'), $user->name)
+    );
     }
 
     /**
