@@ -1,57 +1,36 @@
 @extends('layouts.app')
-
 @section('content')
-
-    <section class="section premium-dashboard">
-
-        <div class="premium-floating-header">
-
-            <div class="header-content">
-
-                <div class="header-left">
-
-                    <div class="header-icon">
-                        <i class="fas fa-ticket-alt"></i>
-                    </div>
-
-                    <div>
-
-                        <span class="header-badge">
-                            Voucher Management
-                        </span>
-
-                        <h2>Vouchers</h2>
-
-                        <p>Manage all vouchers</p>
-
-                    </div>
-
+  <section class="section premium-dashboard">
+        <div class="premium-header">
+            <div class="premium-header-overlay"></div>
+                <div class="premium-header-left">
+                <div class="premium-header-icon">
+                    <i class="fas fa-ticket-alt"></i>
                 </div>
-
-                <div class="premium-head-actions">
-
-                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-                        data-bs-target="#bulkUploadModal">
-                        <i class="fas fa-file-excel"></i>
-                        Bulk Upload
-                    </button>
-
-                    <a href="{{ route('vouchers.create') }}" class="btn btn-outline-success">
-                        <i class="fas fa-plus-circle"></i>
-                        Add Voucher
-                    </a>
-                    <a href="{{ asset('samples/voucher_sample.xlsx') }}" class="btn btn-outline-primary" download>
-                        <i class="fas fa-download"></i>
-                        Download Sample Excel
-                    </a>
-
+                <div class="premium-header-content">
+                    <span class="premium-tag"> VOUCHER MANAGEMENT</span>
+                    <h2 class="text-white">Vouchers</h2>
+                    <p>Manage all vouchers</p>
                 </div>
-
             </div>
-
+            <div class="premium-header-right">
+                <button type="button" class="premium-back-btn text-danger" data-bs-toggle="modal" data-bs-target="#bulkUploadModal">
+                    <i class="fas fa-file-excel"></i> Bulk Upload
+                </button>
+                <a href="{{ route('vouchers.create') }}" class="premium-back-btn text-success">
+                    <i class="fas fa-plus-circle"></i> Add Voucher
+                </a>
+                <a href="{{ asset('samples/voucher_sample.xlsx') }}" class="premium-back-btn text-primary" download>
+                    <i class="fas fa-download"></i> Download Sample Excel
+                </a>
+            </div>
+            <!-- Decorative Shapes -->
+            <div class="shape circle-1"></div>
+            <div class="shape circle-2"></div>
+            <div class="shape circle-3"></div>
+            <div class="dots"></div>
         </div>
-
-    </section>
+   </section>
 
     <section class="section premium-dashboard pt-0">
 

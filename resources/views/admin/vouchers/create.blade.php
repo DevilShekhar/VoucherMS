@@ -4,44 +4,37 @@
 
 <section class="section premium-dashboard">
 
-    <div class="premium-floating-header">
+    <div class="premium-header">
 
-        <div class="header-content">
-
-            <div class="header-left">
-
-                <div class="header-icon">
+        <div class="premium-header-overlay"></div>
+            <div class="premium-header-left">
+                <div class="premium-header-icon">
                     <i class="fas fa-ticket-alt"></i>
                 </div>
-
-                <div>
-
-                    <span class="header-badge">
-                        Voucher Management
+                <div class="premium-header-content">
+                    <span class="premium-tag">
+                        VOUCHER MANAGEMENT
                     </span>
-
-                    <h2>Add Voucher</h2>
-
+                    <h2 class="text-white">Add Voucher</h2>
                     <p>Create a new voucher</p>
-
                 </div>
-
             </div>
 
-            <div class="premium-head-actions">
+            <div class="premium-header-right">
 
-                <a href="{{ route('vouchers.index') }}"
-                   class="btn btn-create"
-                   style="background: var(--cloth); color: var(--ink);">
-
+                <a href="{{ route('vouchers.index') }}" 
+                   class="premium-back-btn">
                     <i class="fas fa-arrow-left"></i>
                     Back to Vouchers
-
                 </a>
 
             </div>
 
-        </div>
+        <!-- Decorative Shapes -->
+        <div class="shape circle-1"></div>
+        <div class="shape circle-2"></div>
+        <div class="shape circle-3"></div>
+        <div class="dots"></div>
 
     </div>
 
@@ -210,8 +203,8 @@
 
                 <div class="mt-4">
 
-                    <button type="submit" class="btn btn-create">
-                        <i class="fas fa-save"></i>
+                    <button type="submit" class="btn btn-save">
+                        <i class="fas fa-save me-2"></i>
                         Save Voucher
                     </button>
 
