@@ -39,8 +39,11 @@ class LeadController extends Controller
                 $q->where('status', $status);
             });
         }
+        if ($priority = request('priority')) {
+            $query->where('priority', $priority);
+        }
 
-        $leads = $query->latest()->paginate(10);
+        $leads = $query->latest()->paginate(30);
 
         // Base query for counts
         $countQuery = Lead::query();
@@ -57,6 +60,9 @@ class LeadController extends Controller
             'Not Interested' => (clone $countQuery)->whereHas('followups', fn ($q) => $q->where('status', 'Not Interested'))->count(),
             'Converted' => (clone $countQuery)->whereHas('followups', fn ($q) => $q->where('status', 'Converted'))->count(),
             // 'Closed' => (clone $countQuery)->whereHas('followups', fn ($q) => $q->where('status', 'Closed'))->count(),
+            'High' => (clone $countQuery)->where('priority', 'High')->count(),
+            'Medium' => (clone $countQuery)->where('priority', 'Medium')->count(),
+            'Low' => (clone $countQuery)->where('priority', 'Low')->count(),
         ];
 
         return view('admin.leads.index', compact('leads', 'counts'));
