@@ -122,6 +122,10 @@ class PermissionSeeder extends Seeder
             // Voucher Request Notifications
             'voucher-request-notifications.latest',
             'voucher-request-notifications.read',
+
+            //Exam-schedule
+            'exam-schedules.index',
+            'exam-schedules.create',
         ];
 
         foreach ($permissions as $permission) {
