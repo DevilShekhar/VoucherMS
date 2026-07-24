@@ -8,7 +8,6 @@ use App\Models\CandidateDocument;
 use App\Models\Center;
 use App\Models\Course;
 use App\Models\Lead;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -23,12 +22,12 @@ class CandidateController extends Controller
             'executive',
             'payments',
             'voucherRequest',
-            'examSchedule'
-        ])->where('status', 'Active')->get();
+            'examSchedule',
+        ])->where('status', 'Active');
         if (Auth::user()->role_id == 4) {
             $query->where('executive_id', Auth::id());
         }
-        $candidates = $query;
+        $candidates = $query->get();
         $centers = Center::orderBy('center_name')->get();
         return view('admin.candidates.index', compact('candidates', 'centers'));
     }
