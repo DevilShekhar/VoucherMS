@@ -1,3 +1,4 @@
+@can('candidates.edit')
 @extends('layouts.app')
 
 @section('content')
@@ -8,12 +9,12 @@
                 <div class="premium-header-icon">
                     <i class="fas fa-user-graduate"></i>
                 </div>
-                <div class="premium-header-content">                    
+                <div class="premium-header-content">
                     <span class="premium-tag">Candidate Management</span>
                         <h1 class="text-white">Edit</h2>
                         <p>Manage all converted candidates</p>
                 </div>
-            </div>            
+            </div>
             <!-- Decorative Shapes -->
             <div class="shape circle-1"></div>
             <div class="shape circle-2"></div>
@@ -129,3 +130,8 @@
     </div>
 </section>
 @endsection
+@else
+    @php
+        abort(403);
+    @endphp
+@endcan

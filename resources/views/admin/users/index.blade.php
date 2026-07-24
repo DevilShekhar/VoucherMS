@@ -1,3 +1,4 @@
+@can('users.index')
 @extends('layouts.app')
 
 @section('content')
@@ -200,5 +201,8 @@
         });
     </script>
 @endsection
-
-
+@else
+    @php
+        abort(403);
+    @endphp
+@endcan

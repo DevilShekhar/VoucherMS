@@ -24,9 +24,10 @@ Route::get('/login', function () {
 });
 Route::get('/verify-otp', [OtpController::class, 'show'])->name('otp.form');
 Route::post('/verify-otp', [OtpController::class, 'verify'])->name('otp.verify');
-Route::post('/resend-otp', [OtpController::class, 'resend'])->name('otp.resend');    
+Route::post('/resend-otp', [OtpController::class, 'resend'])->name('otp.resend');
 
 use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'otp'])
@@ -35,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
+
 });
 Route::middleware(['auth', 'otp'])->group(function () {
     Route::resource('roles', RoleController::class);

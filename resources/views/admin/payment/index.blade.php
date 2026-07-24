@@ -1,3 +1,4 @@
+@can('payments.index')
 @extends('layouts.app')
 
 @section('content')
@@ -77,3 +78,8 @@
     </div>
 </section>
 @endsection
+@else
+    @php
+        abort(403);
+    @endphp
+@endcan
