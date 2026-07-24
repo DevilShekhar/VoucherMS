@@ -171,12 +171,14 @@
                 </li>
             @endcan
 
+            @can('report-index')
             <li>
                 <a href="{{ route('reports.index') }}" class="sb-link">
                     <i class="fas fa-chart-bar"></i>
                     <span>Reports</span>
                 </a>
             </li>
+            @endcan
         </ul>
 
 
