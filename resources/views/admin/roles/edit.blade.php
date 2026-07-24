@@ -4,47 +4,45 @@
 
     <section class="section premium-dashboard">
 
-        <div class="premium-floating-header">
+        <div class="premium-header">
 
-            <div class="header-content">
+             <div class="premium-header-overlay"></div>
 
-                <div class="header-left">
+         <div class="premium-header-left">
 
-                    <div class="header-icon">
-                        <i class="fas fa-user-shield"></i>
-                    </div>
+            <div class="premium-header-icon">
+                <i class="fas fa-user-shield"></i>
+            </div>
 
-                    <div>
+            <div class="premium-header-content">
 
-                        <span class="header-badge">
-                            Roles Management
-                        </span>
+                <span class="premium-tag">ROLES MANAGEMENT</span>
 
-                        <h2>Edit Role</h2>
+                <h2 class="text-white">Edit Role</h2>   
 
-                        <p>Update role details</p>
-
-                    </div>
-
-                </div>
-
-                <div class="premium-head-actions">
-
-                    <a href="{{ route('roles.index') }}" class="btn btn-create"
-                        style="background: var(--cloth); color: var(--ink);">
-
-                        <i class="fas fa-arrow-left"></i>
-                        Back to Roles
-
-                    </a>
-
-                </div>
-
+                 <p>Update role details</p>
             </div>
 
         </div>
 
-    </section>
+        <div class="premium-header-right">
+
+            <a href="{{ route('roles.index') }}" class="premium-back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Roles
+            </a>
+
+        </div>
+
+        <!-- Decorative Shapes -->
+        <div class="shape circle-1"></div>
+        <div class="shape circle-2"></div>
+        <div class="shape circle-3"></div>
+        <div class="dots"></div>
+
+     </div>
+
+</section>
 
     <section class="section premium-dashboard pt-0">
 

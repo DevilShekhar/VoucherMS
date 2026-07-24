@@ -4,41 +4,38 @@
 
 <section class="section premium-dashboard">
 
-    <div class="premium-floating-header">
+    <div class="premium-header">
 
-        <div class="header-content">
+        <div class="premium-header-overlay"></div>
 
-            <div class="header-left">
+        <div class="premium-header-left">
 
-                <div class="header-icon">
-                    <i class="fas fa-building"></i>
-                </div>
-
-                <div>
-                    <span class="header-badge">
-                        Center Management
-                    </span>
-
-                    <h2>Training Centers</h2>
-
-                    <p>Manage all training centers</p>
-                </div>
-
+            <div class="premium-header-icon">
+                <i class="fas fa-building"></i>
             </div>
 
-            <div class="premium-head-actions">
-
-                <a href="{{ route('centers.create') }}" class="btn btn-create">
-
-                    <i class="fas fa-plus"></i>
-
-                    Add Center
-
-                </a>
-
+            <div class="premium-header-content">
+                <span class="premium-tag">CENTER MANAGEMENT</span>
+                <h2 class="text-white">Training Centers</h2>
+                <p>Manage all training centers</p>
             </div>
 
         </div>
+
+        <div class="premium-header-right">
+
+            <a href="{{ route('centers.create') }}" class="premium-back-btn">
+                <i class="fas fa-plus"></i>
+                Add Center
+            </a>
+
+        </div>
+
+        <!-- Decorative Shapes -->
+        <div class="shape circle-1"></div>
+        <div class="shape circle-2"></div>
+        <div class="shape circle-3"></div>
+        <div class="dots"></div>
 
     </div>
 

@@ -52,8 +52,8 @@
                     </div>
 
                     <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); display: flex; gap: 12px; flex-wrap: wrap;">
-                        <button type="submit" class="btn btn-create">
-                            <i class="fas fa-plus-circle"></i>
+                        <button type="submit" class="btn btn-save">
+                            <i class="fas fa-plus-circle me-2"></i>
                             Create Role
                         </button>
                         <a href="{{ route('roles.index') }}" class="btn" style="background: var(--cloth); color: var(--ink); padding: 10px 24px; border-radius: 10px; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; transition: all .2s ease;">
