@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-   <section class="section premium-dashboard">
+    <section class="section premium-dashboard">
     <div class="premium-header">
         <div class="premium-header-overlay"></div>
         <div class="premium-header-left">
@@ -138,5 +138,4 @@
             });
         });
     </script>
-    
 @endsection

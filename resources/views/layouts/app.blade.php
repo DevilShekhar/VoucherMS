@@ -170,14 +170,9 @@
                     </a>
                 </li>
             @endcan
+
             <li>
-                <a href="#" class="sb-link">
-                    <i class="fas fa-users"></i>
-                    <span>Students</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="sb-link">
+                <a href="{{ route('reports.index') }}" class="sb-link">
                     <i class="fas fa-chart-bar"></i>
                     <span>Reports</span>
                 </a>

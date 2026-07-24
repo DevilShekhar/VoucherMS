@@ -63,4 +63,8 @@ class Voucher extends Model
     {
         return $this->hasMany(VoucherRequest::class);
     }
+    public function candidate()
+    {
+        return $this->hasMany(Candidate::class);
+    }
 }
