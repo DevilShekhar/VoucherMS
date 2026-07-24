@@ -1,21 +1,25 @@
 @extends('layouts.app')
 @section('content')
-    <section class="section premium-dashboard">
-        <div class="premium-floating-header">
-            <div class="header-content">
-                <div class="header-left">
-                    <div class="header-icon">
-                        <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div>
-                        <span class="header-badge">Exam Management</span>
-                        <h2>Exam Schedule</h2>
-                        <p>Manage all scheduled exams</p>
-                    </div>
+   <section class="section premium-dashboard">
+        <div class="premium-header">
+            <div class="premium-header-overlay"></div>
+            <div class="premium-header-left">
+                <div class="premium-header-icon">
+                    <i class="fas fa-calendar-alt"></i>
                 </div>
-            </div>
+                <div class="premium-header-content">
+                    <span class="premium-tag">EXAM MANAGEMENT</span>
+                    <h2 class="text-white">Exam Schedule</h2>
+                    <p>Manage all scheduled exams</p>
+                </div>
+           </div>
+                <!-- Decorative Shapes -->
+                <div class="shape circle-1"></div>
+                <div class="shape circle-2"></div>
+                <div class="shape circle-3"></div>
+                <div class="dots"></div>
         </div>
-    </section>
+   </section>
     <section class="section premium-dashboard pt-0">
         <div class="card premium-block">
             <div class="card-header premium-card-header">
