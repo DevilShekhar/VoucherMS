@@ -16,23 +16,28 @@ use App\Http\Controllers\Admin\VoucherRequestController;
 use App\Http\Controllers\Admin\VoucherRequestNotificationController;
 use App\Http\Controllers\Admin\VoucherVendorController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Auth\OtpController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/login', function () {
     return view('welcome');
 });
+Route::get('/verify-otp', [OtpController::class, 'show'])->name('otp.form');
+Route::post('/verify-otp', [OtpController::class, 'verify'])->name('otp.verify');
+Route::post('/resend-otp', [OtpController::class, 'resend'])->name('otp.resend');    
+
 use App\Http\Controllers\Admin\LocationController;
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'otp'])
     ->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
 });
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'otp'])->group(function () {
     Route::resource('roles', RoleController::class);
 
     Route::resource('permissions', PermissionController::class)->names([
@@ -154,5 +159,5 @@ Route::middleware(['auth'])->group(function () {
         [ExamScheduleController::class, 'markUsed'])
         ->name('vouchers.mark-used');
 });
-
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth')->name('logout');
 require __DIR__.'/auth.php';
