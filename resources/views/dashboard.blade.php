@@ -204,7 +204,7 @@
                 <div class="stat-content">
                     <div class="stat-top">
                         <h2>₹{{ number_format($totalEarning, 2) }}</h2>
-                        <span class="trend success">
+                        <span class="trend success bg-success">
                             <i class="fas fa-coins"></i>
                             Earnings
                         </span>
