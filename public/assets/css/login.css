@@ -946,3 +946,12 @@ margin-top: 5px;
     font-size:14px;
 
 }
+@media(max-width:768px){
+.right-panel{
+        width: 100%;
+
+}
+.left-panel{
+    display: none;
+}
+}
