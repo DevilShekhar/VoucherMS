@@ -5354,3 +5354,21 @@ font-size:30px;
 .premium-add-btn:hover{
     background:#1d4ed8;
 }
+@media(max-width:768px){
+.right-panel{
+        width: 100% !important;
+
+}
+.left-panel{
+    display: none !important;
+}
+}
+@media(max-width:575px){
+.right-panel{
+        width: 100% !important;
+
+}
+.left-panel{
+    display: none !important;
+}
+}
