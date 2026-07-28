@@ -51,11 +51,6 @@ class VoucherController extends Controller
             ->with('success', 'Voucher created successfully.');
     }
 
-    public function show(Voucher $voucher)
-    {
-        return view('admin.vouchers.show', compact('voucher'));
-    }
-
     public function edit(Voucher $voucher)
     {
         $vendors = VoucherVendor::orderBy('vendor_name')->get();
