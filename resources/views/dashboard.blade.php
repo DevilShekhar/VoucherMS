@@ -198,13 +198,13 @@
         <!-- Total Earnings -->
         <div class="col-xl-4 col-lg-6 col-md-6">
             <div class="premium-stat-card">
-                <div class="stat-icon success">
+                <div class="stat-icon success bg-success">
                <i class="fas fa-rupee-sign"></i>
                 </div>
                 <div class="stat-content">
-                    <div class="stat-top">
+                    <div class="stat-top ">
                         <h2>₹{{ number_format($totalEarning, 2) }}</h2>
-                        <span class="trend success bg-success">
+                        <span class="trend success ">
                             <i class="fas fa-coins"></i>
                             Earnings
                         </span>
