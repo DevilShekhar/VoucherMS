@@ -128,10 +128,16 @@ class PermissionSeeder extends Seeder
             //Exam-schedule
             'exam-schedules.index',
             'exam-schedules.create',
-            
+
             //reports
             'reports.index',
-            'report-index'
+            'report-index',
+
+            //voucher vendor
+            'voucher-venders-create',
+            'voucher-venders-index',
+            'voucher-venders-edit',
+            'voucher-venders-destory',
         ];
 
         foreach ($permissions as $permission) {

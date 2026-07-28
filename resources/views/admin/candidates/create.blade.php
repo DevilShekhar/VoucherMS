@@ -3,27 +3,33 @@
 
 @section('content')
     <section class="section premium-dashboard">
-        <div class="premium-floating-header">
-            <div class="header-content">
-                <div class="header-left">
-                    <div class="header-icon">
-                        <i class="fas fa-user-plus"></i>
+
+            <div class="premium-header">
+                <div class="premium-header-overlay"></div>
+                <div class="premium-header-left">
+                    <div class="premium-header-icon">
+                        <i class="fas fa-book"></i>
                     </div>
-                    <div>
-                        <span class="header-badge">Candidate Management</span>
-                        <h2>Create Candidate</h2>
+                    <div class="premium-header-content">
+                        <span class="premium-tag">Candidate Management</span>
+                        <h2 class="text-white">Create Candidate</h2>
                         <p>Convert lead into candidate</p>
                     </div>
                 </div>
-                <div class="premium-head-actions">
-                    <a href="{{ route('candidates.index') }}" class="btn btn-create"
-                        style="background: var(--cloth); color: var(--ink);">
-                        <i class="fas fa-arrow-left"></i> Back to Candidates
+                <div class="premium-header-right">
+                    <a href="{{ route('candidates.index') }}" class="premium-back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Candidates
                     </a>
                 </div>
+
+                <!-- Decorative Shapes -->
+                <div class="shape circle-1"></div>
+                <div class="shape circle-2"></div>
+                <div class="shape circle-3"></div>
+                <div class="dots"></div>
             </div>
-        </div>
-    </section>
+        </section>
 
     <section class="section premium-dashboard pt-0">
         @if ($errors->any())
@@ -138,14 +144,14 @@
 
                     </div>
 
-                    <div class="mt-4 d-flex gap-2">
-                        <button type="submit" class="btn btn-create">
-                            <i class="fas fa-save"></i> Save Candidate
-                        </button>
-                        <a href="{{ route('candidates.index') }}" class="btn"
-                            style="background: var(--cloth); color: var(--ink);">
+                    <div class="form-footer">
+                        <a href="{{ route('candidates.index') }}" class="btn btn-cancel">
                             <i class="fas fa-times"></i> Cancel
                         </a>
+                        <button type="submit" class="btn btn-save">
+                            <i class="fas fa-save"></i> Save Candidate
+                        </button>
+
                     </div>
                 </div>
             </div>

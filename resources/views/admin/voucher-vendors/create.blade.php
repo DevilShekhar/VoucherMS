@@ -68,15 +68,15 @@
                     @enderror
                 </div>
             </div>
-            <div class="mt-4">
-                <button type="submit" class="btn btn-save">
-                    <i class="fas fa-save me-2"></i> Save Vendor
-                </button>
-                <a href="{{ route('voucher-vendors.index') }}" class="btn"
-                    style="background: var(--cloth); color: var(--ink);">
+            <div class="form-footer">
+                <a href="{{ route('voucher-vendors.index') }}" class="btn btn-cancel">
                     <i class="fas fa-times"></i>
                     Cancel
                 </a>
+                <button type="submit" class="btn btn-save">
+                    <i class="fas fa-save me-2"></i> Save Vendor
+                </button>
+
             </div>
         </div>
     </div>

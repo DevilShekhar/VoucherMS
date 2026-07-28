@@ -189,20 +189,19 @@
 
                     </div>
 
-                    <div class="mt-4">
+                    <div class="form-footer">
 
-                        <button type="submit" class="btn btn-save">
-                            <i class="fas fa-me-2"></i>
-                            Update Voucher
-                        </button>
 
-                        <a href="{{ route('vouchers.index') }}" class="btn"
-                            style="background: var(--cloth); color: var(--ink);">
+                        <a href="{{ route('vouchers.index') }}" class="btn btn-cancel">
 
                             <i class="fas fa-times"></i>
                             Cancel
 
                         </a>
+                        <button type="submit" class="btn btn-save">
+                            <i class="fas fa-me-2"></i>
+                            Update Voucher
+                        </button>
 
                     </div>
 
