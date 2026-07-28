@@ -1792,7 +1792,7 @@ header.bg-white,
 
 .bg-indigo-light {
     background: #e0e7ff;
-    color: #4f46e5;
+    color: #4f46e5 !important;
 }
 
 .bg-success-light {
@@ -1802,7 +1802,7 @@ header.bg-white,
 
 .bg-orange-light {
     background: #ffedd5;
-    color: #ea580c;
+    color: #ea580c !important;
 }
 
 .bg-blue-light {
