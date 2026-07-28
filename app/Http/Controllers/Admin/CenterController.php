@@ -31,16 +31,20 @@ class CenterController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'center_code' => 'required|string|max:255',
+            'center_code' => 'required|string|max:255|unique:centers,center_code',
             'center_name' => 'nullable|string|max:255',
             'center_exe_id' => 'nullable|exists:users,id',
-            'address' => 'nullable|string|max:20',
-            'city' => 'nullable',
-            'state' => 'nullable',
-            'country' => 'nullable',
-            'pincode' => 'nullable',
-            'phone' => 'nullable',
-            'email' => 'nullable|email|max:255',
+            'address' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'pincode' => 'nullable|string|max:20',
+            'phone' => 'nullable|string|max:20|unique:centers,phone',
+            'email' => 'nullable|email|max:255|unique:centers,email',
+        ], [
+            'center_code.unique' => 'This center code already exists.',
+            'phone.unique' => 'This phone number already exists.',
+            'email.unique' => 'This email address already exists.',
         ]);
         $validated['status'] = 1;
 
@@ -54,7 +58,7 @@ class CenterController extends Controller
     public function edit(Center $center)
     {
         $centerExecutive = Role::query()->where('name', 'Center Admin')->first();
-         $centerexes = User::query()->where('role_id', $centerExecutive->id)
+        $centerexes = User::query()->where('role_id', $centerExecutive->id)
             ->where('status', 1)
             ->get();
 

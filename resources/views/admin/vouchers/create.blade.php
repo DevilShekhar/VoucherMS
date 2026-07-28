@@ -58,8 +58,9 @@
                                     Voucher Code <span class="text-danger">*</span>
                                 </label>
 
-                                <input type="text" name="voucher_code" class="form-control" value="{{ old('voucher_code') }}"
-                                    placeholder="Enter Voucher Code">
+                                <input type="text" name="voucher_code" class="form-control check-unique"
+                                    value="{{ old('voucher_code') }}" placeholder="Enter Voucher Code" data-table="vouchers"
+                                    data-column="voucher_code" data-message="This voucher code already exists.">
 
                                 @error('voucher_code')
                                     <span class="text-danger">{{ $message }}</span>

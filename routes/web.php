@@ -15,8 +15,8 @@ use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\VoucherRequestController;
 use App\Http\Controllers\Admin\VoucherRequestNotificationController;
 use App\Http\Controllers\Admin\VoucherVendorController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\OtpController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/login', function () {
@@ -159,6 +159,9 @@ Route::middleware(['auth', 'otp'])->group(function () {
     Route::patch('/vouchers/{voucher}/mark-used',
         [ExamScheduleController::class, 'markUsed'])
         ->name('vouchers.mark-used');
+
+    Route::post('/check-unique', [DashboardController::class, 'checkUnique'])
+        ->name('check.unique');
 });
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth')->name('logout');
 require __DIR__.'/auth.php';

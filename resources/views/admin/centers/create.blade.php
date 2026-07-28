@@ -55,18 +55,25 @@
 
                         <div class="col-md-6 mb-3">
 
-                            <label class="form-label">
-                                Center Code <span class="text-danger">*</span>
-                            </label>
+                        <label class="form-label">
+                            Center Code <span class="text-danger">*</span>
+                        </label>
 
-                            <input type="text" name="center_code" class="form-control" value="{{ old('center_code') }}"
-                                placeholder="Enter Center Code">
+                        <input
+                            type="text"
+                            name="center_code"
+                            class="form-control check-unique"
+                            value="{{ old('center_code') }}"
+                            placeholder="Enter Center Code"
+                            data-table="centers"
+                            data-column="center_code"
+                            data-message="This center code already exists.">
 
-                            @error('center_code')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
+                        @error('center_code')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
 
-                        </div>
+                    </div>
 
                         <div class="col-md-6 mb-3">
 

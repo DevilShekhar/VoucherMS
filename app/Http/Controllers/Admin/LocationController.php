@@ -4,35 +4,35 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Http\Location;
-use Illuminate\Support\Facades\Auth;
-
 
 class LocationController extends Controller
 {
     //
     public function index()
-    {  $location=\App\Models\Location::get();
-       return view ('admin.location.index',compact('location'));
+    {
+        $location = \App\Models\Location::get();
+
+        return view('admin.location.index', compact('location'));
     }
 
     public function create()
     {
-       return view( 'admin.location.create');
+        return view('admin.location.create');
     }
 
-     public function edit($id)
-
+    public function edit($id)
     {
-        $location=\App\Models\Location::findOrFail($id);
-       return view( 'admin.location.edit',compact('location'));
+        $location = \App\Models\Location::findOrFail($id);
+
+        return view('admin.location.edit', compact('location'));
     }
 
-   public function store(Request $request)
+    public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-
+            'name' => 'required|string|max:255|unique:locations,name',
+        ], [
+            'name.unique' => 'This name already exists.',
         ]);
 
         \App\Models\Location::create($validated);
@@ -66,8 +66,4 @@ class LocationController extends Controller
             ->route('locations.index')
             ->with('success', 'Location deleted successfully.');
     }
-
-
 }
-
-

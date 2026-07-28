@@ -53,13 +53,13 @@
             <li><a href="{{ route('dashboard') }}" class="sb-link"><i
                         class="fas fa-th-large"></i><span>Dashboard</span></a></li>
             @can('locations.index')
-            <li>
-                <a href="{{ route('locations.index') }}"
-                    class="sb-link {{ request()->routeIs('locations.*') ? 'active' : '' }}">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>Locations</span>
-                </a>
-            </li>
+                <li>
+                    <a href="{{ route('locations.index') }}"
+                        class="sb-link {{ request()->routeIs('locations.*') ? 'active' : '' }}">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Locations</span>
+                    </a>
+                </li>
             @endcan
             @can('users.index')
                 <li>
@@ -732,7 +732,34 @@
             }
         });
     </script>
+    <script>
+        $(document).on('keyup blur', '.check-unique', function () {
 
+            let input = $(this);
+
+            $.ajax({
+                url: "{{ route('check.unique') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    table: input.data('table'),
+                    column: input.data('column'),
+                    value: input.val(),
+                    id: input.data('id') || ''
+                },
+                success: function (res) {
+
+                    input.next('.unique-error').remove();
+
+                    if (res.exists) {
+                        input.after('<small class="text-danger unique-error">Already exists.</small>');
+                    }
+
+                }
+            });
+
+        });
+    </script>
 
 </body>
 

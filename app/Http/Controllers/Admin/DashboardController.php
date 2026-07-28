@@ -11,12 +11,13 @@ use App\Models\ExamSchedule;
 use App\Models\Lead;
 use App\Models\LeadFollowUp;
 use App\Models\Location;
+use App\Models\Payment;
 use App\Models\User;
 use App\Models\Voucher;
-use App\Models\Payment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class DashboardController extends Controller
@@ -113,9 +114,9 @@ class DashboardController extends Controller
             })
             ->latest()
             ->take(5)
-            ->get();           
-        
-        $voucherPurchaseQuery = Voucher::query();               
+            ->get();
+
+        $voucherPurchaseQuery = Voucher::query();
         $totalVoucherPurchase = $voucherPurchaseQuery->sum('purchase_price');
         $paymentQuery = Payment::query();
         if (Auth::user()->role_id == 4) {
@@ -124,8 +125,8 @@ class DashboardController extends Controller
             });
         }
         $totalSellingAmount = $paymentQuery->sum('paid_amount');
-        $totalEarning = $totalSellingAmount - $totalVoucherPurchase;  
-    
+        $totalEarning = $totalSellingAmount - $totalVoucherPurchase;
+
         $vouchers = Voucher::with('vendor')->latest()->paginate(10);
 
         return view('dashboard', compact(
@@ -223,5 +224,22 @@ class DashboardController extends Controller
             'recentCandidates',
             'monthlyReport'
         ));
+    }
+
+
+
+    public function checkUnique(Request $request)
+    {
+        // dd($request->all());
+        $exists = DB::table($request->table)
+            ->where($request->column, $request->value)
+            ->when($request->id, function ($query) use ($request) {
+                $query->where('id', '!=', $request->id);
+            })
+            ->exists();
+
+        return response()->json([
+            'exists' => $exists,
+        ]);
     }
 }
