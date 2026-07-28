@@ -49,8 +49,7 @@
                             <th>Center</th>
                             <th>Requested By</th>
                             <th>Requested On</th>
-                            <th>Admin</th>
-                            <th>Super Admin</th>
+                            <th>Approval Status</th>
                             <th>Status</th>
                             <th width="180">Action</th>
                         </tr>
@@ -88,20 +87,6 @@
 
                             <td>
                                 {{ \Carbon\Carbon::parse($request->requested_at)->format('d M Y h:i A') }}
-                            </td>
-
-                            <td>
-
-                                @if($request->admin_approval=='Approved')
-                                    <span class="badge bg-success">Approved</span>
-
-                                @elseif($request->admin_approval=='Rejected')
-                                    <span class="badge bg-danger">Rejected</span>
-
-                                @else
-                                    <span class="badge bg-warning">Pending</span>
-                                @endif
-
                             </td>
 
                             <td>

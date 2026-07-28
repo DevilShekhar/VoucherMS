@@ -121,9 +121,10 @@
                     </div>
                 </div>
 
-                <div class="mt-4">
-                    <button type="submit" class="btn btn-primary">Update Candidate</button>
-                    <a href="{{ route('candidates.show', $candidate) }}" class="btn btn-secondary">Cancel</a>
+                <div class="form-footer">
+                    <a href="{{ route('candidates.show', $candidate) }}" class="btn btn-cancel">Cancel</a>
+                    <button type="submit" class="btn btn-save">Update Candidate</button>
+
                 </div>
             </form>
         </div>
