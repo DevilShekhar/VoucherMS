@@ -138,6 +138,12 @@ class PermissionSeeder extends Seeder
             'voucher-venders-index',
             'voucher-venders-edit',
             'voucher-venders-destory',
+
+            //Location
+            'locations.index',
+            'locations.create',
+            'locations.edit',
+            'locations.destory',
         ];
 
         foreach ($permissions as $permission) {

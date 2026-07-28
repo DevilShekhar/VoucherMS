@@ -8,7 +8,7 @@
 
     <title>Certification Voucher Management System</title>
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/fav-icon.png') }}"  >
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/fav-icon.png') }}">
     <link rel="shortcut icon" href="{{ asset('assets/images/fav-icon.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('assets/images/fav-icon.png') }}">
     <!-- Fonts & Icons -->
@@ -52,6 +52,15 @@
         <ul class="sb-nav">
             <li><a href="{{ route('dashboard') }}" class="sb-link"><i
                         class="fas fa-th-large"></i><span>Dashboard</span></a></li>
+            @can('locations.index')
+            <li>
+                <a href="{{ route('locations.index') }}"
+                    class="sb-link {{ request()->routeIs('locations.*') ? 'active' : '' }}">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Locations</span>
+                </a>
+            </li>
+            @endcan
             @can('users.index')
                 <li>
                     <a href="{{ route('users.index') }}"
@@ -172,12 +181,12 @@
             @endcan
 
             @can('report-index')
-            <li>
-                <a href="{{ route('reports.index') }}" class="sb-link">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>Reports</span>
-                </a>
-            </li>
+                <li>
+                    <a href="{{ route('reports.index') }}" class="sb-link">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reports</span>
+                    </a>
+                </li>
             @endcan
         </ul>
     </aside>
@@ -195,7 +204,7 @@
                     &nbsp;/&nbsp; <b>@yield('page-title', 'Dashboard')</b>
                 </div>
             </div>
-            <div class="nb-right">                
+            <div class="nb-right">
 
                 <!-- User Dropdown -->
                 <div class="profile-dropdown" id="profileDropdown">
