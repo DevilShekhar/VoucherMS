@@ -221,20 +221,24 @@
 @can('view-voucher')
  <section class="section premium-dashboard pt-0">
     <div class="card premium-block">
-        <div class="card-body">
-
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">All Vouchers</h5>
-
-                <span class="badge bg-primary fs-6">
-                    Total Vouchers : {{ $vouchers->total() }}
-                </span>
+        <div class="profile-section-title d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <div class="title-icon">
+                    <i class="fas fa-address-card"></i>
+                </div>
+                <div class="ms-3">
+                    <h4 class="mb-1">All Vouchers</h4>
+                    <p class="text-white mb-0">Voucher Management</p>
+                </div>
             </div>
-
+            <div class="voucher-count">
+                <span class="count-label">Total Vouchers</span>
+                <h3>{{ number_format($vouchers->total()) }}</h3>
+            </div>
+        </div>
+        <div class="card-body">           
             <div class="table-responsive">
-
                 <table class="table table-hover" id="datatable">
-
                     <thead>
                         <tr>
                             <th>#</th>
@@ -244,19 +248,13 @@
                             <th>Status</th>
                         </tr>
                     </thead>
-
                     <tbody>
-
                         @forelse($vouchers as $voucher)
-
                             <tr>
-
                                 <td>{{ $loop->iteration + ($vouchers->firstItem() ?? 0) - 1 }}</td>
-
                                 <td>
                                     {{ $voucher->vendor->vendor_name ?? '-' }}
                                 </td>
-
                                 <td>
                                         <span class="voucher-code-display" style="cursor: pointer;"
                                             onclick="toggleVoucherCode(this)">
@@ -267,7 +265,6 @@
                                                 style="margin-left: 5px; font-size: 0.8rem; color: #6c757d;"></i>
                                         </span>
                                     </td>
-
                                     <td>
                                         @if($voucher->expiry_date)
                                             {{ \Carbon\Carbon::parse($voucher->expiry_date)->format('d M Y') }}
@@ -344,33 +341,27 @@
 <section class="section premium-dashboard pt-0">
     <div class="row">
         <div class="col-lg-12">
-
             <div class="card premium-block">
-
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="mb-1">
-                            <i class="fas fa-calendar-day text-warning me-2"></i>
-                            Today's Lead Updates
-                        </h5>
-                        <small class="text-muted">
-                            All follow-ups scheduled for today • Updated in real-time
-                        </small>
-                    </div>
-                    <span class="badge bg-warning text-dark px-3 py-2">
-                        TODAY
-                    </span>
+                <div class="profile-section-title d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <div class="title-icon">
+                     <i class="fas fa-calendar-day text-white me-2"></i>
                 </div>
-
-                <div class="card-body p-0">
-                    <div class="card-header bg-white">
-
+                <div class="ms-3">
+                    <h4 class="mb-1"> Today's Lead Updates</h4>
+                    <p class="text-white mb-0">  All follow-ups scheduled for today • Updated in real-time</p>
+                </div>
+            </div>
+            <div class="voucher-count">
+                 <span class="badge bg-white text-dark px-3 py-2">TODAY</span>
+            </div>
+        </div>              
+        <div class="card-body p-0">
+            <div class="card-header bg-white">
                         <form method="GET" action="{{ route('dashboard') }}">
                             <div class="row align-items-end">
-
                                 <div class="col-md-4">
                                     <label class="form-label">Location</label>
-
                                     <select name="location_id"
                                             class="form-select"
                                             onchange="this.form.submit()">
