@@ -123,7 +123,8 @@ class DashboardController extends Controller
                 $q->where('executive_id', Auth::id());
             });
         }
-        $totalSellingAmount = $paymentQuery->sum('paid_amount');     
+        $totalSellingAmount = $paymentQuery->sum('paid_amount');
+        $totalEarning = $totalSellingAmount - $totalVoucherPurchase;  
     
         $vouchers = Voucher::with('vendor')->latest()->paginate(10);
 
@@ -138,7 +139,8 @@ class DashboardController extends Controller
             'scheduledExams',
             'recentEnrollments',
             'totalVoucherPurchase',
-            'totalSellingAmount'
+            'totalSellingAmount',
+            'totalEarning'
         ));
     }
 

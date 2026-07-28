@@ -158,7 +158,7 @@
 <section>
     <div class="row g-4">
             <!-- Voucher Purchase -->
-        <div class="col-xl-6 col-lg-6 col-md-6">
+        <div class="col-xl-4 col-lg-6 col-md-6">
             <div class="premium-stat-card">
                 <div class="stat-icon red">
                     <i class="fas fa-wallet"></i>
@@ -177,21 +177,40 @@
             </div>
         </div>
         <!-- Selling Amount -->
-        <div class="col-xl-6 col-lg-6 col-md-6">
+        <div class="col-xl-4 col-lg-6 col-md-6">
             <div class="premium-stat-card">
                 <div class="stat-icon teal">
-                    <i class="fas fa-sack-dollar"></i>
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
                 </div>
                 <div class="stat-content">
                     <div class="stat-top">
                         <h2>₹{{ number_format($totalSellingAmount,2) }}</h2>
-                        <span class="trend success">
+                        <span class="trend teal">
                             <i class="fas fa-arrow-up"></i>
                             Sales
                         </span>
                     </div>
                     <h5>Total Selling</h5>
                     <p>Total paid amount received.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Total Earnings -->
+        <div class="col-xl-4 col-lg-6 col-md-6">
+            <div class="premium-stat-card">
+                <div class="stat-icon success">
+               <i class="fas fa-rupee-sign"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-top">
+                        <h2>₹{{ number_format($totalEarning, 2) }}</h2>
+                        <span class="trend success">
+                            <i class="fas fa-coins"></i>
+                            Earnings
+                        </span>
+                    </div>
+                    <h5>Total Earnings</h5>
+                    <p>Total profit (Selling Amount − Voucher Purchase).</p>
                 </div>
             </div>
         </div>    
