@@ -2956,7 +2956,7 @@ Responsive
 
 .stat-top{
 
-    display:flex;
+    
 
     justify-content:space-between;
 
@@ -2994,7 +2994,7 @@ Responsive
 ==============================*/
 
 .trend{
-
+    margin-top: 10px;
     padding:6px 12px;
     border-radius:30px;
     font-size:12px;
@@ -3005,33 +3005,24 @@ Responsive
 }
 
 .trend.up{
-
     color:#2563eb;
-
     background:#dbeafe;
-
 }
-
 .trend.success{
-
     color:#059669;
-
     background:#dcfce7;
-
+}
+.trend.teal{  
+    color: #108d81;
+    background: #10877c57;
 }
 
 .trend.warning{
-
     color:#d97706;
-
     background:#fef3c7;
-
 }
-
 .trend i{
-
     font-size:11px;
-
 }
 
 /*==============================
@@ -3227,6 +3218,9 @@ padding:5px 10px;
 
 .stat-icon.pink{
     background:linear-gradient(135deg,#ec4899,#be185d);
+}
+.stat-icon.success{
+    background:linear-gradient(135deg, #198754, #10b981);
 }
 
 .trend.danger{
