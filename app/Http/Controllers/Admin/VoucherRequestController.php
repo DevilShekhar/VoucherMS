@@ -20,12 +20,16 @@ class VoucherRequestController extends Controller
      */
     public function index()
     {
-         
-        $requests = VoucherRequest::with([
+        $user = Auth::user();
+        $query = VoucherRequest::with([
             'candidate',
             'center',
             'requestedBy',
-        ])->latest()->paginate(15);
+        ]);
+        if ($user->role_id != 1) {
+            $query->where('requested_by', $user->id);
+        }
+        $requests = $query->latest()->paginate(15);
 
         return view('admin.voucher_requests.index', compact('requests'));
     }
