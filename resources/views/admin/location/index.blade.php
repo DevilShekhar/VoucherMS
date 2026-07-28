@@ -2,29 +2,30 @@
 
 @section('content')
     <section class="section premium-dashboard">
-        <div class="premium-floating-header">
-            <div class="header-content">
-                <div class="header-left">
-                    <div class="header-icon">
-                        <i class="fas fa-user-shield"></i>
-                    </div>
-                    <div>
-                        <span class="header-badge">
-                            Location Management
-                        </span>
-                        <h2>Location</h2>
-                        <p>Manage all Location and their permissions</p>
-                    </div>
+        <div class="premium-header">
+            <div class="premium-header-overlay"></div>
+            <div class="premium-header-left">
+                <div class="premium-header-icon">
+                    <i class="fas fa-map-marker-alt"></i>
                 </div>
-                <div class="premium-head-actions">
-                    <a href="{{ route('locations.create') }}" class="btn btn-create">
-                        <i class="fas fa-plus"></i>
-                        Add location
-                    </a>
+                <div class="premium-header-content">
+                    <span class="premium-tag">Location Management</span>
+                        <h1 class="text-white">Location</h2>
+                       
                 </div>
             </div>
+            <div class="premium-header-right">
+                <a href="{{ route('locations.create') }}" class="premium-back-btn">
+                    <i class="fas fa-plus-circle"></i> Add location
+                </a>
+            </div>
+            <!-- Decorative Shapes -->
+            <div class="shape circle-1"></div>
+            <div class="shape circle-2"></div>
+            <div class="shape circle-3"></div>
+            <div class="dots"></div>
         </div>
-    </section>
+    </section>   
 
     <section class="section premium-dashboard pt-0">
         <div class="card premium-block">
