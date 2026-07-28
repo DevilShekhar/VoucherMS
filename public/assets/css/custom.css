@@ -1788,7 +1788,7 @@ header.bg-white,
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
- 
+
 
 .bg-indigo-light {
     background: #e0e7ff;
@@ -1999,7 +1999,7 @@ PREMIUM HEADER
 
     color:#fff;
 
-  
+
 
     font-weight:700;
 
@@ -2193,7 +2193,7 @@ PREMIUM HEADER
 }
 
 @media(max-width:576px){
-.premium-header-right{    
+.premium-header-right{
     display: grid;
 }
 .premium-header{
@@ -2343,7 +2343,7 @@ PREMIUM HEADER
 
 }
 .save-btn{
-    
+
     width: 100%;
     height: 50px;
     border: none;
@@ -2576,7 +2576,7 @@ Title
 -------------------------------------*/
 
 .dashboard-title{
-    
+
     font-weight:800;
     color:#162447;
     margin-top:18px;
@@ -2658,7 +2658,7 @@ Buttons
 .action-buttons{
     display:flex;
     gap:18px;
-   
+
     justify-content:flex-end;
 }
 
@@ -2956,7 +2956,7 @@ Responsive
 
 .stat-top{
 
-    
+
 
     justify-content:space-between;
 
@@ -2968,7 +2968,7 @@ Responsive
 
 .stat-top h2{
 
-    margin:0;   
+    margin:0;
     font-weight:800;
     color:#0f172a;
     line-height:1;
@@ -3012,7 +3012,7 @@ Responsive
     color:#059669;
     background:#dcfce7;
 }
-.trend.teal{  
+.trend.teal{
     color: #108d81;
     background: #10877c57;
 }
@@ -4152,8 +4152,6 @@ padding:5px 10px;
 
 .input-group-text {
     border-radius: 12px 0 0 12px;
-    background: #f8fafc;
-    border: 1px solid #dbe4ef;
     font-weight: 700;
 }
 
@@ -4525,7 +4523,7 @@ justify-content:center;
     overflow: hidden;
 }
 
- 
+
 
 .profile-section-title h4 {
     margin: 0;
@@ -4582,7 +4580,7 @@ justify-content:center;
     transition: .3s;
 }
 
- 
+
 
 .info-box span {
     display: block;
@@ -4640,7 +4638,7 @@ justify-content:center;
 /*=========================================
     TEXT
 =========================================*/
- 
+
 
 /*=========================================
     SPACING
@@ -4795,7 +4793,7 @@ justify-content:center;
     opacity:.9;
 }
 
- 
+
 
 /*==========================
         RIGHT
@@ -4910,7 +4908,7 @@ width:100%;
 justify-content:center;
 }
 
- 
+
 
 .lead-avatar{
 width:80px;
@@ -5282,7 +5280,7 @@ font-size:30px;
 .lead-info-icon.cyan{
     background:linear-gradient(135deg,#06b6d4,#0891b2);
 }
- 
+
 
 .timeline-item:not(:last-child)::before{
     content:"";
@@ -5293,14 +5291,14 @@ font-size:30px;
     height:100%;
     background:#dbeafe;
 }
-.timeline-dot{   
+.timeline-dot{
     background:linear-gradient(135deg,#2563eb,#3b82f6);
     color:#fff;
     display:flex;
     justify-content:center;
     align-items:center;
     flex-shrink:0;
-    font-size:18px;  
+    font-size:18px;
 }
 .timeline-content{
     flex:1;
