@@ -232,8 +232,7 @@
                                             <th>Paid</th>
                                             <th>Pending</th>
                                             <th>Status</th>
-                                            <th>Mode</th>
-                                            <th>Receipt</th>
+                                            <th>Mode</th>                                            
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -269,17 +268,7 @@
                                                 </td>
                                                 <td>
                                                     {{ $transaction->payment_mode ?? '-' }}
-                                                </td>
-                                                <td>
-                                                    @if($transaction && $transaction->receipt)
-                                                        <a href="{{ Storage::url($transaction->receipt) }}" target="_blank"
-                                                            class="btn btn-sm btn-info">
-                                                            <i class="fas fa-file"></i>
-                                                        </a>
-                                                    @else
-                                                        -
-                                                    @endif
-                                                </td>
+                                                </td>                                                
                                                 <td>
                                                     <a href="{{ route('payments.show', $payment->id) }}"
                                                         class="btn btn-sm btn-primary">

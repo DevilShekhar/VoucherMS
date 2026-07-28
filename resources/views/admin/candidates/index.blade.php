@@ -2,7 +2,7 @@
 @extends('layouts.app')
 
 @section('content')
-<section class="section premium-dashboard">
+    <section class="section premium-dashboard">
         <div class="premium-header">
             <div class="premium-header-overlay"></div>
             <div class="premium-header-left">
@@ -11,7 +11,7 @@
                 </div>
                 <div class="premium-header-content">
                     <span class="premium-tag">Candidate Management</span>
-                        <h1 class="text-white">Candidates</h2>
+                        <h1 class="text-white">Candidates</h1>
                         <p>Manage all converted candidates</p>
                 </div>
             </div>
