@@ -19,7 +19,7 @@ class CenterController extends Controller
 
     public function create()
     {
-        $centerExecutive = Role::query()->where('name', 'Center Executive')->first();
+        $centerExecutive = Role::query()->where('name', 'Center Admin')->first();
 
         $centerexes = User::query()->where('role_id', $centerExecutive->id)
             ->where('status', 1)
@@ -53,7 +53,7 @@ class CenterController extends Controller
 
     public function edit(Center $center)
     {
-        $centerExecutive = Role::query()->where('name', 'Center Executive')->first();
+        $centerExecutive = Role::query()->where('name', 'Center Admin')->first();
          $centerexes = User::query()->where('role_id', $centerExecutive->id)
             ->where('status', 1)
             ->get();
