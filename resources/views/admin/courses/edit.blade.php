@@ -84,14 +84,14 @@
                         </div>
                     </div>
 
-                    <div class="mt-4 d-flex gap-2">
+                    <div class="form-footer">
+                        <a href="{{ route('courses.index') }}" class="btn btn-cancel">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
                         <button type="submit" class="btn btn-save">
                             <i class="fas fa-save me-2"></i> Update Course
                         </button>
-                        <a href="{{ route('courses.index') }}" class="btn"
-                           style="background: var(--cloth); color: var(--ink);">
-                            <i class="fas fa-times"></i> Cancel
-                        </a>
+
                     </div>
                 </div>
             </div>

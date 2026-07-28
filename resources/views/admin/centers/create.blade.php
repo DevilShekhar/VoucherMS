@@ -4,15 +4,15 @@
 
     <section class="section premium-dashboard">
 
-    <div class="premium-header">
+        <div class="premium-header">
 
-        <div class="premium-header-overlay"></div>
+            <div class="premium-header-overlay"></div>
 
-             <div class="premium-header-left">
+            <div class="premium-header-left">
 
-                    <div class="premium-header-icon">
-                        <i class="fas fa-building"></i>
-                    </div>
+                <div class="premium-header-icon">
+                    <i class="fas fa-building"></i>
+                </div>
 
                 <div class="premium-header-content">
                     <span class="premium-tag">CENTER MANAGEMENT</span>
@@ -20,26 +20,26 @@
                     <p>Add a new training center</p>
                 </div>
 
+            </div>
+
+            <div class="premium-header-right">
+
+                <a href="{{ route('centers.index') }}" class="premium-back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Centers
+                </a>
+
+            </div>
+
+            <!-- Decorative Shapes -->
+            <div class="shape circle-1"></div>
+            <div class="shape circle-2"></div>
+            <div class="shape circle-3"></div>
+            <div class="dots"></div>
+
         </div>
 
-        <div class="premium-header-right">
-
-            <a href="{{ route('centers.index') }}" class="premium-back-btn">
-                <i class="fas fa-arrow-left"></i>
-                Back to Centers
-            </a>
-
-        </div>
-
-        <!-- Decorative Shapes -->
-        <div class="shape circle-1"></div>
-        <div class="shape circle-2"></div>
-        <div class="shape circle-3"></div>
-        <div class="dots"></div>
-
-    </div>
-
-</section>
+    </section>
 
     <section class="section premium-dashboard pt-0">
 
@@ -97,7 +97,7 @@
 
                                     <option value="{{ $centerexe->id }}" {{ old('center_exe_id') == $centerexe->id ? 'selected' : '' }}>
 
-                                       {{ $centerexe->name }} ({{ $centerexe->email }})
+                                        {{ $centerexe->name }} ({{ $centerexe->email }})
 
                                     </option>
 
@@ -197,8 +197,15 @@
                         </div>
                     </div>
 
-                    <div class="mt-4">
+                    <div class="form-footer">
 
+                        <a href="{{ route('centers.index') }}" class="btn btn-cancel">
+
+                            <i class="fas fa-times"></i>
+
+                            Cancel
+
+                        </a>
                         <button type="submit" class="btn btn-save">
 
                             <i class="fas fa-save me-2"></i>
@@ -207,14 +214,7 @@
 
                         </button>
 
-                        <a href="{{ route('centers.index') }}" class="btn"
-                            style="background: var(--cloth); color: var(--ink);">
 
-                            <i class="fas fa-times"></i>
-
-                            Cancel
-
-                        </a>
 
                     </div>
 

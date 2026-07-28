@@ -31,7 +31,7 @@
     <!-- NEW STAT CARDS DIV ADDED HERE -->
     <section class="section pt-0 pb-3">
         <div class="row g-3">
-            <div class="col-md-3 col-sm-6">
+            <div class="col-md-4 col-sm-6">
                 <div class="stat-card">
                     <div class="stat-icon bg-indigo-light text-indigo">
                         <i class="fas fa-users"></i>
@@ -43,7 +43,7 @@
                 </div>
             </div>
 
-            <div class="col-md-3 col-sm-6">
+            <div class="col-md-4 col-sm-6">
                 <div class="stat-card">
                     <div class="stat-icon bg-success-light text-success">
                         <i class="fas fa-user-check"></i>
@@ -55,7 +55,7 @@
                 </div>
             </div>
 
-            <div class="col-md-3 col-sm-6">
+            <div class="col-md-4 col-sm-6">
                 <div class="stat-card">
                     <div class="stat-icon bg-orange-light text-orange">
                         <i class="fas fa-user-slash"></i>
@@ -83,10 +83,10 @@
                         <thead>
                             <tr>
                                 <th width="60">#</th>
-                                <th>Photo</th>                                
-                                <th>Name</th>                                
+                                <th>Photo</th>
+                                <th>Name</th>
                                  <th>Contact Info</th>
-                                <th>Location</th>                                 
+                                <th>Location</th>
                                 <th>Status</th>
                                 <th width="170" class="text-center">Action</th>
                             </tr>
@@ -104,7 +104,7 @@
                                                 {{ strtoupper(substr($user->name, 0, 1)) }}
                                             </div>
                                         @endif
-                                    </td>                                    
+                                    </td>
                                     <td>
                                         <div class="fw-bold text-dark">
                                             {{ $user->name }}
@@ -126,7 +126,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{{ $user->location?->name ?? '-' }}</td>                                     
+                                    <td>{{ $user->location?->name ?? '-' }}</td>
                                     <td>
                                         <!-- Updated Status Chip UI -->
                                         @if($user->status == '1')
