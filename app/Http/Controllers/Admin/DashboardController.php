@@ -13,6 +13,7 @@ use App\Models\LeadFollowUp;
 use App\Models\Location;
 use App\Models\User;
 use App\Models\Voucher;
+use App\Models\Payment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -112,8 +113,18 @@ class DashboardController extends Controller
             })
             ->latest()
             ->take(5)
-            ->get();
-
+            ->get();           
+        
+        $voucherPurchaseQuery = Voucher::query();               
+        $totalVoucherPurchase = $voucherPurchaseQuery->sum('purchase_price');
+        $paymentQuery = Payment::query();
+        if (Auth::user()->role_id == 4) {
+            $paymentQuery->whereHas('candidate', function ($q) {
+                $q->where('executive_id', Auth::id());
+            });
+        }
+        $totalSellingAmount = $paymentQuery->sum('paid_amount');     
+    
         $vouchers = Voucher::with('vendor')->latest()->paginate(10);
 
         return view('dashboard', compact(
@@ -125,7 +136,9 @@ class DashboardController extends Controller
             'activeCourses',
             'pendingLeads',
             'scheduledExams',
-            'recentEnrollments'
+            'recentEnrollments',
+            'totalVoucherPurchase',
+            'totalSellingAmount'
         ));
     }
 

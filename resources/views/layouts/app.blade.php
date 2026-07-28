@@ -180,25 +180,6 @@
             </li>
             @endcan
         </ul>
-
-
-        <div class="sb-section">System</div>
-        <ul class="sb-nav">
-            <li><a href="#" class="sb-link"><i class="fas fa-cog"></i><span>Settings</span></a></li>
-            <li><a href="#" class="sb-link"><i class="fas fa-question-circle"></i><span>Help</span></a></li>
-        </ul>
-
-        <div class="sb-foot">
-            <div class="av">
-                {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
-            </div>
-            <div class="txt">
-                <div class="who">{{ Auth::user()->name ?? 'Admin User' }}</div>
-                <div class="role">
-                    {{ Auth::user()->roles->first()?->name ? ucwords(str_replace('_', ' ', Auth::user()->roles->first()->name)) : 'Administrator' }}
-                </div>
-            </div>
-        </div>
     </aside>
 
     <!-- Shell -->
@@ -214,18 +195,7 @@
                     &nbsp;/&nbsp; <b>@yield('page-title', 'Dashboard')</b>
                 </div>
             </div>
-            <div class="nb-right">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search anything...">
-                </div>
-                <div class="theme-switch" id="themeSwitch" title="Toggle theme">
-                    <div class="knob" id="themeKnob"><i class="fas fa-sun"></i></div>
-                </div>
-                <div class="bell-wrap">
-                    <button class="icon-btn"><i class="fas fa-bell"></i></button>
-                    <span class="bell-dot"></span>
-                </div>
+            <div class="nb-right">                
 
                 <!-- User Dropdown -->
                 <div class="profile-dropdown" id="profileDropdown">

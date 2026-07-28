@@ -13,7 +13,7 @@
                 </div>
                 <div class="premium-header-content">
                     <span class="premium-tag">Analytics & Reports</span>
-                    <h1 class="text-white">Reports Dashboard</h1>
+                    <h2 class="text-white">Reports Dashboard</h2>
                     <p>Lead, Candidate & Voucher Analytics</p>
                 </div>
             </div>
@@ -164,11 +164,14 @@
         <div class="row mt-4">
             <div class="col-12">
                 <div class="card premium-block">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">
-                            <i class="fas fa-users text-warning me-2"></i>
-                            Executive Performance
-                        </h5>
+                    <div class="profile-section-title">
+                        <div class="title-icon success">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div>
+                            <h4>Executive Performance</h4>
+                            <p>Track executive productivity and lead conversion performance</p>
+                        </div>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
@@ -212,11 +215,14 @@
         <div class="row mt-4 g-4">
             <div class="col-lg-6">
                 <div class="card premium-block h-100">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">
-                            <i class="fas fa-calendar-alt text-warning me-2"></i>
-                            Monthly Summary
-                        </h5>
+                    <div class="profile-section-title">
+                        <div class="title-icon warning">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div>
+                            <h4>Monthly Summary</h4>
+                            <p>Overview of monthly leads, follow-ups, conversions, and performance</p>
+                        </div>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
@@ -250,11 +256,14 @@
             <!-- Recent Candidates -->
             <div class="col-lg-6">
                 <div class="card premium-block h-100">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">
-                            <i class="fas fa-user-graduate text-warning me-2"></i>
-                            Recent Enrollments
-                        </h5>
+                    <div class="profile-section-title">
+                        <div class="title-icon info">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div>
+                            <h4>Recent Enrollments</h4>
+                            <p>Latest student admissions and enrollment activities</p>
+                        </div>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">

@@ -1,185 +1,203 @@
 @extends('layouts.app')
-
 @section('page-title', 'Dashboard')
-
 @section('content')
-    <section class="section premium-dashboard">
-    <div class="card premium-block shadow-sm">
-
-        <div class="card-body py-4 px-4">
-            <div class="header-content d-flex justify-content-between align-items-start flex-wrap gap-4">
-
-                <!-- Left Side -->
-                <div class="header-left d-flex align-items-center">
-                    <div class="me-3">
-                        <i class="fas fa-chart-pie fa-3x" style="color: #1e40af;"></i>
-                    </div>
-                    <div>
-                        <span class="header-badge px-3 py-1"
-                              style="background-color: #1e40af; color: white; border-radius: 30px; font-size: 0.85rem;">
-                            Overview
-                        </span>
-
-                        <h2 class="mb-2 mt-2" style="color: #1e3a8a;">Dashboard</h2>
-                        <!-- Enhanced Greeting -->
-                       @php
-                        $hour = now()->hour;
-
-                        if ($hour >= 5 && $hour < 12) {
-                            $timeOfDay = 'Morning';
-                        } elseif ($hour >= 12 && $hour < 17) {
-                            $timeOfDay = 'Afternoon';
-                        } elseif ($hour >= 17 && $hour < 21) {
-                            $timeOfDay = 'Evening';
-                        } else {
-                            $timeOfDay = 'Night';
-                        }
-                    @endphp
-
-                    <p class="mb-0 fw-medium" style="font-size: 1.1rem; color: #1e3a8a;">
-                        👋 Welcome back! Good {{ $timeOfDay }}, <strong>{{ Auth::user()->name }}</strong>.
-                        We hope you're having a productive day.
-                    </p>
+    <section class="dashboard-banner">
+        <div class="dashboard-card">
+            <!-- Background Decoration -->
+            <div class="banner-shape"></div>
+            <div class="row align-items-center">
+                <!-- Left Content -->
+                <div class="col-lg-7">
+                    <div class="d-flex align-items-start">
+                        <div class="dashboard-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <div class="ms-4">
+                            <span class="overview-badge">
+                                OVERVIEW
+                            </span>
+                            <h1 class="dashboard-title">
+                                Dashboard
+                            </h1>
+                            <div class="title-line"></div>
+                            @php
+                                $hour = now()->hour;
+                                if ($hour >= 5 && $hour < 12) {
+                                    $timeOfDay = 'Morning';
+                                } elseif ($hour >= 12 && $hour < 17) {
+                                    $timeOfDay = 'Afternoon';
+                                } elseif ($hour >= 17 && $hour < 21) {
+                                    $timeOfDay = 'Evening';
+                                } else {
+                                    $timeOfDay = 'Night';
+                                }
+                            @endphp
+                            <p class="welcome-text">                           
+                                Welcome back!
+                                Good {{ $timeOfDay }},
+                                <strong>{{ Auth::user()->name }}</strong>.
+                                <br>
+                                <small>
+                                    We hope you're having a productive day.
+                                </small>
+                            </p>
+                        </div>
                     </div>
                 </div>
-
                 <!-- Right Side -->
-                <div class="d-flex flex-column align-items-end gap-3">
-                    <span style="font-size: 13px; color: #334155; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-calendar-alt" style="color: #f59e0b;"></i>
-                        {{ now()->format('l, F j, Y') }}
-                    </span>
-                    <div class="d-flex gap-2">
-                        <a href="{{ route('dashboard.export.leads') }}" class="btn btn-outline-success btn-sm">
-                            <i class="fas fa-file-excel"></i> Download Leads
-                        </a>
-
-                        <a href="{{ route('dashboard.export.vouchers') }}" class="btn btn-outline-primary btn-sm">
-                            <i class="fas fa-file-excel"></i> Download Vouchers
-                        </a>
+                <div class="col-lg-5">
+                    <div class="dashboard-actions">
+                        <!-- Date -->
+                        <div class="date-box">
+                            <i class="far fa-calendar-alt"></i>
+                            {{ now()->format('l, F d, Y') }}
+                        </div>
+                        <!-- Buttons -->
+                        <div class="action-buttons">
+                            <a href="{{ route('dashboard.export.leads') }}"
+                            class="btn-download btn-green">
+                                <i class="fas fa-file-excel"></i>
+                                Download Leads
+                            </a>
+                            <a href="{{ route('dashboard.export.vouchers') }}"
+                            class="btn-download btn-blue">
+                                <i class="fas fa-file-excel"></i>
+                                Download Vouchers
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
+    </section>
 {{-- Other users --}}
-<section class="section premium-dashboard pt-0">
-    <!-- Stats Cards -->
-    <div class="stat-grid-container mb-4">
-        <div class="stat-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(245px, 1fr)); gap: 22px;">
+ 
 
-            <!-- 1. Enrolled Students -->
-            <div class="stat-card" style="background: #ffffff; border: 1px solid #e0e7ff; border-radius: 20px; padding: 28px 24px; box-shadow: 0 10px 30px rgba(79, 70, 229, 0.08); transition: all 0.3s ease;">
-                <div class="d-flex justify-content-between align-items-start mb-4">
-                    <div class="icon-wrapper" style="width: 54px; height: 54px; background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);">
-                        <i class="fas fa-user-graduate"></i>
+<section class="dashboard-stats">
+    <div class="row g-4">
+        <!-- Enrolled Students -->
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="premium-stat-card">
+                <div class="stat-icon blue">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-top">
+                        <h2>{{ number_format($totalStudents) }}</h2>
+                        <span class="trend up">
+                            <i class="fas fa-users"></i>
+                            Students
+                        </span>
                     </div>
-                </div>
-                <div class="num" style="font-size: 36px; font-weight: 700; color: #1e293b; margin-bottom: 6px; font-family: 'Inter', system-ui;">
-                    {{ number_format($totalStudents ?? 0) }}
-                </div>
-                <div class="lbl" style="color: #64748b; font-size: 14.5px; font-weight: 500;">Enrolled Students</div>
-            </div>
-
-            <!-- 2. Active Courses -->
-            <div class="stat-card" style="background: #ffffff; border: 1px solid #e0e7ff; border-radius: 20px; padding: 28px 24px; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.08); transition: all 0.3s ease;">
-                <div class="d-flex justify-content-between align-items-start mb-4">
-                    <div class="icon-wrapper" style="width: 54px; height: 54px; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);">
-                        <i class="fas fa-book-open"></i>
-                    </div>
-                </div>
-                <div class="num" style="font-size: 36px; font-weight: 700; color: #1e293b; margin-bottom: 6px; font-family: 'Inter', system-ui;">
-                    {{ $activeCourses ?? 0 }}
-                </div>
-                <div class="lbl" style="color: #64748b; font-size: 14.5px; font-weight: 500;">Active Courses</div>
-            </div>
-
-            <!-- 3. Pending Leads -->
-            <div class="stat-card" style="background: #ffffff; border: 1px solid #e0e7ff; border-radius: 20px; padding: 28px 24px; box-shadow: 0 10px 30px rgba(245, 158, 11, 0.08); transition: all 0.3s ease;">
-                <div class="d-flex justify-content-between align-items-start mb-4">
-                    <div class="icon-wrapper" style="width: 54px; height: 54px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);">
-                        <i class="fas fa-file-pen"></i>
-                    </div>
-                </div>
-                <div class="num" style="font-size: 36px; font-weight: 700; color: #1e293b; margin-bottom: 6px; font-family: 'Inter', system-ui;">
-                    {{ $pendingLeads ?? 0 }}
-                </div>
-                <div class="lbl" style="color: #64748b; font-size: 14.5px; font-weight: 500;">Pending Leads</div>
-                <div class="mt-3" style="color: #f59e0b; font-size: 13.5px; font-weight: 600;">
-                    <i class="fas fa-clock me-1"></i> Requires Follow-up
+                    <h5>Enrolled Students</h5>
+                    <p>Total registered students.</p>
                 </div>
             </div>
-
-            <!-- 4. Scheduled Exams -->
-            <div class="stat-card" style="background: #ffffff; border: 1px solid #e0e7ff; border-radius: 20px; padding: 28px 24px; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.08); transition: all 0.3s ease;">
-                <div class="d-flex justify-content-between align-items-start mb-4">
-                    <div class="icon-wrapper" style="width: 54px; height: 54px; background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);">
-                        <i class="fas fa-calendar-check"></i>
-                    </div>
-                </div>
-                <div class="num" style="font-size: 36px; font-weight: 700; color: #1e293b; margin-bottom: 6px; font-family: 'Inter', system-ui;">
-                    {{ $scheduledExams ?? 0 }}
-                </div>
-                <div class="lbl" style="color: #64748b; font-size: 14.5px; font-weight: 500;">Scheduled Exams</div>
-                <div class="mt-3" style="color: #10b981; font-size: 13.5px; font-weight: 600;">
-                    <i class="fas fa-check-circle me-1"></i> Active
-                </div>
-            </div>
-
         </div>
-    </div>
-
-    <!-- Recent Enrollments -->
-    <div class="panel" style="background: #ffffff; border: 1px solid #e0e7ff; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06); overflow: hidden;">
-        <div class="panel-head d-flex justify-content-between align-items-center px-5 py-4 border-bottom">
-            <h2 style="font-size: 19px; font-weight: 600; margin: 0; color: #1e293b;">Recent Enrollments</h2>
-            <a href="{{ route('candidates.index') }}" class="text-indigo-600 fw-semibold text-decoration-none d-flex align-items-center gap-1">
-                View All <i class="fas fa-arrow-right"></i>
-            </a>
+        <!-- Active Courses -->
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="premium-stat-card">
+                <div class="stat-icon green">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-top">
+                        <h2>{{ number_format($activeCourses) }}</h2>
+                        <span class="trend success">
+                            <i class="fas fa-check-circle"></i>
+                            Active
+                        </span>
+                    </div>
+                    <h5>Active Courses</h5>
+                    <p>Available courses.</p>
+                </div>
+            </div>
         </div>
-        <div class="table-responsive">
-            <table class="table table-hover mb-0" style="font-size: 14.5px;">
-                <thead class="table-light">
-                    <tr>
-                        <th class="ps-5">Student</th>
-                        <th>Course</th>
-                        <th>Center</th>
-                        <th>Status</th>
-                        <th>Enrolled On</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($recentEnrollments ?? [] as $candidate)
-                        <tr>
-                            <td class="ps-5">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="avatar-circle" style="width: 36px; height: 36px; background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px;">
-                                        {{ strtoupper(substr($candidate->first_name ?? 'U', 0, 1)) }}
-                                    </div>
-                                    <div>
-                                        <strong>{{ $candidate->first_name }} {{ $candidate->last_name }}</strong>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>{{ $candidate->course->course_name ?? 'N/A' }}</td>
-                            <td>{{ $candidate->center->center_name ?? 'N/A' }}</td>
-                            <td>
-                                <span class="badge" style="background: #10b981; color: white; padding: 6px 14px; border-radius: 30px; font-size: 12.5px;">Converted</span>
-                            </td>
-                            <td>{{ $candidate->created_at->format('d M Y') }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="text-center py-5 text-muted">No recent enrollments found.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+        <!-- Pending Leads -->
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="premium-stat-card">
+                <div class="stat-icon orange">
+                    <i class="fas fa-file-signature"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-top">
+                        <h2>{{ number_format($pendingLeads) }}</h2>
+                        <span class="trend warning">
+                            <i class="fas fa-clock"></i>
+                            Pending
+                        </span>
+                    </div>
+                    <h5>Pending Leads</h5>
+                    <p>Waiting for follow-up.</p>
+                </div>
+            </div>
         </div>
+        <!-- Scheduled Exams -->
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="premium-stat-card">
+                <div class="stat-icon purple">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-top">
+                        <h2>{{ number_format($scheduledExams) }}</h2>
+                        <span class="trend success">
+                            <i class="fas fa-calendar"></i>
+                            Scheduled
+                        </span>
+                    </div>
+                    <h5>Scheduled Exams</h5>
+                    <p>Upcoming exams.</p>
+                </div>
+            </div>
+        </div>
+          
     </div>
 </section>
+@can('view-voucher-earning')
+<section>
+    <div class="row g-4">
+            <!-- Voucher Purchase -->
+        <div class="col-xl-6 col-lg-6 col-md-6">
+            <div class="premium-stat-card">
+                <div class="stat-icon red">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-top">
+                        <h2>₹{{ number_format($totalVoucherPurchase,2) }}</h2>
+                        <span class="trend danger">
+                            <i class="fas fa-money-bill-wave"></i>
+                            Purchase
+                        </span>
+                    </div>
+                    <h5>Voucher Purchase</h5>
+                    <p>Total voucher purchase amount.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Selling Amount -->
+        <div class="col-xl-6 col-lg-6 col-md-6">
+            <div class="premium-stat-card">
+                <div class="stat-icon teal">
+                    <i class="fas fa-sack-dollar"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-top">
+                        <h2>₹{{ number_format($totalSellingAmount,2) }}</h2>
+                        <span class="trend success">
+                            <i class="fas fa-arrow-up"></i>
+                            Sales
+                        </span>
+                    </div>
+                    <h5>Total Selling</h5>
+                    <p>Total paid amount received.</p>
+                </div>
+            </div>
+        </div>    
+    <div>
+</section>
+@endcan
 
 @can('view-voucher')
  <section class="section premium-dashboard pt-0">

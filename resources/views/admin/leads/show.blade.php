@@ -1,268 +1,314 @@
 @extends('layouts.app')
 
 @section('content')
-    <section class="section premium-dashboard">
-        <div class="premium-floating-header">
-            <div class="header-content">
-                <div class="header-left">
-                    <div class="header-icon">
-                        <i class="fas fa-user-plus"></i>
+    <section class="section premium-dashboard pt-0">
+        <div class="lead-hero">
+            <div class="lead-hero-overlay"></div>
+            <div class="lead-hero-content">
+                <div class="lead-left">
+                    <div class="lead-avatar">
+                        <i class="fas fa-user-tie"></i>
                     </div>
-                    <div>
-                        <span class="header-badge">Lead Management</span>
-                        <h2>Lead Details</h2>
-                        <p>Complete lead information</p>
+                    <div class="lead-details">
+                        <span class="lead-module">
+                            <i class="fas fa-layer-group"></i>
+                            Lead Management
+                        </span>
+                        <h2>{{ $lead->first_name }} {{ $lead->last_name }}</h2>
+                        <p class="lead-code">
+                            <i class="fas fa-id-card"></i>
+                            Lead Code :
+                            <strong>{{ $lead->lead_code }}</strong>
+                        </p>                   
                     </div>
                 </div>
-                <div class="premium-head-actions">
-                    <a href="{{ route('leads.index') }}" class="btn mb-2" style="background:var(--cloth);color:var(--ink);">
-                        <i class="fas fa-arrow-left"></i> Back
-                    </a>
-                    <a href="{{ route('leads.edit', $lead->id) }}" class="btn btn-create mb-2">
-                        <i class="fas fa-edit"></i> Edit Lead
-                    </a>
-                    <button class="btn btn-dark mb-2" data-bs-toggle="modal" data-bs-target="#addFollowupModal">
-                        <i class="fas fa-phone"></i> Add Follow Up
-                    </button>
-
+                <div class="lead-right">
+                    <div class="lead-status">
+                        @if($lead->status=='Converted')
+                            <span class="status-pill success">
+                                <i class="fas fa-check-circle"></i>
+                                Converted
+                            </span>
+                        @elseif($lead->status=='Closed')
+                            <span class="status-pill danger">
+                                <i class="fas fa-times-circle"></i>
+                                Closed
+                            </span>
+                        @else
+                            <span class="status-pill warning">
+                                <i class="fas fa-clock"></i>
+                                {{ $lead->status }}
+                            </span>
+                        @endif
+                    </div>
+                    <div class="hero-buttons">
+                        <a href="{{ route('leads.index') }}" class="hero-btn light">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Back</span>
+                        </a>
+                        <a href="{{ route('leads.edit',$lead->id) }}" class="hero-btn primary">
+                            <i class="fas fa-edit"></i>
+                            <span>Edit</span>
+                        </a>
+                        <button class="hero-btn dark"
+                                data-bs-toggle="modal"
+                                data-bs-target="#addFollowupModal">
+                            <i class="fas fa-phone-volume"></i>
+                            <span>Follow Up</span>
+                        </button>
+                    </div>
                 </div>
-            </div>
+        </div>
         </div>
     </section>
 
     <section class="section premium-dashboard pt-0">
         <div class="row">
-            <div class="col-lg-12">
-                <div class="card premium-block">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-lg-4">
-                                <div class="d-flex">
-                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($lead->candidate_name) }}&background=f5f5f5&color=000"
-                                        class="rounded-circle border" width="150" height="150">
-                                    <div class="ms-4">
-                                        <h3 class="fw-bold mb-1">{{ $lead->candidate_name }}</h3>
-                                        <div class="text-muted">{{ $lead->lead_no }}</div>
-                                        <div class="mt-3">
-                                            <div><i class="fas fa-envelope text-warning"></i> {{ $lead->email ?: '-' }}
+            <div class="col-12">
+                <div class="lead-profile-card">
+                    <div class="row align-items-center g-0">
+                        <!-- Left Profile -->
+                        <div class="col-xl-6">
+                            <div class="lead-profile-left">
+                                <div class="lead-avatar">
+                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($lead->candidate_name) }}&background=f5f5f5&color=0f172a&size=200"
+                                       alt="Lead">
+                                    <span class="avatar-badge">
+                                        <i class="fas fa-star"></i>
+                                    </span>
+                                </div>
+                                <div class="lead-profile-content">
+                                    <span class="lead-module">
+                                        <i class="fas fa-layer-group"></i>
+                                        Lead Management
+                                    </span>
+                                    <h2>
+                                       {{ $lead->candidate_name }}
+                                    </h2>
+                                    <div class="lead-number">
+                                        {{ $lead->lead_no }}
+                                    </div>
+                                    <div class="lead-contact-list">
+                                        <div class="lead-contact-item">
+                                            <div class="contact-icon warning">
+                                                <i class="fas fa-envelope"></i>
                                             </div>
-                                            <div><i class="fas fa-phone text-warning"></i> {{ $lead->mobile }}</div>
-                                            <div><i class="fas fa-building text-warning"></i> {{ $lead->company ?: '-' }}
-                                            </div>
-                                            <div><i class="fas fa-map-marker-alt text-warning"></i> {{ $lead->city ?: '-' }}
-                                            </div>
+                                            <span>{{ $lead->email ?: '-' }}</span>
                                         </div>
-                                        <span class="badge bg-warning text-dark mt-3">{{ strtoupper($lead->status) }}</span>
+                                        <div class="lead-contact-item">
+                                            <div class="contact-icon success">
+                                                <i class="fas fa-phone"></i>
+                                            </div>
+                                            <span>{{ $lead->mobile }}</span>
+                                        </div>
+                                        <div class="lead-contact-item">
+                                            <div class="contact-icon primary">
+                                                <i class="fas fa-building"></i>
+                                            </div>
+                                            <span>{{ $lead->company ?: '-' }}</span>
+                                        </div>
+                                        <div class="lead-contact-item">
+                                            <div class="contact-icon danger">
+                                                <i class="fas fa-map-marker-alt"></i>
+                                            </div>
+                                            <span>{{ $lead->city ?: '-' }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-4">
-                                <table class="table table-borderless mb-0">
-                                    <tr>
-                                        <th width="40%">Assigned To</th>
-                                        <td>{{ $lead->assignedUser->name ?? 'Unassigned' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Center</th>
-                                        <td>{{ $lead->center->center_name ?? '-' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Course</th>
-                                        <td>{{ $lead->course->course_name ?? '-' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Priority</th>
-                                        <td>
-                                            @if($lead->priority == 'High')
-                                                <span class="badge bg-danger">High</span>
-                                            @elseif($lead->priority == 'Medium')
-                                                <span class="badge bg-warning text-dark">Medium</span>
-                                            @else
-                                                <span class="badge bg-success">Low</span>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="col-lg-4">
-                                <table class="table table-borderless mb-0">
-                                    <tr>
-                                        <th width="40%">Status</th>
-                                        <td><span class="badge bg-dark">{{ $lead->status }}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Created By</th>
-                                        <td>{{ $lead->createdBy->name ?? '-' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Created At</th>
-                                        <td>{{ $lead->created_at->format('d M Y h:i A') }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Updated At</th>
-                                        <td>{{ $lead->updated_at->format('d M Y h:i A') }}</td>
-                                    </tr>
-                                </table>
+                        </div>
+                        <!-- Right Information -->
+                        <div class="col-xl-6">
+                            <div class="lead-information-grid">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="lead-info-item">
+                                            <div class="lead-info-icon blue">
+                                                <i class="fas fa-user-check"></i>
+                                            </div>
+                                            <div>
+                                                <label>Assigned To</label>
+                                                <h6>{{ $lead->assignedUser->name ?? 'Unassigned' }}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="lead-info-item">
+                                            <div class="lead-info-icon purple">
+                                                <i class="fas fa-circle-check"></i>
+                                            </div>
+                                            <div>
+                                                <label>Status</label>
+                                                <h6>
+                                                    @if($lead->status=='Converted')
+                                                        <span class="status-chip success">Converted</span>
+                                                    @elseif($lead->status=='Closed')
+                                                        <span class="status-chip danger">Closed</span>
+                                                    @else
+                                                        <span class="status-chip warning">{{ $lead->status }}</span>
+                                                    @endif
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="lead-info-item">
+                                            <div class="lead-info-icon green">
+                                                <i class="fas fa-building"></i>
+                                            </div>
+                                            <div>
+                                                <label>Center</label>
+                                                <h6>{{ $lead->center->center_name ?? '-' }}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="lead-info-item">
+                                            <div class="lead-info-icon orange">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div>
+                                                <label>Created By</label>
+                                                <h6>{{ $lead->createdBy->name ?? '-' }}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="lead-info-item">
+                                            <div class="lead-info-icon orange">
+                                                <i class="fas fa-book-open"></i>
+                                            </div>
+                                            <div>
+                                                <label>Course</label>
+                                                <h6>{{ $lead->course->course_name ?? '-' }}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="lead-info-item">
+                                            <div class="lead-info-icon indigo">
+                                                <i class="fas fa-calendar-plus"></i>
+                                            </div>
+                                            <div>
+                                                <label>Created At</label>
+                                                <h6>{{ $lead->created_at->format('d M Y h:i A') }}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="lead-info-item">
+                                            <div class="lead-info-icon red">
+                                                <i class="fas fa-bolt"></i>
+                                            </div>
+                                            <div>
+                                                <label>Priority</label>
+                                                <h6>
+                                                    @if($lead->priority=='High')
+                                                        <span class="priority-chip high">High</span>
+                                                    @elseif($lead->priority=='Medium')
+                                                        <span class="priority-chip medium">Medium</span>
+                                                    @else
+                                                        <span class="priority-chip low">Low</span>
+                                                    @endif
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="lead-info-item">
+                                            <div class="lead-info-icon violet">
+                                                <i class="fas fa-calendar-check"></i>
+                                            </div>
+                                            <div>
+                                                <label>Updated At</label>
+                                                <h6>{{ $lead->updated_at->format('d M Y h:i A') }}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="lead-info-item remarks-card">
+                                            <div class="lead-info-icon cyan">
+                                                <i class="fas fa-comment-dots"></i>
+                                            </div>
+                                            <div class="remarks-content">
+                                                <label>Remarks</label>
+                                                <p>
+                                                   {{ $lead->remarks ?: 'No remarks available.' }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="row mt-3">
-            <div class="col-lg-6">
-                <div class="card premium-block h-100">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0"><i class="fas fa-info-circle text-warning"></i> Lead Information</h5>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-borderless">
-                            <tr>
-                                <th width="35%">Candidate</th>
-                                <td>{{ $lead->candidate_name }}</td>
-                            </tr>
-                            <tr>
-                                <th>Email</th>
-                                <td>{{ $lead->email ?: '-' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Mobile</th>
-                                <td>{{ $lead->mobile }}</td>
-                            </tr>
-                            <tr>
-                                <th>Company</th>
-                                <td>{{ $lead->company ?: '-' }}</td>
-                            </tr>
-                            <tr>
-                                <th>City</th>
-                                <td>{{ $lead->city ?: '-' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Course</th>
-                                <td>{{ $lead->course->course_name ?? '-' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Center</th>
-                                <td>{{ $lead->center->center_name ?? '-' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Remarks</th>
-                                <td>{{ $lead->remarks ?: '-' }}</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Communication Section - Now shows real data -->
-            <div class="col-lg-6 mt-3">
-                <div class="card premium-block h-100">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0"><i class="fas fa-comments text-warning"></i> Communication</h5>
-                        <button class="btn btn-create btn-sm" data-bs-toggle="modal" data-bs-target="#addFollowupModal">
-                            <i class="fas fa-plus"></i> Add Follow-up
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        @if($lead->followups->isEmpty())
-                            <div class="text-center py-5">
-                                <i class="fas fa-comments fa-3x text-muted mb-3"></i>
-                                <h5>No Communication Yet</h5>
-                                <p class="text-muted">All communication records will appear here.</p>
-                            </div>
-                        @else
-                            <div class="list-group">
-                                @foreach($lead->followups->take(3) as $followup) <!-- Show latest 3 -->
-                                    <div class="list-group-item">
-                                        <div class="d-flex justify-content-between">
-                                            <strong>{{ \Carbon\Carbon::parse($followup->followup_date)->format('d M Y') }}</strong>
-                                            <small>{{ $followup->createdBy?->name ?? 'System' }}</small>
-                                        </div>
-                                        <p class="mb-1">{{ Str::limit($followup->discussion, 90) }}</p>
-                                        <small class="text-muted">
-                                            Status: <span class="badge bg-info">{{ $followup->status }}</span>
-                                            @if($followup->next_followup)
-                                                | Next: {{ \Carbon\Carbon::parse($followup->next_followup)->format('d M Y') }}
-                                            @endif
-                                        </small>
-                                    </div>
-                                @endforeach
-                            </div>
-                            @if($lead->followups->count() > 3)
-                                <div class="text-center mt-3">
-                                    <small><a href="#followup-history" class="text-warning">View all follow-ups ↓</a></small>
-                                </div>
-                            @endif
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
+        </div>        
     </section>
 
     <div class="row mt-4">
-        <!-- Follow-up History (Full with Pagination) -->
-        <div class="col-lg-12 mb-2" id="followup-history">
-            <div class="card premium-block h-100">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="fas fa-history text-warning"></i> Follow-up History</h5>
-                    <button class="btn btn-sm btn-create" data-bs-toggle="modal" data-bs-target="#addFollowupModal">
-                        <i class="fas fa-plus"></i> Add Follow-up
+        <div class="col-lg-12" id="followup-history">
+            <div class="premium-profile-card">
+                <div class="profile-section-title">
+                    <div class="title-icon success">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <div>
+                        <h4>Follow-up History</h4>
+                        <p>Complete communication timeline of this lead</p>
+                    </div>
+                    <button class="premium-add-btn ms-auto" data-bs-toggle="modal"  data-bs-target="#addFollowupModal">
+                        <i class="fas fa-plus"></i>
+                        Add Follow-up
                     </button>
                 </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-white">
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Discussion</th>
-                                    <th>Next Follow-up</th>
-                                    <th>Status</th>
-                                    <th>By</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($lead->followups as $followup)
-                                                        <tr>
-                                                            <td>
-                                                                {{ $followup->followup_date
-                                    ? \Carbon\Carbon::parse($followup->followup_date)->format('d M Y, h:i A')
-                                    : now()->format('d M Y, h:i A') }}
-                                                            </td>
-                                                            <td>{{ Str::limit($followup->discussion, 80) }}</td>
-                                                            <td>
-                                                                @if($followup->next_followup)
-                                                                    {{ \Carbon\Carbon::parse($followup->next_followup)->format('d M Y, h:i A') }}
-                                                                @else
-                                                                    -
-                                                                @endif
-                                                            </td>
-                                                            <td>
-                                                                <span
-                                                                    class="badge bg-{{ in_array($followup->status, ['Converted', 'Closed']) ? 'success' : 'info' }}">
-                                                                    {{ $followup->status }}
-                                                                </span>
-                                                            </td>
-                                                            <td>{{ $followup->createdBy?->name ?? 'System' }}</td>
-                                                        </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5" class="text-center py-5">
-                                            <i class="fas fa-phone-alt fa-3x text-muted mb-3"></i>
-                                            <h6>No Follow-up Available</h6>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="profile-body">
+                    @forelse($lead->followups as $followup)
+                        <div class="timeline-item">
+                            <div class="timeline-dot">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <div>
+                                        <h5> {{ $followup->followup_date ? \Carbon\Carbon::parse($followup->followup_date)->format('d M Y, h:i A') : now()->format('d M Y, h:i A') }}</h5>
+                                        <small>  By {{ $followup->createdBy?->name ?? 'System' }} </small>
+                                    </div>
+                                    <div>
+                                        @if($followup->status=='Converted')
+                                            <span class="status-chip success"> Converted </span>
+                                        @elseif($followup->status=='Closed')
+                                            <span class="status-chip danger"> Closed </span>
+                                        @else
+                                            <span class="status-chip warning"> {{ $followup->status }} </span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="timeline-body">
+                                    {{ $followup->discussion }}
+                                </div>
+                                <div class="timeline-footer">
+                                    <span>
+                                        <i class="fas fa-calendar-alt"></i>
+                                        Next Follow-up : {{ $followup->next_followup ? \Carbon\Carbon::parse($followup->next_followup)->format('d M Y, h:i A'): 'Not Scheduled' }} 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="empty-state">
+                            <i class="fas fa-history"></i>
+                            <h5>No Follow-up History</h5>
+                            <p>
+                                Follow-up history will appear here once communication starts.
+                            </p>
+                        </div>
+                    @endforelse
                 </div>
             </div>
         </div>
     </div>
-
     <!-- ====================== ADD FOLLOW-UP MODAL ====================== -->
     <div class="modal fade" id="addFollowupModal" tabindex="-1" aria-labelledby="addFollowupModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">

@@ -52,70 +52,232 @@
         </div>
 
         <div class="card-body">
-            <!-- Status Filter Buttons -->
-            <div class="d-flex flex-wrap gap-2 mb-4 lead-filters">
-                <a href="{{ request()->url() }}"
-                    class="btn {{ !request('status') ? 'btn-primary' : 'btn-light border' }}">
-                    <i class="fas fa-list-ul me-2"></i> All Leads
-                    <span class="badge bg-white text-dark ms-2">{{ $counts['all'] ?? $leads->total() }}</span>
-                </a>
+            
+    <div class="filter-card">
 
-                <a href="{{ request()->fullUrlWithQuery(['status' => 'New']) }}"
-                    class="btn {{ request('status') == 'New' ? 'btn-primary' : 'btn-light border' }}">
-                    <i class="fas fa-plus-circle me-2"></i> New
-                    <span class="badge bg-white text-dark ms-2">{{ $counts['New'] ?? 0 }}</span>
-                </a>
+        <div class="filter-header">
 
-                <a href="{{ request()->fullUrlWithQuery(['status' => 'Contacted']) }}"
-                    class="btn {{ request('status') == 'Contacted' ? 'btn-primary' : 'btn-light border' }}">
-                    <i class="fas fa-phone me-2"></i> Contacted
-                    <span class="badge bg-white text-dark ms-2">{{ $counts['Contacted'] ?? 0 }}</span>
-                </a>
+            <div>
 
-                <a href="{{ request()->fullUrlWithQuery(['status' => 'Interested']) }}"
-                    class="btn {{ request('status') == 'Interested' ? 'btn-primary' : 'btn-light border' }}">
-                    <i class="fas fa-heart me-2"></i> Interested
-                    <span class="badge bg-white text-dark ms-2">{{ $counts['Interested'] ?? 0 }}</span>
-                </a>
+                <div class="filter-title">
 
-                <a href="{{ request()->fullUrlWithQuery(['status' => 'Not Interested']) }}"
-                    class="btn {{ request('status') == 'Not Interested' ? 'btn-primary' : 'btn-light border' }}">
-                    <i class="fas fa-thumbs-down me-2"></i> Not Interested
-                    <span class="badge bg-white text-dark ms-2">{{ $counts['Not Interested'] ?? 0 }}</span>
-                </a>
+                    <div class="filter-icon blue">
 
-                <a href="{{ request()->fullUrlWithQuery(['status' => 'Converted']) }}"
-                    class="btn {{ request('status') == 'Converted' ? 'btn-primary' : 'btn-light border' }}">
-                    <i class="fas fa-check-circle me-2"></i> Converted
-                    <span class="badge bg-white text-dark ms-2">{{ $counts['Converted'] ?? 0 }}</span>
-                </a>
-                <a href="{{ request()->fullUrlWithQuery(['priority' => 'Converted']) }}"
-                    class="btn {{ request('status') == 'Converted' ? 'btn-primary' : 'btn-light border' }}">
-                    <i class="fas fa-check-circle me-2"></i> Converted
-                    <span class="badge bg-white text-dark ms-2">{{ $counts['Converted'] ?? 0 }}</span>
-                </a>
-            </div>
-            <div class="d-flex flex-wrap gap-2 mb-4">
+                        <i class="fas fa-list-check"></i>
 
-                <a href="{{ request()->fullUrlWithQuery(['priority' => 'High']) }}"
-                    class="btn {{ request('priority') == 'High' ? 'btn-danger' : 'btn-light border' }}">
-                    <i class="fas fa-arrow-up me-2"></i> High
-                    <span class="badge bg-white text-dark ms-2">{{ $counts['High'] ?? 0 }}</span>
-                </a>
+                    </div>
 
-                <a href="{{ request()->fullUrlWithQuery(['priority' => 'Medium']) }}"
-                    class="btn {{ request('priority') == 'Medium' ? 'btn-warning' : 'btn-light border' }}">
-                    <i class="fas fa-minus me-2"></i> Medium
-                    <span class="badge bg-white text-dark ms-2">{{ $counts['Medium'] ?? 0 }}</span>
-                </a>
+                    <div>
 
-                <a href="{{ request()->fullUrlWithQuery(['priority' => 'Low']) }}"
-                    class="btn {{ request('priority') == 'Low' ? 'btn-success' : 'btn-light border' }}">
-                    <i class="fas fa-arrow-down me-2"></i> Low
-                    <span class="badge bg-white text-dark ms-2">{{ $counts['Low'] ?? 0 }}</span>
-                </a>
+                        <h3>Filter by Status</h3>
+
+                        <p>View leads based on current status</p>
+
+                    </div>
+
+                </div>
 
             </div>
+
+        </div>
+
+        <div class="status-grid">
+
+            <!-- All Leads -->
+
+            <a href="{{ request()->url() }}"
+                class="status-item {{ !request('status') ? 'active-card' : '' }}">
+
+                <div class="status-circle blue">
+
+                    <i class="fas fa-list"></i>
+
+                </div>
+
+                <h5>All Leads</h5>
+
+                <span class="status-count">
+
+                    {{ $counts['all'] ?? $leads->total() }}
+
+                </span>
+
+            </a>
+
+            <!-- New -->
+
+            <a href="{{ request()->fullUrlWithQuery(['status'=>'New']) }}"
+                class="status-item {{ request('status')=='New' ? 'active-card' : '' }}">
+
+                <div class="status-circle green">
+
+                    <i class="fas fa-plus"></i>
+
+                </div>
+
+                <h5>New</h5>
+
+                <span class="status-count">
+
+                    {{ $counts['New'] ?? 0 }}
+
+                </span>
+
+            </a>
+
+            <!-- Contacted -->
+
+            <a href="{{ request()->fullUrlWithQuery(['status'=>'Contacted']) }}"
+                class="status-item {{ request('status')=='Contacted' ? 'active-card' : '' }}">
+
+                <div class="status-circle info">
+
+                    <i class="fas fa-phone"></i>
+
+                </div>
+
+                <h5>Contacted</h5>
+
+                <span class="status-count">
+
+                    {{ $counts['Contacted'] ?? 0 }}
+
+                </span>
+
+            </a>
+
+            <!-- Interested -->
+
+            <a href="{{ request()->fullUrlWithQuery(['status'=>'Interested']) }}"
+                class="status-item {{ request('status')=='Interested' ? 'active-card' : '' }}">
+
+                <div class="status-circle pink">
+
+                    <i class="fas fa-heart"></i>
+
+                </div>
+
+                <h5>Interested</h5>
+
+                <span class="status-count">
+
+                    {{ $counts['Interested'] ?? 0 }}
+
+                </span>
+
+            </a>
+
+            <!-- Not Interested -->
+
+            <a href="{{ request()->fullUrlWithQuery(['status'=>'Not Interested']) }}"
+                class="status-item {{ request('status')=='Not Interested' ? 'active-card' : '' }}">
+
+                <div class="status-circle orange">
+
+                    <i class="fas fa-thumbs-down"></i>
+
+                </div>
+
+                <h5>Not Interested</h5>
+
+                <span class="status-count">
+
+                    {{ $counts['Not Interested'] ?? 0 }}
+
+                </span>
+
+            </a>
+
+            <!-- Converted -->
+
+            <a href="{{ request()->fullUrlWithQuery(['status'=>'Converted']) }}"
+                class="status-item {{ request('status')=='Converted' ? 'active-card' : '' }}">
+
+                <div class="status-circle success">
+
+                    <i class="fas fa-check"></i>
+
+                </div>
+
+                <h5>Converted</h5>
+
+                <span class="status-count">
+
+                    {{ $counts['Converted'] ?? 0 }}
+
+                </span>
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- Priority Card -->
+
+    <div class="filter-card mt-4">
+
+        <div class="filter-header">
+
+            <div class="filter-title">
+
+                <div class="filter-icon red">
+
+                    <i class="fas fa-flag"></i>
+
+                </div>
+
+                <div>
+
+                    <h3>Filter by Priority</h3>
+
+                    <p>View leads based on priority level</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="priority-grid">
+
+            <a href="{{ request()->fullUrlWithQuery(['priority'=>'High']) }}"
+                class="priority-item high {{ request('priority')=='High' ? 'active-priority' : '' }}">
+
+                <i class="fas fa-arrow-up"></i>
+
+                <span>High Priority</span>
+
+                <strong>{{ $counts['High'] ?? 0 }}</strong>
+
+            </a>
+
+            <a href="{{ request()->fullUrlWithQuery(['priority'=>'Medium']) }}"
+                class="priority-item medium {{ request('priority')=='Medium' ? 'active-priority' : '' }}">
+
+                <i class="fas fa-minus"></i>
+
+                <span>Medium Priority</span>
+
+                <strong>{{ $counts['Medium'] ?? 0 }}</strong>
+
+            </a>
+
+            <a href="{{ request()->fullUrlWithQuery(['priority'=>'Low']) }}"
+                class="priority-item low {{ request('priority')=='Low' ? 'active-priority' : '' }}">
+
+                <i class="fas fa-arrow-down"></i>
+
+                <span>Low Priority</span>
+
+                <strong>{{ $counts['Low'] ?? 0 }}</strong>
+
+            </a>
+
+        </div>
+
+    </div>
+
 
             <div class="table-responsive">
                 <table class="table table-hover align-middle" id="datatable">
