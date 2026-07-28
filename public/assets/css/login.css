@@ -948,10 +948,10 @@ margin-top: 5px;
 }
 @media(max-width:768px){
 .right-panel{
-        width: 100%;
+        width: 100% !important;
 
 }
 .left-panel{
-    display: none;
+    display: none !important;
 }
 }
