@@ -19,33 +19,33 @@
                             @if($examSchedule->voucher)
                                 <div class="d-flex flex-wrap gap-2">
                                     @can('view-voucher')
-                                    <span class="badge bg-primary fs-6 px-3 py-2">
-                                        <i class="fas fa-ticket-alt me-1"></i>
-                                        Voucher : <strong>{{ $examSchedule->voucher->voucher_code }}</strong>
-                                    </span>
+                                        <span class="badge bg-primary fs-6 px-3 py-2">
+                                            <i class="fas fa-ticket-alt me-1"></i>
+                                            Voucher : <strong>{{ $examSchedule->voucher->voucher_code }}</strong>
+                                        </span>
                                     @endcan
                                     <span class="badge
-                                        @if($examSchedule->voucher->status == 'Used')
-                                            bg-danger text-white
-                                        @elseif($examSchedule->voucher->status == 'Available')
-                                            bg-success
-                                        @elseif($examSchedule->voucher->status == 'Allocated')
-                                            bg-warning text-dark
-                                        @else
-                                            bg-secondary
-                                        @endif
-                                        fs-6 px-3 py-2">
+                                                @if($examSchedule->voucher->status == 'Used')
+                                                    bg-danger text-white
+                                                @elseif($examSchedule->voucher->status == 'Available')
+                                                    bg-success
+                                                @elseif($examSchedule->voucher->status == 'Allocated')
+                                                    bg-warning text-dark
+                                                @else
+                                                    bg-secondary
+                                                @endif
+                                                fs-6 px-3 py-2">
                                         <i class="fas
-                                            @if($examSchedule->voucher->status == 'Used')
-                                                fa-times-circle
-                                            @elseif($examSchedule->voucher->status == 'Available')
-                                                fa-check-circle
-                                            @elseif($examSchedule->voucher->status == 'Allocated')
-                                                fa-hourglass-half
-                                            @else
-                                                fa-info-circle
-                                            @endif
-                                            me-1"></i>
+                                                    @if($examSchedule->voucher->status == 'Used')
+                                                        fa-times-circle
+                                                    @elseif($examSchedule->voucher->status == 'Available')
+                                                        fa-check-circle
+                                                    @elseif($examSchedule->voucher->status == 'Allocated')
+                                                        fa-hourglass-half
+                                                    @else
+                                                        fa-info-circle
+                                                    @endif
+                                                    me-1"></i>
                                         {{ $examSchedule->voucher->status }}
                                     </span>
                                     <span class="badge bg-dark fs-6 px-3 py-2">
@@ -118,7 +118,8 @@
                             <!-- Mark as Used Button - Only show if voucher exists and not used -->
                             @if($examSchedule->voucher && $examSchedule->voucher->status != 'Used')
                                 <button class="btn btn-warning btn-lg" data-bs-toggle="modal"
-                                    data-bs-target="#voucherStatusModal{{ $examSchedule->id }}">
+                                    data-bs-target="#voucherStatusModal{{ $examSchedule->id }}"
+                                    title="Click to mark this voucher as Used" data-bs-placement="top">
                                     <i class="fas fa-check-circle me-1"></i>
                                     Mark as Used
                                 </button>
@@ -148,7 +149,7 @@
                             <thead class="table-light">
                                 <tr>
                                     @can('view-voucher')
-                                    <th><i class="fas fa-ticket-alt me-2 text-primary"></i>Voucher Code</th>
+                                        <th><i class="fas fa-ticket-alt me-2 text-primary"></i>Voucher Code</th>
                                     @endcan
                                     <th><i class="fas fa-user me-2 text-primary"></i>Student Name</th>
                                     <th><i class="fas fa-building me-2 text-primary"></i>Vendor</th>
@@ -162,9 +163,9 @@
                             <tbody>
                                 <tr>
                                     @can('view-voucher')
-                                    <td>
-                                        <strong class="text-primary">{{ $examSchedule->voucher->voucher_code }}</strong>
-                                    </td>
+                                        <td>
+                                            <strong class="text-primary">{{ $examSchedule->voucher->voucher_code }}</strong>
+                                        </td>
                                     @endcan
                                     <td>
                                         {{ $examSchedule->candidate->first_name ?? '' }}
@@ -228,7 +229,7 @@
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle me-2"></i>
                             @can('view-voucher')
-                            <strong>Voucher Code:</strong> {{ $examSchedule->voucher->voucher_code }}<br>
+                                <strong>Voucher Code:</strong> {{ $examSchedule->voucher->voucher_code }}<br>
                             @endcan
                             <strong>Student:</strong> {{ $examSchedule->candidate->first_name ?? '' }}
                             {{ $examSchedule->candidate->last_name ?? '' }}
@@ -447,4 +448,5 @@
             }
         }
     </style>
+    
 @endsection
