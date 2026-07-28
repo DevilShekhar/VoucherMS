@@ -32,7 +32,7 @@
                                     $timeOfDay = 'Night';
                                 }
                             @endphp
-                            <p class="welcome-text">                           
+                            <p class="welcome-text">
                                 Welcome back!
                                 Good {{ $timeOfDay }},
                                 <strong>{{ Auth::user()->name }}</strong>.
@@ -71,7 +71,7 @@
         </div>
     </section>
 {{-- Other users --}}
- 
+
 
 <section class="dashboard-stats">
     <div class="row g-4">
@@ -151,7 +151,6 @@
                 </div>
             </div>
         </div>
-          
     </div>
 </section>
 @can('view-voucher-earning')
@@ -213,7 +212,7 @@
                     <p>Total profit (Selling Amount − Voucher Purchase).</p>
                 </div>
             </div>
-        </div>    
+        </div>
     <div>
 </section>
 @endcan
@@ -236,7 +235,7 @@
                 <h3>{{ number_format($vouchers->total()) }}</h3>
             </div>
         </div>
-        <div class="card-body">           
+        <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover" id="datatable">
                     <thead>
@@ -355,7 +354,7 @@
             <div class="voucher-count">
                  <span class="badge bg-white text-dark px-3 py-2">TODAY</span>
             </div>
-        </div>              
+        </div>
         <div class="card-body p-0">
             <div class="card-header bg-white">
                         <form method="GET" action="{{ route('dashboard') }}">

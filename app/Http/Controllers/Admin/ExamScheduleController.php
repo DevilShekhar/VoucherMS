@@ -26,12 +26,20 @@ class ExamScheduleController extends Controller
         // Center Executive
         if ($user->role_id == 5) {
 
-            $centerId = Center::query()->where('center_exe_id', $user->id)->value('id');
+            $centerId = Center::query()
+                ->where('center_exe_id', $user->id)
+                ->value('id');
+
             if ($centerId) {
-                $query->where('center_id', $centerId);
+                $query->where('center_id', $centerId)
+                    ->where('created_by', $user->id);
             } else {
                 $query->whereRaw('1 = 0');
             }
+
+        } elseif ($user->role_id != 1) {
+            // Other users see only their own schedules
+            $query->where('created_by', $user->id);
         }
         $examSchedules = $query->latest()->get();
 
@@ -55,7 +63,7 @@ class ExamScheduleController extends Controller
         ]);
         $examSchedule->load(['candidate.course', 'center', 'createdBy']);
 
-        return view('admin.exam-schdule.show', compact('examSchedule','query'));
+        return view('admin.exam-schdule.show', compact('examSchedule', 'query'));
     }
 
     public function store(Request $request)
