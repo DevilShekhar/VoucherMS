@@ -86,12 +86,12 @@
                         <div class="col-md-6 mb-3">
 
                             <label class="form-label">
-                                Center Executive
+                                Center Admin
                             </label>
 
                             <select name="center_exe_id" class="form-control">
 
-                                <option value="">Select Cenetr Executive</option>
+                                <option value="">Select Cenetr Admin</option>
 
                                 @foreach($centerexes as $centerexe)
 
