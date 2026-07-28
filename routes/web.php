@@ -78,8 +78,7 @@ Route::middleware(['auth', 'otp'])->group(function () {
 
     Route::resource('voucher-requests', VoucherRequestController::class);
 
-    Route::get('voucher-requests/create/{candidate}', [VoucherRequestController::class, 'create'])->name('voucher-requests.create');
-    Route::post('voucher-requests', [VoucherRequestController::class, 'store'])->name('voucher-requests.store');
+    Route::get('voucher-requests/create/{candidate}', [VoucherRequestController::class, 'create'])->name('voucher-requests.create');   
     Route::post('voucher-requests/{voucherRequest}/approve-admin', [VoucherRequestController::class, 'approveByAdmin'])->name('voucher-requests.approve.admin');
 
     Route::post(
