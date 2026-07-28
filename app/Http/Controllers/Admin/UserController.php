@@ -55,7 +55,15 @@ class UserController extends Controller
             'mobile' => 'required|string|max:20|unique:users,mobile|regex:/^[0-9+\-\s]+$/',
             'password' => 'required|min:6|confirmed',
             'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+        ],
+            [
+                'email.unique' => 'This email address already exists.',
+                'mobile.unique' => 'This mobile number already exists.',
+                'email.required' => 'Email is required.',
+                'email.email' => 'Please enter a valid email address.',
+                'mobile.required' => 'Mobile number is required.',
+                'mobile.regex' => 'Please enter a valid mobile number.',
+            ]);
 
         $validated['status'] = 1;
 
@@ -146,7 +154,7 @@ class UserController extends Controller
             Storage::disk('public')->delete($user->profile_photo);
         }
 
-        $user->delete();
+        $user->update(['status' => 0]);
 
         return redirect()
             ->route('users.index')
