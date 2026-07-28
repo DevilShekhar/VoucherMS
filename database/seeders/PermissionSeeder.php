@@ -118,6 +118,8 @@ class PermissionSeeder extends Seeder
             'voucher-requests.reject',
             'voucher-requests.approve',
             'voucher-requests.allocate',
+            'view-voucher',
+            'view-voucher-earning',
 
             // Voucher Request Notifications
             'voucher-request-notifications.latest',
@@ -128,7 +130,8 @@ class PermissionSeeder extends Seeder
             'exam-schedules.create',
             
             //reports
-            'reports.index'
+            'reports.index',
+            'report-index'
         ];
 
         foreach ($permissions as $permission) {

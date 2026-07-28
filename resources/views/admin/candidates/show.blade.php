@@ -2,154 +2,228 @@
 @extends('layouts.app')
 
 @section('content')
-    <section class="section premium-dashboard">
-        <div class="premium-floating-header">
-            <div class="header-content">
-                <div class="header-left">
-                    <div class="header-icon">
+    <section class="section premium-dashboard pt-0">
+        <div class="candidate-hero">
+            <div class="candidate-hero-overlay"></div>
+            <div class="candidate-hero-content">
+                <div class="candidate-left">
+                    <div class="candidate-avatar">
                         <i class="fas fa-user-graduate"></i>
                     </div>
-                    <div>
-                        <span class="header-badge">Candidate Management</span>
-                        <h2>{{ $candidate->first_name }} {{ $candidate->last_name ?? '' }}</h2>
-                        <p><strong>Code:</strong> {{ $candidate->candidate_code }}</p>
+                    <div class="candidate-details">
+                        <span class="hero-badge">
+                            Candidate Management
+                        </span>
+                        <h2>
+                            {{ $candidate->first_name }}
+                            {{ $candidate->last_name ?? '' }}
+                        </h2>
+                        <div class="candidate-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-id-card"></i>
+                                <span>
+                                    {{ $candidate->candidate_code }}
+                                </span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-circle text-success"></i>
+                                <span>
+                                    {{ $candidate->status }}
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="premium-head-actions">
-                    <a href="{{ route('candidates.index') }}" class="btn mb-2"
-                        style="background:var(--cloth);color:var(--ink);">
-                        <i class="fas fa-arrow-left"></i> Back
+                <div class="candidate-actions">
+                    <a href="{{ route('candidates.index') }}"
+                        class="btn btn-light premium-btn">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Back
                     </a>
-                    <button class="btn btn-warning mb-2 upload-doc-btn" data-candidate-id="{{ $candidate->id }}"
+                    <button
+                        class="btn premium-upload-btn upload-doc-btn"
+                        data-candidate-id="{{ $candidate->id }}"
                         data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name ?? '' }}"
                         data-candidate-code="{{ $candidate->candidate_code }}">
-                        <i class="fas fa-upload"></i> Upload Document
+                        <i class="fas fa-upload me-2"></i>
+                        Upload Document
                     </button>
                 </div>
             </div>
         </div>
     </section>
-
-    <section class="section premium-dashboard pt-0">
-        <!-- Personal Information Card -->
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card premium-block">
-                    <div class="card-body">
-                        <div class="row">
-                            <!-- Left Side - Personal Info -->
-                            <div class="col-lg-5">
-                                <div class="d-flex align-items-start">
-                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($candidate->first_name) }}&background=0d6efd&color=fff"
-                                        class="rounded-circle border" width="130" height="130">
-                                    <div class="ms-4">
-                                        <h3 class="fw-bold">{{ $candidate->first_name }} {{ $candidate->last_name }}</h3>
-                                        <h5 class="text-muted">{{ $candidate->candidate_code }}</h5>
-                                        <span
-                                            class="badge bg-{{ $candidate->status == 'Active' ? 'success' : 'warning' }} mt-2">
-                                            {{ $candidate->status }}
-                                        </span>
-                                    </div>
-                                </div>
+    <section class="candidate-information-section mt-4">
+        <!-- Quick Information -->
+        <div class="premium-profile-card">
+            <div class="profile-section-title">
+                <div class="title-icon">
+                    <i class="fas fa-address-card"></i>
+                </div>
+                <div>
+                    <h4>Quick Information</h4>
+                    <p>Basic contact information of the candidate</p>
+                </div>
+            </div>
+            <div class="profile-body">
+                <div class="row g-4">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="info-box">
+                            <div class="info-icon blue">
+                                <i class="fas fa-phone"></i>
                             </div>
-
-                            <!-- Right Side - Key Info -->
-                            <div class="col-lg-7">
-                                <table class="table table-borderless table-sm">
-                                    <tr>
-                                        <th width="25%">Mobile</th>
-                                        <td>{{ $candidate->mobile }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Email</th>
-                                        <td>{{ $candidate->email ?: '-' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Company</th>
-                                        <td>{{ $candidate->company ?: '-' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>City</th>
-                                        <td>{{ $candidate->city ?: '-' }}</td>
-                                    </tr>
-                                </table>
+                            <div>
+                                <span>Mobile</span>
+                                <h6>{{ $candidate->mobile }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="info-box text-center">
+                            <div class="info-icon green">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <span>Email</span>
+                                <h6>{{ $candidate->email ?: '-' }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="info-box">
+                            <div class="info-icon orange">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <div>
+                                <span>Company</span>
+                                <h6>{{ $candidate->company ?: '-' }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="info-box">
+                            <div class="info-icon purple">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <span>City</span>
+                                <h6>{{ $candidate->city ?: '-' }}</h6>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Detailed Information Card -->
-        <div class="row mt-4">
-            <div class="col-lg-12">
-                <div class="card premium-block">
-                    <div class="card-header bg-white">
-                        <h5><i class="fas fa-info-circle"></i> Candidate Details</h5>
+        <!-- Candidate Details -->
+        <div class="premium-profile-card mt-4">
+            <div class="profile-section-title">
+                <div class="title-icon success">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div>
+                    <h4>Candidate Details</h4>
+                    <p>Academic and profile information</p>
+                </div>
+            </div>
+            <div class="profile-body">
+                <div class="row g-4">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="info-box">
+                            <div class="info-icon blue">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div>
+                                <span>Course</span>
+                                <h6>{{ $candidate->course->course_name ?? 'Not Assigned' }}</h6>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover align-middle">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th width="25%">Field</th>
-                                        <th>Details</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th>Course</th>
-                                        <td>{{ $candidate->course->course_name ?? 'Not Assigned' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Center</th>
-                                        <td>{{ $candidate->center->center_name ?? 'Not Assigned' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Executive</th>
-                                        <td>{{ $candidate->executive->name ?? 'Not Assigned' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Gender</th>
-                                        <td>{{ $candidate->gender ?? '-' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Date of Birth</th>
-                                        <td>{{ $candidate->dob ? $candidate->dob->format('d M Y') : '-' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Created At</th>
-                                        <td>{{ $candidate->created_at->format('d M Y h:i A') }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Updated At</th>
-                                        <td>{{ $candidate->updated_at->format('d M Y h:i A') }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="info-box">
+                            <div class="info-icon green">
+                                <i class="fas fa-school"></i>
+                            </div>
+                            <div>
+                                <span>Center</span>
+                                <h6>{{ $candidate->center->center_name ?? 'Not Assigned' }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="info-box">
+                            <div class="info-icon orange">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div>
+                                <span>Executive</span>
+                                <h6>{{ $candidate->executive->name ?? 'Not Assigned' }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="info-box">
+                            <div class="info-icon purple">
+                                <i class="fas fa-venus-mars"></i>
+                            </div>
+                            <div>
+                                <span>Gender</span>
+                                <h6>{{ $candidate->gender ?? '-' }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="info-box">
+                            <div class="info-icon blue">
+                                <i class="fas fa-birthday-cake"></i>
+                            </div>
+                            <div>
+                                <span>Date of Birth</span>
+                                <h6>{{ $candidate->dob ? $candidate->dob->format('d M Y') : '-' }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="info-box">
+                            <div class="info-icon green">
+                                <i class="fas fa-calendar-plus"></i>
+                            </div>
+                            <div>
+                                <span>Created At</span>
+                                <h6>{{ $candidate->created_at->format('d M Y h:i A') }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="info-box">
+                            <div class="info-icon orange">
+                                <i class="fas fa-history"></i>
+                            </div>
+                            <div>
+                                <span>Updated At</span>
+                                <h6>{{ $candidate->updated_at->format('d M Y h:i A') }}</h6>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
+    </section>
+    <section class="section premium-dashboard  ">      
         <div class="row mt-4">
             <div class="col-lg-12">
                 <div class="card premium-block">
-                    <div class="card-header bg-white">
-                        <h5>
-                            <i class="fas fa-money-bill-wave text-success"></i>
-                            Payment History
-                        </h5>
+                    <div class="profile-section-title">
+                        <div class="title-icon success">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div>
+                            <h4>Payment History</h4>
+                            <p>Track all candidate payment transactions</p>
+                        </div>
                     </div>
-
                     <div class="card-body">
-
                         @if($candidate->payments->count())
-
                             <div class="table-responsive">
                                 <table class="table table-bordered align-middle">
-
                                     <thead class="table-light">
                                         <tr>
                                             <th>Payment No</th>
@@ -163,110 +237,69 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-
                                     <tbody>
-
                                         @foreach($candidate->payments as $payment)
-
                                             @php
                                                 $transaction = $payment->transactions->first();
                                             @endphp
-
                                             <tr>
-
                                                 <td>
                                                     <strong>{{ $payment->payment_no }}</strong>
                                                 </td>
-
                                                 <td>
                                                     {{ \Carbon\Carbon::parse($payment->payment_date)->format('d M Y') }}
                                                 </td>
-
                                                 <td>
                                                     ₹ {{ number_format($payment->net_amount, 2) }}
                                                 </td>
-
                                                 <td class="text-success fw-bold">
                                                     ₹ {{ number_format($payment->paid_amount, 2) }}
                                                 </td>
-
                                                 <td class="text-danger fw-bold">
                                                     ₹ {{ number_format($payment->pending_amount, 2) }}
                                                 </td>
-
                                                 <td>
-
                                                     @if($payment->payment_status == 'Paid')
                                                         <span class="badge bg-success">Paid</span>
-
                                                     @elseif($payment->payment_status == 'Partial')
                                                         <span class="badge bg-warning">Partial</span>
-
                                                     @else
                                                         <span class="badge bg-danger">Pending</span>
                                                     @endif
-
                                                 </td>
-
                                                 <td>
                                                     {{ $transaction->payment_mode ?? '-' }}
                                                 </td>
-
                                                 <td>
-
                                                     @if($transaction && $transaction->receipt)
-
                                                         <a href="{{ Storage::url($transaction->receipt) }}" target="_blank"
                                                             class="btn btn-sm btn-info">
-
                                                             <i class="fas fa-file"></i>
-
                                                         </a>
-
                                                     @else
-
                                                         -
-
                                                     @endif
-
                                                 </td>
-
                                                 <td>
-
                                                     <a href="{{ route('payments.show', $payment->id) }}"
                                                         class="btn btn-sm btn-primary">
-
                                                         <i class="fas fa-eye"></i>
-
                                                     </a>
-
                                                 </td>
-
                                             </tr>
-
                                         @endforeach
-
                                     </tbody>
-
                                 </table>
                             </div>
-
                         @else
-
                             <div class="text-center py-5">
-
                                 <i class="fas fa-money-bill-wave fa-4x text-muted mb-3"></i>
-
                                 <h6>No Payment Recorded</h6>
-
                                 <p class="text-muted mb-0">
-                                    Payment history will appear here once a payment is recorded.
+                                   Payment history will appear here once a payment is recorded.
                                 </p>
-
                             </div>
-
                         @endif
-
                     </div>
                 </div>
             </div>
@@ -275,14 +308,21 @@
         <div class="row mt-4">
             <div class="col-lg-12">
                 <div class="card premium-block">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                        <h5><i class="fas fa-folder-open"></i> Uploaded Documents</h5>
-                        <button class="btn btn-success btn-sm upload-doc-btn" data-candidate-id="{{ $candidate->id }}"
-                            data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name ?? '' }}"
-                            data-candidate-code="{{ $candidate->candidate_code }}">
-                            <i class="fas fa-upload"></i> Upload New
-                        </button>
-                    </div>
+                    <div class="profile-section-title d-flex justify-content-between align-items-center">
+                        <div class="title-icon success">
+                           <i class="fas fa-folder-open"></i>  
+                        </div>
+                        <div>
+                            <h4>Uploaded Documents</h4>    
+                        </div>
+                        <div>
+                            <button class="btn btn-success btn-sm upload-doc-btn" data-candidate-id="{{ $candidate->id }}"
+                                data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name ?? '' }}"
+                                data-candidate-code="{{ $candidate->candidate_code }}">
+                                <i class="fas fa-upload"></i> Upload New
+                            </button>                 
+                        </div>
+                    </div>                     
                     <div class="card-body">
                         @if($candidate->documents->count() > 0)
                             <div class="table-responsive">

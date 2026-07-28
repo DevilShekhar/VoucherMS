@@ -83,13 +83,10 @@
                         <thead>
                             <tr>
                                 <th width="60">#</th>
-                                <th>Photo</th>
-                                <th>Employee Code</th>
-                                <th>Name</th>
-                                <th>Role</th>
-                                <th>Email</th>
-                                <th>Location</th>
-                                <th>Mobile</th>
+                                <th>Photo</th>                                
+                                <th>Name</th>                                
+                                 <th>Contact Info</th>
+                                <th>Location</th>                                 
                                 <th>Status</th>
                                 <th width="170" class="text-center">Action</th>
                             </tr>
@@ -107,16 +104,29 @@
                                                 {{ strtoupper(substr($user->name, 0, 1)) }}
                                             </div>
                                         @endif
-                                    </td>
-                                    <td><span class="code-badge">{{ $user->employee_code }}</span></td>
-                                    <td class="fw-bold">{{ $user->name }}</td>
+                                    </td>                                    
                                     <td>
-                                        <!-- Updated Role Badge UI -->
-                                        <span class="role-pill">{{ $user->role?->name ?? '-' }}</span>
+                                        <div class="fw-bold text-dark">
+                                            {{ $user->name }}
+                                        </div>
+                                        <span class=" ">
+                                            {{ $user->role?->name ?? '-' }}
+                                        </span>
                                     </td>
-                                    <td>{{ $user->email }}</td>
-                                    <td>{{ $user->location?->name ?? '-' }}</td>
-                                    <td>{{ $user->mobile }}</td>
+                                    <td>
+                                        <div class="contact-info">
+                                            <div>
+                                                <i class="fas fa-envelope text-primary me-2"></i>
+                                                {{ $user->email }}
+                                            </div>
+
+                                            <div class="mt-1">
+                                                <i class="fas fa-phone-alt text-success me-2"></i>
+                                                {{ $user->mobile }}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ $user->location?->name ?? '-' }}</td>                                     
                                     <td>
                                         <!-- Updated Status Chip UI -->
                                         @if($user->status == '1')
