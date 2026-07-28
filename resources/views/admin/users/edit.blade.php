@@ -148,7 +148,8 @@
                                         class="rounded border" style="object-fit:cover;">
 
                                 </div>
-
+                            @else
+                                <p>no image uploaded</p>
                             @endif
 
                         </div>
