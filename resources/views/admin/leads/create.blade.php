@@ -59,7 +59,7 @@
                         @if(Auth::user()->hasAnyRole(['Manager', 'Owner', 'Super Admin']))
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">
-                                    Location
+                                    Distribution Location <small class="text-muted">(Where vouchers will be distributed)</small>
                                 </label>
 
                                 <select name="location_id" id="location" class="form-select">
@@ -97,7 +97,7 @@
 
 
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Candidate Name <span class="text-danger">*</span></label>
+                            <label class="form-label">Candidate Name </label>
                             <input type="text" name="candidate_name" class="form-control"
                                 value="{{ old('candidate_name') }}">
                             @error('candidate_name')
@@ -130,20 +130,6 @@
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Course <span class="text-danger">*</span></label>
-                            <select name="course_id" id="course_id" class="form-select">
-                                <option value="">Select Course</option>
-                                @foreach($courses as $course)
-                                    <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
-                                        {{ $course->course_name }}
-                                    </option>
-                                @endforeach
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-
                         <div class="col-md-6 mb-3" id="other_course_div" style="display: none;">
                             <label class="form-label">New Course Name <span class="text-danger">*</span></label>
                             <input type="text" name="other_course_name" id="other_course_name" class="form-control"
