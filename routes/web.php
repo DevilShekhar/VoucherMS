@@ -54,8 +54,7 @@ Route::middleware(['auth', 'otp'])->group(function () {
     Route::resource('centers', CenterController::class);
     Route::resource('courses', CourseController::class);
     Route::resource('leads', LeadController::class);
-    Route::post('/leads/{lead}/followups', [LeadController::class, 'addFollowup'])
-        ->name('leads.followups.store');
+    Route::post('/leads/{lead}/followups', [LeadController::class, 'addFollowup'])->name('leads.followups.store');
     Route::get('/lead-notifications', [LeadNotificationController::class, 'latest'])->name('lead.notifications');
     Route::post('/lead-notifications/{id}/read', [LeadNotificationController::class, 'markRead'])->name('lead.notifications.read');
     Route::resource('candidates', CandidateController::class);
