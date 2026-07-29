@@ -219,34 +219,34 @@
                     <ul class="sb-submenu" id="voucherRequestSubmenu">
                         <li>
                             <a href="{{ route('voucher-requests.index') }}"
-                            class="{{ request()->routeIs('voucher-requests.index') ? 'active' : '' }}">
+                                class="{{ request()->routeIs('voucher-requests.index') ? 'active' : '' }}">
                                 All Requests
                             </a>
                         </li>
 
                         <li>
                             <a href="{{ route('voucher-requests.status', 'Pending') }}"
-                            class="{{ request()->is('voucher-requests/status/Pending') ? 'active' : '' }}">
+                                class="{{ request()->is('voucher-requests/status/Pending') ? 'active' : '' }}">
                                 Pending
                             </a>
                         </li>
 
                         <li>
                             <a href="{{ route('voucher-requests.status', 'Approved') }}"
-                            class="{{ request()->is('voucher-requests/status/Approved') ? 'active' : '' }}">
+                                class="{{ request()->is('voucher-requests/status/Approved') ? 'active' : '' }}">
                                 Approved
                             </a>
                         </li>
 
                         <li>
                             <a href="{{ route('voucher-requests.status', 'Rejected') }}"
-                            class="{{ request()->is('voucher-requests/status/Rejected') ? 'active' : '' }}">
+                                class="{{ request()->is('voucher-requests/status/Rejected') ? 'active' : '' }}">
                                 Rejected
                             </a>
                         </li>
                     </ul>
                 </li>
-                @endcan
+            @endcan
 
             @can('report-index')
                 <li>
@@ -359,6 +359,10 @@
     {{-- Voucher Request Notification Sound --}}
     <audio id="voucherNotificationSound" preload="auto">
         <source src="{{ asset('assets/sounds/voucher-request-notification.mp3') }}" type="audio/mpeg">
+    </audio>
+
+    <audio id="followupNotificationSound" preload="auto">
+        <source src="{{ asset('assets/sounds/follow-up.mp3') }}" type="audio/mpeg">
     </audio>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -672,31 +676,92 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+        let isFollowupPopupOpen = false;
+
         function checkFollowupReminders() {
+            if (isFollowupPopupOpen) return;
+
             $.ajax({
                 url: "{{ route('leads.followups.reminders') }}",
                 method: 'GET',
                 success: function (response) {
+                    console.log('Follow-up response:', response);
+
                     if (response.reminders && response.reminders.length > 0) {
-                        response.reminders.forEach(function (item) {
-                            Swal.fire({
-                                icon: 'warning',
-                                title: '⏰ Follow-up Reminder!',
-                                html: `
-                                <strong>${item.lead_name}</strong><br>
-                                <small>${item.followup_time}</small><br><br>
-                                ${item.discussion}
-                            `,
-                                showCancelButton: true,
-                                confirmButtonText: 'Mark as Done',
-                                cancelButtonText: 'Snooze 10 mins',
-                                timer: 90000,
-                                timerProgressBar: true,
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    markFollowupDone(item.id);
+                        let item = response.reminders[0];
+
+                        // Correct field mapping based on your API
+                        let leadName = item.lead_name
+                            || item.lead?.name
+                            || item.lead?.full_name
+                            || item.name
+                            || ('Lead #' + (item.lead_id || item.id));
+
+                        let followupTime = item.followup_date
+                            || item.followup_time
+                            || item.follow_up_time
+                            || '-';
+
+                        // Format date nicely
+                        if (followupTime && followupTime !== '-') {
+                            try {
+                                followupTime = new Date(followupTime).toLocaleString('en-IN', {
+                                    day: '2-digit',
+                                    month: 'short',
+                                    year: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    hour12: true
+                                });
+                            } catch (e) { }
+                        }
+
+                        let discussion = item.discussion
+                            || item.note
+                            || item.notes
+                            || item.remark
+                            || item.remarks
+                            || '-';
+
+                        isFollowupPopupOpen = true;
+
+                        Swal.fire({
+                            icon: 'warning',
+                            title: '⏰ Follow-up Reminder!',
+                            html: `
+                            <strong>${leadName}</strong><br>
+                            <small>${followupTime}</small><br><br>
+                            ${discussion}
+                        `,
+                            showCancelButton: true,
+                            confirmButtonText: 'Mark as Done',
+                            cancelButtonText: 'Snooze 10 mins',
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            didOpen: () => {
+                                if (localStorage.getItem("audioEnabled") == "1") {
+                                    const audio = document.getElementById('followupNotificationSound');
+                                    if (audio) {
+                                        audio.currentTime = 0;
+                                        audio.loop = true;
+                                        audio.play().catch(err => console.log(err));
+                                    }
                                 }
-                            });
+                            }
+                        }).then((result) => {
+                            const audio = document.getElementById('followupNotificationSound');
+                            if (audio) {
+                                audio.pause();
+                                audio.currentTime = 0;
+                            }
+
+                            isFollowupPopupOpen = false;
+
+                            if (result.isConfirmed) {
+                                markFollowupDone(item.id);
+                            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                snoozeFollowup(item.id);
+                            }
                         });
                     }
                 },
@@ -722,9 +787,27 @@
             });
         }
 
+        function snoozeFollowup(id) {
+            $.ajax({
+                url: `/lead-followups/${id}/snooze`,
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    minutes: 10
+                },
+                success: function () {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Snoozed for 10 minutes',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                }
+            });
+        }
+
         setInterval(checkFollowupReminders, 10000);
 
-        // Check immediately when page loads
         $(document).ready(function () {
             checkFollowupReminders();
         });
@@ -790,7 +873,7 @@
 
         });
     </script>
-    
+
 </body>
 
 </html>
