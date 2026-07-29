@@ -74,8 +74,8 @@ Route::middleware(['auth', 'otp'])->group(function () {
         ->name('candidates.details');
     Route::get('admin/payments/{payment}', [PaymentController::class, 'show'])
         ->name('payments.show');
-    Route::resource('vouchers', VoucherController::class);
     Route::get('/vouchers/status/{status}', [VoucherController::class, 'status'])->name('vouchers.status');
+    Route::resource('vouchers', VoucherController::class);
 
     Route::resource('voucher-requests', VoucherRequestController::class);
 
