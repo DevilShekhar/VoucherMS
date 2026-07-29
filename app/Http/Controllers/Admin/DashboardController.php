@@ -127,7 +127,17 @@ class DashboardController extends Controller
         $totalSellingAmount = $paymentQuery->sum('paid_amount');
         $totalEarning = $totalSellingAmount - $totalVoucherPurchase;
 
-        $vouchers = Voucher::with('vendor')->latest()->paginate(10);
+        $voucherQuery = Voucher::query();
+        $totalVouchers = $voucherQuery->count();
+        $availableCount = Voucher::query()->where('status', 'Available')->count();
+        $allocatedCount = Voucher::query()->where('status', 'Allocated')->count();
+        $usedCount = Voucher::query()->where('status', 'Used')->count();
+        $expiredCount = Voucher::query()->where('status', 'Expired')->count();
+        $cancelledCount = Voucher::query()->where('status', 'Cancelled')->count();
+
+        $vouchers = Voucher::with('vendor')
+            ->latest()
+            ->paginate(30);
 
         return view('dashboard', compact(
             'todayLeads',
@@ -141,7 +151,12 @@ class DashboardController extends Controller
             'recentEnrollments',
             'totalVoucherPurchase',
             'totalSellingAmount',
-            'totalEarning'
+            'totalEarning', 'vouchers',
+            'totalVouchers',
+            'availableCount',
+            'allocatedCount',
+            'usedCount',
+            'expiredCount','cancelledCount'
         ));
     }
 
@@ -225,8 +240,6 @@ class DashboardController extends Controller
             'monthlyReport'
         ));
     }
-
-
 
     public function checkUnique(Request $request)
     {

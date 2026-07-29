@@ -161,48 +161,47 @@
             @endcan
 
             @can('vouchers.index')
-            <li class="sb-item">
-                <a href="javascript:void(0);"
-                    class="sb-link {{ request()->routeIs('vouchers.*') ? 'active' : '' }}"
-                    id="voucherMenu">
-                    <i class="fas fa-ticket-alt"></i>
-                    <span>Voucher</span>
-                    <i class="fas fa-chevron-down ms-auto" id="voucherArrow"></i>
-                </a>
-                <ul class="sb-submenu" id="voucherSubmenu">
-                    <li>
-                        <a href="{{ route('vouchers.index') }}"
-                            class="{{ request()->routeIs('vouchers.index') ? 'active' : '' }}">
-                            All Vouchers
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('vouchers.status','available') }}">
-                            Available
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('vouchers.status','allocated') }}">
-                            Allocated
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('vouchers.status','used') }}">
-                            Used
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('vouchers.status','expired') }}">
-                            Expired
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('vouchers.status','cancelled') }}">
-                            Cancelled
-                        </a>
-                    </li>
-                </ul>
-            </li>
+                <li class="sb-item">
+                    <a href="javascript:void(0);" class="sb-link {{ request()->routeIs('vouchers.*') ? 'active' : '' }}"
+                        id="voucherMenu">
+                        <i class="fas fa-ticket-alt"></i>
+                        <span>Voucher</span>
+                        <i class="fas fa-chevron-down ms-auto" id="voucherArrow"></i>
+                    </a>
+                    <ul class="sb-submenu" id="voucherSubmenu">
+                        <li>
+                            <a href="{{ route('vouchers.index') }}"
+                                class="{{ request()->routeIs('vouchers.index') ? 'active' : '' }}">
+                                All Vouchers
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('vouchers.status', 'available') }}">
+                                Available
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('vouchers.status', 'allocated') }}">
+                                Allocated
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('vouchers.status', 'used') }}">
+                                Used
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('vouchers.status', 'expired') }}">
+                                Expired
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('vouchers.status', 'cancelled') }}">
+                                Cancelled
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             @endcan
 
             @can('voucher-requests.index')
@@ -318,28 +317,32 @@
             </div>
         </footer>
     </div>
+    {{-- Lead Notification Sound --}}
     <audio id="notificationSound" preload="auto">
         <source src="{{ asset('assets/sounds/notification.mp3') }}" type="audio/mpeg">
+    </audio>
+
+    {{-- Voucher Request Notification Sound --}}
+    <audio id="voucherNotificationSound" preload="auto">
+        <source src="{{ asset('assets/sounds/voucher-request-notification.mp3') }}" type="audio/mpeg">
     </audio>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-
         let shownNotifications = [];
-        const notificationAudio = document.getElementById('notificationSound');
 
-        notificationAudio.loop = true;
+        const notificationAudio = document.getElementById('notificationSound');
+        const voucherAudio = document.getElementById('voucherNotificationSound');
+
         notificationAudio.volume = 1.0;
+        voucherAudio.volume = 1.0;
 
         /* ============================================================
            Enable Notification Sound (Only Once)
         ============================================================ */
-
         document.addEventListener("DOMContentLoaded", function () {
-
             if (!localStorage.getItem("audioEnabled")) {
-
                 Swal.fire({
                     title: "Enable Notification Sound",
                     text: "Click Enable to allow notification sounds.",
@@ -348,81 +351,54 @@
                     allowOutsideClick: false,
                     allowEscapeKey: false
                 }).then((result) => {
-
                     if (result.isConfirmed) {
-
                         localStorage.setItem("audioEnabled", "1");
 
-                        notificationAudio.play()
-                            .then(() => {
-                                notificationAudio.pause();
-                                notificationAudio.currentTime = 0;
-                            })
-                            .catch((err) => {
-                                console.log(err);
-                            });
+                        // Unlock both audios
+                        notificationAudio.play().then(() => {
+                            notificationAudio.pause();
+                            notificationAudio.currentTime = 0;
+                        }).catch(() => { });
 
+                        voucherAudio.play().then(() => {
+                            voucherAudio.pause();
+                            voucherAudio.currentTime = 0;
+                        }).catch(() => { });
                     }
-
                 });
-
             }
-
         });
 
-
         /* ============================================================
-           Check Notification
+           Lead Notifications
         ============================================================ */
-
         function checkLeadNotifications() {
-
             fetch("{{ route('lead.notifications') }}")
                 .then(response => response.json())
                 .then(data => {
-
-                    if (data.length === 0) {
-                        return;
-                    }
+                    if (data.length === 0) return;
 
                     let notification = data[0];
 
-                    if (shownNotifications.includes(notification.id)) {
-                        return;
-                    }
+                    if (shownNotifications.includes(notification.id)) return;
 
                     shownNotifications.push(notification.id);
 
                     Swal.fire({
-
                         icon: 'info',
                         title: notification.title,
                         html: "<b>" + notification.message + "</b>",
                         confirmButtonText: "Open Lead",
                         allowOutsideClick: false,
                         allowEscapeKey: false,
-
                         didOpen: () => {
-
                             if (localStorage.getItem("audioEnabled") == "1") {
-
                                 notificationAudio.currentTime = 0;
                                 notificationAudio.loop = true;
-
-                                notificationAudio.play()
-                                    .then(() => {
-                                        console.log("Audio Playing");
-                                    })
-                                    .catch((err) => {
-                                        console.log("Play Error", err);
-                                    });
-
+                                notificationAudio.play().catch(err => console.log(err));
                             }
-
                         }
-
                     }).then(() => {
-
                         notificationAudio.pause();
                         notificationAudio.currentTime = 0;
 
@@ -432,72 +408,48 @@
                                 "X-CSRF-TOKEN": "{{ csrf_token() }}",
                                 "Content-Type": "application/json"
                             }
-                        })
-                            .then(() => {
-
-                                window.location.href = "/leads/" + notification.lead_id;
-
-                            });
-
+                        }).then(() => {
+                            window.location.href = "/leads/" + notification.lead_id;
+                        });
                     });
-
                 });
-
         }
 
         checkLeadNotifications();
-
         setInterval(checkLeadNotifications, 5000);
 
-    </script>
-
-    <script>
-
+        /* ============================================================
+           Voucher Request Notifications (with special sound)
+        ============================================================ */
         function checkVoucherNotifications() {
-
             fetch("{{ route('voucher-request-notifications.latest') }}")
                 .then(response => response.json())
                 .then(data => {
-
-                    if (data.length === 0) {
-                        return;
-                    }
+                    if (data.length === 0) return;
 
                     let notification = data[0];
 
-                    if (shownNotifications.includes('voucher-' + notification.id)) {
-                        return;
-                    }
+                    if (shownNotifications.includes('voucher-' + notification.id)) return;
 
                     shownNotifications.push('voucher-' + notification.id);
 
                     Swal.fire({
-
                         icon: 'info',
                         title: notification.title,
                         html: "<b>" + notification.message + "</b>",
                         confirmButtonText: "Open Request",
                         allowOutsideClick: false,
                         allowEscapeKey: false,
-
                         didOpen: () => {
-
                             if (localStorage.getItem("audioEnabled") == "1") {
-
-                                notificationAudio.currentTime = 0;
-                                notificationAudio.loop = true;
-
-                                notificationAudio.play()
-                                    .catch(err => console.log(err));
-
+                                voucherAudio.currentTime = 0;
+                                voucherAudio.loop = true;
+                                voucherAudio.play().catch(err => console.log(err));
                             }
-
                         }
-
                     }).then(() => {
-
-                        notificationAudio.pause();
-                        notificationAudio.currentTime = 0;
+                        voucherAudio.pause();
+                        voucherAudio.currentTime = 0;
 
                         fetch("/voucher-request-notifications/" + notification.id + "/read", {
                             method: "POST",
@@ -505,24 +457,15 @@
                                 "X-CSRF-TOKEN": "{{ csrf_token() }}",
                                 "Content-Type": "application/json"
                             }
-                        })
-                            .then(() => {
-
-                                window.location.href =
-                                    "/voucher-requests/" + notification.voucher_request_id;
-
-                            });
-
+                        }).then(() => {
+                            window.location.href = "/voucher-requests/" + notification.voucher_request_id;
+                        });
                     });
-
                 });
-
         }
 
         checkVoucherNotifications();
-
         setInterval(checkVoucherNotifications, 5000);
-
     </script>
 
     <!-- Scripts -->
@@ -775,27 +718,27 @@
         });
     </script>
     <script>
-document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function () {
 
-    const menu = document.getElementById('voucherMenu');
-    const submenu = document.getElementById('voucherSubmenu');
-    const arrow = document.getElementById('voucherArrow');
+            const menu = document.getElementById('voucherMenu');
+            const submenu = document.getElementById('voucherSubmenu');
+            const arrow = document.getElementById('voucherArrow');
 
-    if(menu){
+            if (menu) {
 
-        // Open automatically on voucher pages
-        if(document.querySelector('.sb-link.active')){
-            submenu.classList.add('show');
-            arrow.classList.add('rotate');
-        }
+                // Open automatically on voucher pages
+                if (document.querySelector('.sb-link.active')) {
+                    submenu.classList.add('show');
+                    arrow.classList.add('rotate');
+                }
 
-        menu.addEventListener('click', function () {
-            submenu.classList.toggle('show');
-            arrow.classList.toggle('rotate');
+                menu.addEventListener('click', function () {
+                    submenu.classList.toggle('show');
+                    arrow.classList.toggle('rotate');
+                });
+            }
+
         });
-    }
-
-});
     </script>
 </body>
 
