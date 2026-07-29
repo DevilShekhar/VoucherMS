@@ -282,10 +282,9 @@
                     <table class="table table-hover align-middle" id="datatable">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Lead No</th>
+                                <th>#</th>   
+                                <th>Candidate Mobile No.</th>                             
                                 <th>Candidate Name</th>
-                                <th>Candidate Mobile No.</th>
                                 <th>Course</th>
                                 <th>Center</th>
                                 @if (in_array(auth()->user()->role_id, [1, 2]))
@@ -301,14 +300,13 @@
                             @forelse($leads as $lead)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $lead->lead_no }}</td>
+                                     <td>{{ $lead->mobile }}</td>
                                     <td>
                                         <strong>{{ $lead->candidate_name ?? '-'}}</strong>
                                         @if($lead->email)
                                             <br><small class="text-muted">{{ $lead->email }}</small>
                                         @endif
                                     </td>
-                                    <td>{{ $lead->mobile }}</td>
                                     <td>{{ $lead->course->course_name ?? '-' }}</td>
                                     <td>{{ $lead->center->center_name ?? '-' }}</td>
                                     @if (in_array(auth()->user()->role_id, [1, 2,3]))
