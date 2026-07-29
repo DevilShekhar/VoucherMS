@@ -288,7 +288,9 @@
                                 <th>Candidate Mobile No.</th>
                                 <th>Course</th>
                                 <th>Center</th>
-                                <th>Assigned To</th>
+                                @if (in_array(auth()->user()->role_id, [1, 2]))
+                                    <th>Assigned To</th>
+                                @endif
                                 <th>Added By</th>
                                 <th>Priority</th>
                                 <th>Status</th>
@@ -309,16 +311,16 @@
                                     <td>{{ $lead->mobile }}</td>
                                     <td>{{ $lead->course->course_name ?? '-' }}</td>
                                     <td>{{ $lead->center->center_name ?? '-' }}</td>
+                                    @if (in_array(auth()->user()->role_id, [1, 2,3]))
                                     <td>
                                         @if($lead->assignedUser)
                                             <span class="assigned-user" data-bs-toggle="popover" data-bs-trigger="hover focus"
-                                                data-bs-placement="top" data-bs-html="true" title="{{ $lead->assignedUser->name }}"
-                                                data-bs-content="
-                                                              <div class='small'>
-                                                                  <div><i class='fas fa-envelope me-1'></i> {{ $lead->assignedUser->email ?? '—' }}</div>
-                                                                  <div class='mt-1'><i class='fas fa-phone me-1'></i> {{ $lead->assignedUser->mobile ?? '—' }}</div>
-                                                              </div>
-                                                          ">
+                                                data-bs-placement="top" data-bs-html="true" data-bs-content="
+                                                                          <div class='small'>
+                                                                              <div><i class='fas fa-envelope me-1'></i> {{ $lead->assignedUser->email ?? '—' }}</div>
+                                                                              <div class='mt-1'><i class='fas fa-phone me-1'></i> {{ $lead->assignedUser->mobile ?? '—' }}</div>
+                                                                          </div>
+                                                                      ">
                                                 {{ $lead->assignedUser->name }}
                                                 <span class="badge bg-success ms-2">Assigned</span>
                                             </span>
@@ -326,6 +328,7 @@
                                             <span class="badge bg-warning text-dark">Unassigned</span>
                                         @endif
                                     </td>
+                                    @endif
                                     <td>{{ optional($lead->createdBy)->name ?? '-' }}</td>
                                     <td>
                                         @if($lead->priority == 'High')
