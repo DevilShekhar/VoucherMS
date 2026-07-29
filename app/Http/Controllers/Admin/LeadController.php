@@ -308,8 +308,7 @@ class LeadController extends Controller
             abort(403, 'You can only add followups to your assigned leads.');
         }
 
-        $request->validate([
-            'followup_date' => 'required|date',
+        $request->validate([            
             'discussion' => 'required|string',
             'next_followup' => 'nullable|date',
             'status' => 'required|in:Pending,Contacted,Interested,Not Interested,Converted,Closed',
@@ -317,7 +316,7 @@ class LeadController extends Controller
 
         $followup = LeadFollowUp::create([
             'lead_id' => $lead->id,
-            'followup_date' => $request->followup_date,        // ← Fixed
+           'followup_date' => now(),       // ← Fixed
             'discussion' => $request->discussion,
             'next_followup' => $request->next_followup,        // ← Must save time
             'status' => $request->status,

@@ -1431,8 +1431,7 @@ label input[type="checkbox"] {
 
 /* Modal overrides for Bootstrap compatibility */
 .modal-content {
-    background: var(--card) !important;
-    border: 1px solid var(--line) !important;
+    background: var(--card) !important;    
     border-radius: var(--radius) !important;
 }
 
@@ -5402,3 +5401,76 @@ font-size:30px;
         #voucherArrow.rotate{
             transform:rotate(180deg);
         }
+        .followup-modal{
+    border:0;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 20px 50px rgba(0,0,0,.15);
+}
+
+.followup-header{
+    background:linear-gradient(135deg,#2563eb,#1e40af);
+    padding:20px 25px;
+    border:none;
+}
+
+.followup-icon{
+    width:60px;
+    height:60px;
+    border-radius:15px;
+    background:rgba(255,255,255,.18);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.followup-icon i{
+    color:#fff;
+    font-size:24px;
+}
+
+.premium-input{
+    border-radius:12px;
+    border:1px solid #d9e2ef;
+    padding:12px 15px;
+    transition:.3s;
+    font-size:15px;
+}
+
+.premium-input:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 .2rem rgba(37,99,235,.15);
+}
+
+.form-label{
+    margin-bottom:8px;
+    color:#374151;
+}
+
+.modal-footer .btn{
+    border-radius:10px;
+    padding:10px 22px;
+    font-weight:600;
+}
+
+.btn-primary{
+    background:#2563eb;
+    border-color:#2563eb;
+}
+
+.btn-primary:hover{
+    background:#1d4ed8;
+    border-color:#1d4ed8;
+}
+
+textarea.premium-input{
+    resize:none;
+}
+
+small.text-muted{
+    font-size:13px;
+}
+
+.modal-body{
+    background:#fafcff;
+}

@@ -258,7 +258,7 @@
                         <h4>Follow-up History</h4>
                         <p>Complete communication timeline of this lead</p>
                     </div>
-                    <button class="premium-add-btn ms-auto" data-bs-toggle="modal"  data-bs-target="#addFollowupModal">
+                    <button class="premium-add-btn ms-auto text-white" data-bs-toggle="modal"  data-bs-target="#addFollowupModal">
                         <i class="fas fa-plus"></i>
                         Add Follow-up
                     </button>
@@ -311,56 +311,74 @@
     </div>
     <!-- ====================== ADD FOLLOW-UP MODAL ====================== -->
     <div class="modal fade" id="addFollowupModal" tabindex="-1" aria-labelledby="addFollowupModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addFollowupModalLabel">Add New Follow-up</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="{{ route('leads.followups.store', $lead) }}" method="POST">
-                    @csrf
-
-                    <div class="modal-body">
-                        <div class="row">
-                            <!-- Today's Follow-up (with Time) -->
-                            <div class="col-md-6">
-                                <label class="form-label">Follow-Up Date & Time</label>
-                                <input type="datetime-local" name="followup_date" class="form-control"
-                                    value="{{ now()->format('Y-m-d\TH:i') }}">
-                                <small class="text-muted">Automatically set to the current date and time.</small>
-                            </div>
-
-                            <!-- Next Follow-up (with Time) -->
-                            <div class="col-md-6">
-                                <label class="form-label">Next Follow-up Date <span class="text-danger">*</span></label>
-                                <input type="datetime-local" name="next_followup" class="form-control"
-                                    value="{{ old('next_followup') }}" min="{{ now()->format('Y-m-d') }}T00:00">
-                                <small class="text-muted">Next day onwards</small>
-                            </div>
-                            <div class="mt-3">
-                                <label class="form-label">Status <span class="text-danger">*</span></label>
-                                <select name="status" class="form-select" required>
-                                    <option value="Pending">Pending</option>
-                                    <option value="Contacted">Contacted</option>
-                                    <option value="Interested">Interested</option>
-                                    <option value="Not Interested">Not Interested</option>
-                                    <option value="Converted">Converted</option>
-                                </select>
-                            </div>
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content followup-modal">
+                <!-- Header -->
+                <div class="modal-header followup-header">
+                    <div class="d-flex align-items-center">
+                        <div class="followup-icon">
+                            <i class="fas fa-comments"></i>
                         </div>
-
-
-
-                        <div class="mt-3">
-                            <label class="form-label">Discussion <span class="text-danger">*</span></label>
-                            <textarea name="discussion" class="form-control" rows="5" required
-                                placeholder="Write detailed discussion with the candidate...">{{ old('discussion') }}</textarea>
+                        <div class="ms-3">
+                            <h5 class="mb-0 text-white">
+                                Add Follow-up
+                            </h5>
+                            <small class="text-white">
+                                Record your discussion and schedule the next follow-up.
+                            </small>
                         </div>
                     </div>
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save Follow-up</button>
+                    <button type="button" class="btn-close btn-close-white"
+                        data-bs-dismiss="modal"></button>
+                </div>
+                <form action="{{ route('leads.followups.store', $lead) }}" method="POST">
+                    @csrf
+                    <div class="modal-body p-4">
+                        <div class="row g-4">
+                            <!-- Next Followup -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">
+                                    <i class="fas fa-calendar-alt text-primary me-2"></i>
+                                    Next Follow-up
+                                </label>
+                                <input type="datetime-local" name="next_followup"  class="form-control premium-input"  value="{{ old('next_followup') }}"  min="{{ now()->format('Y-m-d') }}T00:00">
+                                <small class="text-muted">Select the next follow-up date & time.</small>
+                            </div>
+                            <!-- Status -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">
+                                    <i class="fas fa-flag text-success me-2"></i>
+                                    Status
+                                </label>
+                                <select name="status" class="form-select premium-input"required>
+                                    <option value="Pending">🟡 Pending</option>
+                                    <option value="Contacted">🔵 Contacted</option>
+                                    <option value="Interested">🟢 Interested</option>
+                                    <option value="Not Interested">🔴 Not Interested</option>
+                                    <option value="Converted">✅ Converted</option>
+                                </select>
+                            </div>
+                            <!-- Discussion -->
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">
+                                    <i class="fas fa-file-alt text-warning me-2"></i>
+                                    Discussion
+                                </label>
+                                <textarea name="discussion" rows="6" class="form-control premium-input"  placeholder="Enter detailed discussion with candidate..." required>{{ old('discussion') }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light border-0 px-4 py-3">
+                        <button type="button" class="btn btn-light border" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-2"></i>
+                            Cancel
+                        </button>
+                        <button type="submit"
+                            class="btn btn-primary px-4 text-white">
+                            <i class="fas fa-save me-2"></i>
+                            Save Follow-up
+                        </button>
                     </div>
                 </form>
             </div>
