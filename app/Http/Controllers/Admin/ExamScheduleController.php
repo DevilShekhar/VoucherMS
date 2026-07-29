@@ -23,24 +23,25 @@ class ExamScheduleController extends Controller
             'createdBy',
         ]);
 
-        // Center Executive
-        if ($user->role_id == 5) {
+        // Super Admin & Admin
+        if (in_array($user->role_id, [1, 2])) {
 
-            $centerId = Center::query()
-                ->where('center_exe_id', $user->id)
-                ->value('id');
+            // Show all records
 
-            if ($centerId) {
-                $query->where('center_id', $centerId)
-                    ->where('created_by', $user->id);
-            } else {
-                $query->whereRaw('1 = 0');
-            }
-
-        } elseif ($user->role_id != 1) {
-            // Other users see only their own schedules
-            $query->where('created_by', $user->id);
         }
+        // Center Admin
+        elseif ($user->role_id == 5) {
+
+            $query->where('center_admin_id', $user->id);
+
+        }
+        // Manager, Sales Executive, Accounts
+        else {
+
+            $query->where('created_by', $user->id);
+
+        }
+
         $examSchedules = $query->latest()->get();
 
         return view('admin.exam-schdule.index', compact('examSchedules'));
@@ -75,38 +76,28 @@ class ExamScheduleController extends Controller
             'exam_date' => 'required|date',
             'exam_time' => 'required',
         ]);
-
-        // Prevent duplicate exam schedule
-        $exists = ExamSchedule::query()->where('candidate_id', $request->candidate_id)->first();
-
+        $exists = ExamSchedule::where('candidate_id', $request->candidate_id)->exists();
         if ($exists) {
             return response()->json([
                 'status' => false,
                 'message' => 'Exam schedule already exists for this candidate.',
             ], 422);
         }
-
-        DB::transaction(function () use ($request) {
-
+        $center = Center::findOrFail($request->center_id);
+        DB::transaction(function () use ($request, $center) {
             ExamSchedule::create([
-                'candidate_id' => $request->candidate_id,
-                'center_id' => $request->center_id,
-                'voucher_id' => $request->voucher_id,
-                'exam_date' => $request->exam_date,
-                'exam_time' => $request->exam_time,
-                'exam_status' => 'Scheduled',
-                'created_by' => Auth::id(),
+                'candidate_id'    => $request->candidate_id,
+                'center_id'       => $request->center_id,
+                'voucher_id'      => $request->voucher_id,
+                'exam_date'       => $request->exam_date,
+                'exam_time'       => $request->exam_time,
+                'exam_status'     => 'Scheduled',
+                'created_by'      => Auth::id(),
+                'center_admin_id' => $center->center_exe_id,
             ]);
-
-            Candidate::query()->where('id', $request->candidate_id)
-                ->update([
-                    'status' => 'Exam Scheduled',
-                ]);
+            Candidate::where('id', $request->candidate_id)->update(['status' => 'Exam Scheduled',]);
         });
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Exam schedule created successfully.',
+        return response()->json(['status' => true,'message' => 'Exam schedule created successfully.',
         ]);
     }
 
