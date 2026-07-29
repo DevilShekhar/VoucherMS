@@ -479,7 +479,7 @@
     --ink: #1A1410;
     --ink-soft: #6B5D4E;
     --line: #E5D9C8;
-    --ember: #C8963E;
+    /* --ember: #C8963E; */
     --ember-dark: #A87D30;
     --ember-soft: #F5EDE0;
     --sage: #8B7A5A;
@@ -852,7 +852,7 @@ body {
 
 .crumb {
     font-size: 13px;
-    color: var(--ink-soft);
+    color: #4f46e5;
 }
 
 .crumb b {
@@ -966,14 +966,14 @@ html[data-theme="dark"] .theme-switch .knob {
 
 .profile-trigger:hover {
     border-color: var(--ember);
-    background: var(--cloth);
+    background: rgba(255, 255, 255, 0.75)
 }
 
 .profile-trigger .av {
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    background: var(--gold-gradient);
+    background: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1299,7 +1299,7 @@ main {
 
 .badge.bg-danger {
     background: var(--rust-bg);
-    color: var(--rust);
+    
 }
 
 .badge.text-white {
@@ -1495,12 +1495,12 @@ footer {
     flex-wrap: wrap;
     gap: 10px;
     font-size: 12.5px;
-    color: var(--ink-soft);
+    color: #3ba1f8;
     transition: border-color .35s ease;
 }
 
 footer a {
-    color: var(--ink-soft);
+    
     text-decoration: none;
     margin-left: 20px;
     transition: color .2s ease;
