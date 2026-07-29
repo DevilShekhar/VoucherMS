@@ -1458,8 +1458,8 @@ label input[type="checkbox"] {
 }
 
 .modal .btn-success {
-    background: var(--gold-gradient) !important;
-    color: #1A1410 !important;
+   background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%) !important;
+    color: #ffffff !important;
     border: none !important;
     box-shadow: var(--gold-glow);
 }

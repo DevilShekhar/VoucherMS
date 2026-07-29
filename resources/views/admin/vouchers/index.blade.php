@@ -120,9 +120,9 @@
                                                 $badgeClass = match($voucher->status) {
                                                     'Available' => 'success',
                                                     'Allocated' => 'primary',
-                                                    'Used' => 'secondary',
+                                                    'Used' => 'danger',
                                                     'Expired' => 'warning',
-                                                    'Cancelled' => 'danger',
+                                                    'Cancelled' => 'info',
                                                     default => 'light',
                                                 };
                                             @endphp
