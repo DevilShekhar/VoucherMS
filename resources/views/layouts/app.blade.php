@@ -161,13 +161,48 @@
             @endcan
 
             @can('vouchers.index')
-                <li>
-                    <a href="{{ route('vouchers.index') }}"
-                        class="sb-link {{ request()->routeIs('vouchers.*') ? 'active' : '' }}">
-                        <i class="fas fa-ticket-alt"></i>
-                        <span>Voucher</span>
-                    </a>
-                </li>
+            <li class="sb-item">
+                <a href="javascript:void(0);"
+                    class="sb-link {{ request()->routeIs('vouchers.*') ? 'active' : '' }}"
+                    id="voucherMenu">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span>Voucher</span>
+                    <i class="fas fa-chevron-down ms-auto" id="voucherArrow"></i>
+                </a>
+                <ul class="sb-submenu" id="voucherSubmenu">
+                    <li>
+                        <a href="{{ route('vouchers.index') }}"
+                            class="{{ request()->routeIs('vouchers.index') ? 'active' : '' }}">
+                            All Vouchers
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('vouchers.status','available') }}">
+                            Available
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('vouchers.status','allocated') }}">
+                            Allocated
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('vouchers.status','used') }}">
+                            Used
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('vouchers.status','expired') }}">
+                            Expired
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('vouchers.status','cancelled') }}">
+                            Cancelled
+                        </a>
+                    </li>
+                </ul>
+            </li>
             @endcan
 
             @can('voucher-requests.index')
@@ -738,6 +773,29 @@
                 return new bootstrap.Tooltip(el);
             });
         });
+    </script>
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const menu = document.getElementById('voucherMenu');
+    const submenu = document.getElementById('voucherSubmenu');
+    const arrow = document.getElementById('voucherArrow');
+
+    if(menu){
+
+        // Open automatically on voucher pages
+        if(document.querySelector('.sb-link.active')){
+            submenu.classList.add('show');
+            arrow.classList.add('rotate');
+        }
+
+        menu.addEventListener('click', function () {
+            submenu.classList.toggle('show');
+            arrow.classList.toggle('rotate');
+        });
+    }
+
+});
     </script>
 </body>
 
