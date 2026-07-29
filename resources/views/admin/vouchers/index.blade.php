@@ -62,6 +62,7 @@
                                     <th>Expiry Date</th>
                                     <th>Purchase Price</th>
                                     <th>Cost</th>
+                                    <th>Status</th>
                                     <th width="180" class="text-center">Action</th>
 
                                 </tr>
@@ -113,6 +114,22 @@
 
                                         <td>
                                             ₹{{ number_format($voucher->cost, 2) }}
+                                        </td>
+                                        <td>
+                                            @php
+                                                $badgeClass = match($voucher->status) {
+                                                    'Available' => 'success',
+                                                    'Allocated' => 'primary',
+                                                    'Used' => 'secondary',
+                                                    'Expired' => 'warning',
+                                                    'Cancelled' => 'danger',
+                                                    default => 'light',
+                                                };
+                                            @endphp
+
+                                            <span class="badge bg-{{ $badgeClass }}">
+                                                {{ $voucher->status }}
+                                            </span>
                                         </td>
                                         <td class="text-center">
 
