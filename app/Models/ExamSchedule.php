@@ -14,6 +14,7 @@ class ExamSchedule extends Model
         'exam_time',
         'exam_status',
         'created_by',
+        'center_admin_id',
     ];
 
     public function candidate()
