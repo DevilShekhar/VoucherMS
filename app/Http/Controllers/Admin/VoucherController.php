@@ -17,6 +17,12 @@ class VoucherController extends Controller
 
         return view('admin.vouchers.index', compact('vouchers'));
     }
+    public function status($status)
+    {
+        $vouchers = Voucher::where('status', ucfirst($status))->paginate(10);
+
+        return view('admin.vouchers.index', compact('vouchers'));
+    }
 
     public function create()
     {
