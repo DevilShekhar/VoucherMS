@@ -80,9 +80,8 @@ Route::middleware(['auth', 'otp'])->group(function () {
     Route::resource('voucher-requests', VoucherRequestController::class);
 
     Route::post('voucher-requests/{voucherRequest}/approve-admin', [VoucherRequestController::class, 'approveByAdmin'])->name('voucher-requests.approve.admin');
-
-    Route::post(
-        '/voucher-requests/{voucherRequest}/approve-superadmin',
+    Route::get('/voucher-requests/status/{status}', [VoucherRequestController::class, 'status'])->name('voucher-requests.status');
+    Route::post('/voucher-requests/{voucherRequest}/approve-superadmin',
         [VoucherRequestController::class, 'approveSuperAdmin']
     )->name('voucher-requests.approve.superadmin');
 

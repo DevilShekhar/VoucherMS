@@ -33,6 +33,14 @@ class VoucherRequestController extends Controller
 
         return view('admin.voucher_requests.index', compact('requests'));
     }
+    public function status($status)
+    {
+        $requests = VoucherRequest::where('status', $status)
+            ->latest()
+            ->paginate(10);
+
+        return view('admin.voucher_requests.index', compact('requests'));
+    }
 
     /**
      * Show the form for creating a new resource.

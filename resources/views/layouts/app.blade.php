@@ -205,14 +205,48 @@
             @endcan
 
             @can('voucher-requests.index')
-                <li>
-                    <a href="{{ route('voucher-requests.index') }}"
-                        class="sb-link {{ request()->routeIs('voucher-requests.*') ? 'active' : '' }}">
-                        <i class="fas fa-ticket-alt"></i>
-                        <span>VoucherRequests</span>
+                <li class="sb-item">
+                    <a href="javascript:void(0);"
+                        class="sb-link {{ request()->routeIs('voucher-requests.*') ? 'active' : '' }}"
+                        id="voucherRequestMenu">
+
+                        <i class="fas fa-file-signature"></i>
+                        <span>Voucher Requests</span>
+
+                        <i class="fas fa-chevron-down ms-auto" id="voucherRequestArrow"></i>
                     </a>
+
+                    <ul class="sb-submenu" id="voucherRequestSubmenu">
+                        <li>
+                            <a href="{{ route('voucher-requests.index') }}"
+                            class="{{ request()->routeIs('voucher-requests.index') ? 'active' : '' }}">
+                                All Requests
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('voucher-requests.status', 'Pending') }}"
+                            class="{{ request()->is('voucher-requests/status/Pending') ? 'active' : '' }}">
+                                Pending
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('voucher-requests.status', 'Approved') }}"
+                            class="{{ request()->is('voucher-requests/status/Approved') ? 'active' : '' }}">
+                                Approved
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('voucher-requests.status', 'Rejected') }}"
+                            class="{{ request()->is('voucher-requests/status/Rejected') ? 'active' : '' }}">
+                                Rejected
+                            </a>
+                        </li>
+                    </ul>
                 </li>
-            @endcan
+                @endcan
 
             @can('report-index')
                 <li>
@@ -720,14 +754,16 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
 
-            const menu = document.getElementById('voucherMenu');
-            const submenu = document.getElementById('voucherSubmenu');
-            const arrow = document.getElementById('voucherArrow');
+            function initSidebarDropdown(menuId, submenuId, arrowId) {
 
-            if (menu) {
+                const menu = document.getElementById(menuId);
+                const submenu = document.getElementById(submenuId);
+                const arrow = document.getElementById(arrowId);
 
-                // Open automatically on voucher pages
-                if (document.querySelector('.sb-link.active')) {
+                if (!menu || !submenu || !arrow) return;
+
+                // Auto open when submenu has active link
+                if (submenu.querySelector('.active')) {
                     submenu.classList.add('show');
                     arrow.classList.add('rotate');
                 }
@@ -738,8 +774,23 @@
                 });
             }
 
+            // Voucher
+            initSidebarDropdown(
+                'voucherMenu',
+                'voucherSubmenu',
+                'voucherArrow'
+            );
+
+            // Voucher Requests
+            initSidebarDropdown(
+                'voucherRequestMenu',
+                'voucherRequestSubmenu',
+                'voucherRequestArrow'
+            );
+
         });
     </script>
+    
 </body>
 
 </html>
