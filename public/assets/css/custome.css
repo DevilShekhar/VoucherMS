@@ -5371,38 +5371,3 @@ font-size:30px;
     display: none !important;
 }
 }
-.sb-submenu{
-    display:none;
-    list-style:none;
-    margin:0;
-    padding:5px 0 5px 40px;
-}
-
-.sb-submenu.show{
-    display:block;
-}
-
-.sb-submenu li a{
-    display:block;
-    padding:8px 10px;
-    color:#000;
-    text-decoration:none;
-    font-size:14px;
-    border-radius:6px;
-}
-
-.sb-submenu li a:hover{
-    background: linear-gradient(135deg, #4f46e5, #3b82f6);
-    color: #ffffff !important;
-    font-weight: 600;
-    border-left-color: transparent;
-    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
-}
-
-#voucherArrow{
-    transition:.3s;
-}
-
-#voucherArrow.rotate{
-    transform:rotate(180deg);
-}
