@@ -16,21 +16,9 @@
                 </div>
             </div>
             <div class="premium-header-right">
-                <a href="{{ route('voucher-requests.index') }}" class="premium-back-btn text-success">
-                    <i class="fas fa-arrow-left"></i> Back
+                <a href="{{ route('voucher-requests.index') }}" class="premium-back-btn text-primary">
+                    <i class="fas fa-arrow-left"></i> Back To Voucher Request
                 </a>
-
-                @if($voucherRequest->status == 'Approved')
-                    <form id="allocateForm" action="{{ route('voucher-requests.allocate', $voucherRequest) }}" method="POST"
-                        class="m-0">
-                        @csrf
-                        <button type="button" id="allocateBtn" class="premium-back-btn text-success"
-                            title="Allocate voucher to this candidate">
-                            <i class="fas fa-ticket-alt"></i> Allocate Voucher
-                        </button>
-                    </form>
-                @endif
-
             </div>
             <!-- Decorative Shapes -->
             <div class="shape circle-1"></div>

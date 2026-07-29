@@ -82,10 +82,10 @@
                                         $examScheduled = $candidate->examSchedule;
                                     @endphp
                                     <td class="text-nowrap">
-                                        <a href="{{ route('candidates.show', $candidate->id) }}" class="btn btn-sm btn-info">
+                                        <a href="{{ route('candidates.show', $candidate->id) }}" class="btn btn-sm btn-info text-white">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('candidates.edit', $candidate) }}" class="btn btn-sm btn-primary">
+                                        <a href="{{ route('candidates.edit', $candidate) }}" class="btn btn-sm btn-primary text-white">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <button type="button" class="btn btn-sm btn-success upload-doc-btn" data-candidate-id="{{ $candidate->id }}" data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name }}" data-candidate-code="{{ $candidate->candidate_code }}">
@@ -111,7 +111,7 @@
                                             <span class="badge bg-danger">
                                                 <i class="fas fa-times"></i> Rejected
                                             </span>
-                                            <button type="button" class="btn btn-sm btn-dark request-voucher-btn" data-candidate-id="{{ $candidate->id }}"
+                                            <button type="button" class="btn btn-sm btn-dark request-voucher-btn text-white" data-candidate-id="{{ $candidate->id }}"
                                                         data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name }}" data-candidate-code="{{ $candidate->candidate_code }}"
                                                         data-center-id="{{ $candidate->center_id }}">
                                                     <i class="fas fa-paper-plane"></i>Re-Send
@@ -119,7 +119,7 @@
                                         @elseif(in_array($voucherRequest->status, ['Approved', 'Allocated']))
 
                                                 <button type="button"
-                                                        class="btn btn-sm btn-primary exam-schedule-btn" data-id="{{ $candidate->id }}"
+                                                        class="btn btn-sm btn-primary exam-schedule-btn text-white" data-id="{{ $candidate->id }}"
                                                         data-name="{{ $candidate->first_name }} {{ $candidate->last_name }}" data-center="{{ $candidate->center_id }}" data-voucher="{{ $voucherRequest->voucher_id }}">
                                                         <i class="fas fa-calendar-alt"></i>
                                                 </button>
