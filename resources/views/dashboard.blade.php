@@ -53,6 +53,7 @@
                             {{ now()->format('l, F d, Y') }}
                         </div>
                         <!-- Buttons -->
+                        @can('download-excel')
                         <div class="action-buttons">
                             <a href="{{ route('dashboard.export.leads') }}"
                             class="btn-download btn-green">
@@ -65,6 +66,7 @@
                                 Download Vouchers
                             </a>
                         </div>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -218,24 +220,56 @@
 @endcan
 
 @can('view-voucher')
- <section class="section premium-dashboard pt-0">
+<section class="section premium-dashboard pt-0">
     <div class="card premium-block">
-        <div class="profile-section-title d-flex justify-content-between align-items-center">
+
+        {{-- Header --}}
+        <div class="profile-section-title d-flex flex-wrap justify-content-between align-items-center gap-3">
+
+            {{-- Left Side --}}
             <div class="d-flex align-items-center">
                 <div class="title-icon">
-                    <i class="fas fa-address-card"></i>
+                    <i class="fas fa-ticket-alt"></i>
                 </div>
                 <div class="ms-3">
-                    <h4 class="mb-1">All Vouchers</h4>
-                    <p class="text-white mb-0">Voucher Management</p>
+                    <h4 class="mb-1 text-white">All Vouchers</h4>
+                    <p class="text-white-50 mb-0">Voucher Management</p>
                 </div>
             </div>
-            <div class="voucher-count">
-                <span class="count-label">Total Vouchers</span>
-                <h3>{{ number_format($vouchers->total()) }}</h3>
+
+            {{-- Right Side - All Counts --}}
+            <div class="d-flex flex-wrap align-items-center gap-3 text-white">
+                <div class="text-center">
+                    <small class="d-block text-white-50">Available</small>
+                    <strong class="fs-5">{{ $availableCount }}</strong>
+                </div>
+                <div class="text-center">
+                    <small class="d-block text-white-50">Allocated</small>
+                    <strong class="fs-5">{{ $allocatedCount }}</strong>
+                </div>
+                <div class="text-center">
+                    <small class="d-block text-white-50">Used</small>
+                    <strong class="fs-5">{{ $usedCount }}</strong>
+                </div>
+                <div class="text-center">
+                    <small class="d-block text-white-50">Expired</small>
+                    <strong class="fs-5">{{ $expiredCount }}</strong>
+                </div>
+                <div class="text-center">
+                    <small class="d-block text-white-50">Cancelled</small>
+                    <strong class="fs-5">{{ $cancelledCount }}</strong>
+                </div>
+                <div class="text-center border-start border-light ps-3">
+                    <small class="d-block text-white-50">Total Vouchers</small>
+                    <strong class="fs-5">{{ number_format($vouchers->total()) }}</strong>
+                </div>
             </div>
+
         </div>
+
         <div class="card-body">
+
+            {{-- Table --}}
             <div class="table-responsive">
                 <table class="table table-hover" id="datatable">
                     <thead>
@@ -251,85 +285,65 @@
                         @forelse($vouchers as $voucher)
                             <tr>
                                 <td>{{ $loop->iteration + ($vouchers->firstItem() ?? 0) - 1 }}</td>
+                                <td>{{ $voucher->vendor->vendor_name ?? '-' }}</td>
                                 <td>
-                                    {{ $voucher->vendor->vendor_name ?? '-' }}
+                                    <span class="voucher-code-display" style="cursor: pointer;"
+                                          onclick="toggleVoucherCode(this)">
+                                        <span class="voucher-code-hidden">••••••••</span>
+                                        <span class="voucher-code-visible" style="display: none;">
+                                            {{ $voucher->voucher_code }}
+                                        </span>
+                                        <i class="fas fa-eye voucher-eye-icon"
+                                           style="margin-left: 5px; font-size: 0.8rem; color: #6c757d;"></i>
+                                    </span>
                                 </td>
                                 <td>
-                                        <span class="voucher-code-display" style="cursor: pointer;"
-                                            onclick="toggleVoucherCode(this)">
-                                            <span class="voucher-code-hidden">••••••••</span>
-                                            <span class="voucher-code-visible"
-                                                style="display: none;">{{ $voucher->voucher_code }}</span>
-                                            <i class="fas fa-eye voucher-eye-icon"
-                                                style="margin-left: 5px; font-size: 0.8rem; color: #6c757d;"></i>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        @if($voucher->expiry_date)
-                                            {{ \Carbon\Carbon::parse($voucher->expiry_date)->format('d M Y') }}
+                                    @if($voucher->expiry_date)
+                                        {{ \Carbon\Carbon::parse($voucher->expiry_date)->format('d M Y') }}
 
-                                            @if(\Carbon\Carbon::parse($voucher->expiry_date)->isPast() && $voucher->status != 'Expired')
-                                                <br>
-                                                <small class="text-danger fw-bold">Expired</small>
-                                            @elseif(\Carbon\Carbon::parse($voucher->expiry_date)->diffInDays(now(), false) <= 7 &&
-                                                    \Carbon\Carbon::parse($voucher->expiry_date)->isFuture())
-                                                <br>
-                                                <small class="text-warning fw-bold" style="color:rgb(187 95 255) !important">
-                                                    Expires in {{ floor(now()->diffInDays(\Carbon\Carbon::parse($voucher->expiry_date))) }} day(s)
-                                                </small>
-                                            @endif
-                                        @else
-                                            -
+                                        @if(\Carbon\Carbon::parse($voucher->expiry_date)->isPast() && $voucher->status != 'Expired')
+                                            <br>
+                                            <small class="text-danger fw-bold">Expired</small>
+                                        @elseif(\Carbon\Carbon::parse($voucher->expiry_date)->diffInDays(now(), false) <= 7 &&
+                                                \Carbon\Carbon::parse($voucher->expiry_date)->isFuture())
+                                            <br>
+                                            <small class="text-warning fw-bold">
+                                                Expires in {{ floor(now()->diffInDays(\Carbon\Carbon::parse($voucher->expiry_date))) }} day(s)
+                                            </small>
                                         @endif
-                                    </td>
+                                    @else
+                                        -
+                                    @endif
+                                </td>
                                 <td>
                                     @switch($voucher->status)
-
                                         @case('Available')
                                             <span class="badge bg-success">Available</span>
                                             @break
-
                                         @case('Allocated')
                                             <span class="badge bg-primary">Allocated</span>
                                             @break
-
                                         @case('Used')
                                             <span class="badge bg-danger text-white">Used</span>
                                             @break
-
                                         @case('Expired')
-                                            <span class="badge bg-warning text-white">Expired</span>
+                                            <span class="badge bg-warning text-dark">Expired</span>
                                             @break
-
                                         @case('Cancelled')
                                             <span class="badge bg-info">Cancelled</span>
                                             @break
-
                                         @default
-                                            <span class="badge bg-light text-dark">
-                                                {{ $voucher->status }}
-                                            </span>
-
+                                            <span class="badge bg-light text-dark">{{ $voucher->status }}</span>
                                     @endswitch
-
                                 </td>
-
                             </tr>
-
                         @empty
-
                             <tr>
-                                <td colspan="4" class="text-center py-5">
-                                    No vouchers found.
-                                </td>
+                                <td colspan="5" class="text-center py-5">No vouchers found.</td>
                             </tr>
-
                         @endforelse
-
                     </tbody>
-
                 </table>
-
             </div>
 
         </div>

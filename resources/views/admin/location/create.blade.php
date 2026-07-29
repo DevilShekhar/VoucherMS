@@ -11,12 +11,12 @@
                 <div class="premium-header-content">
                     <span class="premium-tag">Location Management</span>
                     <h2 class="text-white">Create New Location</h2>
-                    <p>Add a new Location to the system</p>                       
+                    <p>Add a new Location to the system</p>
                 </div>
             </div>
             <div class="premium-header-right">
                 <a href="{{ route('locations.index') }}" class="premium-back-btn">
-                   <i class="fas fa-arrow-left"></i> Back
+                   <i class="fas fa-arrow-left"></i> Back To Location
                 </a>
             </div>
             <!-- Decorative Shapes -->
@@ -25,7 +25,7 @@
             <div class="shape circle-3"></div>
             <div class="dots"></div>
         </div>
-    </section>    
+    </section>
 
     <section class="section premium-dashboard pt-0">
         <form method="POST" action="{{ route('locations.store') }}">
@@ -51,15 +51,16 @@
                         @enderror
                     </div>
 
-                    <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); display: flex; gap: 12px; flex-wrap: wrap;">
-                        <button type="submit" class="btn btn-create">
-                            <i class="fas fa-plus-circle"></i>
-                            Create Location
-                        </button>
-                        <a href="{{ route('locations.index') }}" class="btn" style="background: var(--cloth); color: var(--ink); padding: 10px 24px; border-radius: 10px; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; transition: all .2s ease;">
+                    <div class="form-footer">
+                         <a href="{{ route('locations.index') }}" class="btn btn-cancel">
                             <i class="fas fa-times"></i>
                             Cancel
                         </a>
+                        <button type="submit" class="btn btn-save">
+                            <i class="fas fa-plus-circle"></i>
+                            Create Location
+                        </button>
+
                     </div>
                 </div>
             </div>

@@ -144,6 +144,9 @@ class PermissionSeeder extends Seeder
             'locations.create',
             'locations.edit',
             'locations.destory',
+
+            //Download
+            'download-excel',
         ];
 
         foreach ($permissions as $permission) {

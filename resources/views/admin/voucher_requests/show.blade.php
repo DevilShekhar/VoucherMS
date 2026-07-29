@@ -132,24 +132,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Approval -->
-                    <div class="col-xl-4 col-md-6">
-                        <div class="detail-box">
-                            <div class="detail-icon orange">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-                            <div class="detail-content">
-                                <span>Approval</span>
-                                @if($voucherRequest->admin_approval == 'Approved')
-                                    <span class="status-badge success">Approved</span>
-                                @elseif($voucherRequest->admin_approval == 'Rejected')
-                                    <span class="status-badge danger">Rejected</span>
-                                @else
-                                    <span class="status-badge pending">Pending</span>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
                     <!-- Requested By -->
                     <div class="col-xl-4 col-md-6">
                         <div class="detail-box no-border">

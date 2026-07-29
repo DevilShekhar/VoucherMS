@@ -11,12 +11,12 @@
                 <div class="premium-header-content">
                     <span class="premium-tag">Location Management</span>
                     <h2 class="text-white">Edit Location</h2>
-                    <p>Update location details</p>                   
+                    <p>Update location details</p>
                 </div>
             </div>
             <div class="premium-header-right">
                 <a href="{{ route('locations.index') }}" class="premium-back-btn">
-                   <i class="fas fa-arrow-left"></i> Back
+                   <i class="fas fa-arrow-left"></i> Back To Location
                 </a>
             </div>
             <!-- Decorative Shapes -->
@@ -25,7 +25,7 @@
             <div class="shape circle-3"></div>
             <div class="dots"></div>
         </div>
-    </section>   
+    </section>
     <section class="section premium-dashboard pt-0">
         <form method="POST" action="{{ route('locations.update', $location->id) }}">
             @csrf
@@ -43,16 +43,16 @@
                                <small class="text-danger">{{ $message }}</small>
                            @enderror
                         </div>
-                       <div class="mt-4">
-                            <button type="submit" class="btn btn-create">
-                                <i class="fas fa-save"></i>
-                                Update Location
-                            </button>
-                            <a href="{{ route('locations.index') }}" class="btn"
-                               style="background: var(--cloth); color: var(--ink);">
+                       <div class="form-footer">
+                        <a href="{{ route('locations.index') }}" class="btn btn-cancel">
                                 <i class="fas fa-times"></i>
                                 Cancel
                             </a>
+                            <button type="submit" class="btn btn-save">
+                                <i class="fas fa-save"></i>
+                                Update Location
+                            </button>
+
                         </div>
                     </div>
                 </div>

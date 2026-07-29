@@ -38,6 +38,7 @@
         <div class="card premium-block">
             <div class="card-body">
                 <div class="table-responsive">
+                    <p>Total Candidates: {{ $candidates->count() }}</p>
                     <table class="table table-hover align-middle"  id="datatable">
                         <thead class="table-white">
                             <tr>
