@@ -4,23 +4,28 @@
 
 @section('content')
     <section class="section premium-dashboard">
-        <div class="premium-floating-header">
-            <div class="header-content">
-                <div class="header-left">
-                    <div class="header-icon">
-                        <i class="fas fa-user-circle"></i>
-                    </div>
-                    <div>
-                        <span class="header-badge">
-                            Account Management
-                        </span>
-                        <h2>Profile</h2>
-                        <p>Manage your account settings and preferences</p>
-                    </div>
-                </div>
+    <div class="premium-header">
+        <div class="premium-header-overlay"></div>
+        <div class="premium-header-left">
+            <div class="premium-header-icon">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="premium-header-content">
+                <span class="premium-tag">ACCOUNT MANAGEMENT</span>
+                <h2 class="text-white">Profile</h2>
+                <p>Manage your account settings and preferences</p>
             </div>
         </div>
-    </section>
+        <!-- Optional: Add action buttons here if needed -->
+        <div class="premium-header-right">
+        </div>
+        <!-- Decorative Shapes -->
+        <div class="shape circle-1"></div>
+        <div class="shape circle-2"></div>
+        <div class="shape circle-3"></div>
+        <div class="dots"></div>
+    </div>
+</section>
 
     <section class="section premium-dashboard pt-0">
         <div class="row" style="display: flex; flex-wrap: wrap; gap: 24px; margin: 0;">

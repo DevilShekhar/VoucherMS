@@ -1046,11 +1046,11 @@ html[data-theme="dark"] .theme-switch .knob {
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: var(--gold-gradient);
+    background:  #4d78d2;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #1A1410;
+    color: #ffffff;
     font-weight: 700;
     font-size: 16px;
     flex-shrink: 0;
@@ -1093,8 +1093,8 @@ html[data-theme="dark"] .theme-switch .knob {
 }
 
 .dropdown-item-custom:hover {
-    background: var(--sidebar-hover);
-    color: var(--ember);
+    background: #4d78d2;
+    color: #ffffff;
 }
 
 .dropdown-item-custom i {
