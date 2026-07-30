@@ -85,12 +85,6 @@
                                                 <select name="assigned_to" class="form-select" id="assigned_to">
                                                     <!-- Required for Select2 placeholder to work -->
                                                     <option value=""></option>
-
-                                                    <!-- First option inside dropdown list -->
-                                                    <!-- <option value="auto" {{ old('assigned_to') == 'auto' ? 'selected' : '' }}>
-                                    Auto Assign (Round Robin)
-                                </option> -->
-
                                                     <!-- User list -->
                                                     @foreach($users as $user)
                                                         <option value="{{ $user->id }}" {{ old('assigned_to') == $user->id ? 'selected' : '' }}>
