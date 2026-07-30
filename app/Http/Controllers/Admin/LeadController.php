@@ -396,7 +396,7 @@ class LeadController extends Controller
     public function reminders()
     {
         $now = Carbon::now();
-        $fiveMinutesLater = $now->copy()->addMinutes(5);
+        $fiveMinutesLater = $now->copy()->addMinutes(10);
 
         $reminders = LeadFollowUp::with('lead')
             ->whereBetween('next_followup', [$now, $fiveMinutesLater])
