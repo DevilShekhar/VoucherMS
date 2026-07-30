@@ -1,3 +1,4 @@
+@can('courses.create')
 @extends('layouts.app')
 
 @section('content')
@@ -89,3 +90,8 @@
     </section>
 
 @endsection
+@else
+    @php
+        abort(403);
+    @endphp
+@endcan

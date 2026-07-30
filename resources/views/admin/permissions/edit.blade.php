@@ -1,3 +1,4 @@
+@can('permissions.edit')
 @extends('layouts.app')
 
 @section('content')
@@ -67,3 +68,8 @@
         </form>
     </section>
 @endsection
+@else
+    @php
+        abort(403);
+    @endphp
+@endcan

@@ -1,165 +1,184 @@
-@extends('layouts.app')
+@can('voucher-requests.index')
+    @extends('layouts.app')
 
-@section('content')
+    @section('content')
 
-<section class="section premium-dashboard">
-    <div class="premium-header">
-        <div class="premium-header-overlay"></div>
-        <div class="premium-header-left">
-            <div class="premium-header-icon">
-                <i class="fas fa-ticket-alt"></i>
+        <section class="section premium-dashboard">
+            <div class="premium-header">
+                <div class="premium-header-overlay"></div>
+                <div class="premium-header-left">
+                    <div class="premium-header-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div class="premium-header-content">
+                        <span class="premium-tag">VOUCHER MANAGEMENT</span>
+                        <h2 class="text-white">Voucher Requests</h2>
+                        <p>Manage voucher approval requests</p>
+                    </div>
+                </div>
+                <!-- Decorative Shapes -->
+                <div class="shape circle-1"></div>
+                <div class="shape circle-2"></div>
+                <div class="shape circle-3"></div>
+                <div class="dots"></div>
             </div>
-            <div class="premium-header-content">
-                <span class="premium-tag">VOUCHER MANAGEMENT</span>
-                <h2 class="text-white">Voucher Requests</h2>
-                <p>Manage voucher approval requests</p>
-            </div>
-        </div>
-        <!-- Decorative Shapes -->
-        <div class="shape circle-1"></div>
-        <div class="shape circle-2"></div>
-        <div class="shape circle-3"></div>
-        <div class="dots"></div>
-    </div>
-</section>
+        </section>
 
-<section class="section premium-dashboard pt-0">
+        <section class="section premium-dashboard pt-0">
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
 
-    <div class="card premium-block">
+            <div class="card premium-block">
 
-        <div class="card-body">
+                <div class="card-body">
 
-            <div class="table-responsive">
+                    <div class="table-responsive">
 
-                <table class="table table-hover align-middle" id="datatable">
+                        <table class="table table-hover align-middle" id="datatable">
 
-                    <thead class="table-light">
+                            <thead class="table-light">
 
-                        <tr>
-                            <th>#</th>
-                            <th>Request No</th>
-                            <th>Candidate</th>
-                            <th>Candidate Code</th>
-                            <th>Center</th>
-                            <th>Requested By</th>
-                            <th>Requested On</th>
-                            <th>Approval Status</th>
-                            <th>Status</th>
-                            <th width="180">Action</th>
-                        </tr>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Request No</th>
+                                    <th>Candidate</th>
+                                    <th>Candidate Code</th>
+                                    <th>Center</th>
+                                    <th>Requested By</th>
+                                    <th>Requested On</th>
+                                    <th>Approval Status</th>
+                                    <th>Status</th>
+                                    <th width="180">Action</th>
+                                </tr>
 
-                    </thead>
+                            </thead>
 
-                    <tbody>
+                            <tbody>
 
-                        @forelse($requests as $request)
+                                @forelse($requests as $request)
 
-                        <tr>
+                                    <tr>
 
-                            <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $loop->iteration }}</td>
 
-                            <td>
-                                <strong>{{ $request->request_no }}</strong>
-                            </td>
+                                        <td>
+                                            <strong>{{ $request->request_no }}</strong>
+                                        </td>
 
-                            <td>
-                                {{ $request->candidate->first_name }}
-                                {{ $request->candidate->last_name }}
-                            </td>
+                                        <td>
+                                            {{ $request->candidate->first_name }}
+                                            {{ $request->candidate->last_name }}
+                                        </td>
 
-                            <td>
-                                {{ $request->candidate->candidate_code }}
-                            </td>
+                                        <td>
+                                            {{ $request->candidate->candidate_code }}
+                                        </td>
 
-                            <td>
-                                {{ $request->center->center_name ?? '-' }}
-                            </td>
+                                        <td>
+                                            {{ $request->center->center_name ?? '-' }}
+                                        </td>
 
-                            <td>
-                                {{ $request->requestedBy->name ?? '-' }}
-                            </td>
+                                        <td>
+                                            {{ $request->requestedBy->name ?? '-' }}
+                                        </td>
 
-                            <td>
-                                {{ \Carbon\Carbon::parse($request->requested_at)->format('d M Y h:i A') }}
-                            </td>
+                                        <td>
+                                            {{ \Carbon\Carbon::parse($request->requested_at)->format('d M Y h:i A') }}
+                                        </td>
 
-                            <td>
+                                        <td>
 
-                                @if($request->superadmin_approval=='Approved')
-                                    <span class="badge bg-success">Approved</span>
+                                            @if($request->superadmin_approval == 'Approved')
+                                                <span class="badge bg-success">Approved</span>
 
-                                @elseif($request->superadmin_approval=='Rejected')
-                                    <span class="badge bg-danger">Rejected</span>
+                                            @elseif($request->superadmin_approval == 'Rejected')
+                                                <span class="badge bg-danger" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    data-bs-html="true">Rejected</span>
 
-                                @else
-                                    <span class="badge bg-warning">Pending</span>
-                                @endif
+                                            @else
+                                                <span class="badge bg-warning">Pending</span>
+                                            @endif
 
-                            </td>
+                                        </td>
 
-                            <td>
+                                        <td>
 
-                                @if($request->status=='Allocated')
-                                    <span class="badge bg-primary">Allocated</span>
+                                            @if($request->status == 'Allocated')
+                                                <span class="badge bg-primary">Allocated</span>
 
-                                @elseif($request->status=='Approved')
-                                    <span class="badge bg-success">Approved</span>
+                                            @elseif($request->status == 'Approved')
+                                                <span class="badge bg-success">Approved</span>
 
-                                @elseif($request->status=='Rejected')
-                                    <span class="badge bg-danger">Rejected</span>
+                                            @elseif($request->status == 'Rejected')
+                                                <span class="badge bg-danger" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    data-bs-html="true"
+                                                    title="<strong>Reason for Rejection</strong><br>{{ $request->remarks ?? 'No remarks available.' }}">
+                                                    Rejected
+                                                </span>
 
-                                @else
-                                    <span class="badge bg-warning">Pending</span>
-                                @endif
+                                            @else
+                                                <span class="badge bg-warning">Pending</span>
+                                            @endif
 
-                            </td>
+                                        </td>
 
-                            <td>
+                                        <td>
 
-                                <a href="{{ route('voucher-requests.show',$request->id) }}"
-                                   class="btn btn-sm btn-info">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                            </td>
+                                            <a href="{{ route('voucher-requests.show', $request->id) }}" class="btn btn-sm btn-info">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
 
-                        </tr>
+                                    </tr>
 
-                        @empty
+                                @empty
 
-                        <tr>
+                                    <tr>
 
-                            <td colspan="11" class="text-center py-5">
+                                        <td colspan="11" class="text-center py-5">
 
-                                <i class="fas fa-ticket-alt fa-3x text-muted mb-3"></i>
+                                            <i class="fas fa-ticket-alt fa-3x text-muted mb-3"></i>
 
-                                <h6>No Voucher Requests Found</h6>
+                                            <h6>No Voucher Requests Found</h6>
 
-                            </td>
+                                        </td>
 
-                        </tr>
+                                    </tr>
 
-                        @endforelse
+                                @endforelse
 
-                    </tbody>
+                            </tbody>
 
-                </table>
+                        </table>
 
-            </div>
+                    </div>
 
-            <div class="mt-3">
-                {{ $requests->links() }}
+                    <div class="mt-3">
+                        {{ $requests->links() }}
+                    </div>
+
+                </div>
+
             </div>
 
-        </div>
+        </section>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
 
-    </div>
+                [...tooltipTriggerList].forEach(el => {
+                    new bootstrap.Tooltip(el);
+                });
+            });
+        </script>
 
-</section>
-
-@endsection
+    @endsection
+@else
+    @php
+        abort(403);
+    @endphp
+@endcan

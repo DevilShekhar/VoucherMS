@@ -1,3 +1,4 @@
+@can('leads.show')
 @extends('layouts.app')
 
 @section('content')
@@ -19,7 +20,7 @@
                             <i class="fas fa-id-card"></i>
                             Lead Code :
                             <strong>{{ $lead->lead_code }}</strong>
-                        </p>                   
+                        </p>
                     </div>
                 </div>
                 <div class="lead-right">
@@ -244,7 +245,7 @@
                     </div>
                 </div>
             </div>
-        </div>        
+        </div>
     </section>
 
     <div class="row mt-4">
@@ -291,7 +292,7 @@
                                 <div class="timeline-footer">
                                     <span>
                                         <i class="fas fa-calendar-alt"></i>
-                                        Next Follow-up : {{ $followup->next_followup ? \Carbon\Carbon::parse($followup->next_followup)->format('d M Y, h:i A'): 'Not Scheduled' }} 
+                                        Next Follow-up : {{ $followup->next_followup ? \Carbon\Carbon::parse($followup->next_followup)->format('d M Y, h:i A'): 'Not Scheduled' }}
                                     </span>
                                 </div>
                             </div>
@@ -385,3 +386,8 @@
         </div>
     </div>
 @endsection
+@else
+    @php
+        abort(403);
+    @endphp
+@endcan

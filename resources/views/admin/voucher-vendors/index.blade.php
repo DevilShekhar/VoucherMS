@@ -1,151 +1,151 @@
 @can('voucher-vendors.index')
-@extends('layouts.app')
+    @extends('layouts.app')
 
-@section('content')
+    @section('content')
 
-<section class="section premium-dashboard">
-    <div class="premium-header">
-        <div class="premium-header-overlay"></div>
-        <div class="premium-header-left">
-            <div class="premium-header-icon">
-                <i class="fas fa-ticket-alt"></i>
+        <section class="section premium-dashboard">
+            <div class="premium-header">
+                <div class="premium-header-overlay"></div>
+                <div class="premium-header-left">
+                    <div class="premium-header-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div class="premium-header-content">
+                        <span class="premium-tag">VOUCHER VENDOR MANAGEMENT</span>
+                        <h2 class="text-white">Voucher Vendors</h2>
+                        <p>Manage all voucher vendors</p>
+                    </div>
+                </div>
+                <div class="premium-header-right">
+                    <a href="{{ route('voucher-vendors.create') }}" class="premium-back-btn">
+                        <i class="fas fa-plus-circle"></i> Add Vendor
+                    </a>
+                </div>
+                <!-- Decorative Shapes -->
+                <div class="shape circle-1"></div>
+                <div class="shape circle-2"></div>
+                <div class="shape circle-3"></div>
+                <div class="dots"></div>
             </div>
-            <div class="premium-header-content">
-                <span class="premium-tag">VOUCHER VENDOR MANAGEMENT</span>
-                <h2 class="text-white">Voucher Vendors</h2>
-                <p>Manage all voucher vendors</p>
-            </div>
-        </div>
-        <div class="premium-header-right">
-            <a href="{{ route('voucher-vendors.create') }}" class="premium-back-btn">
-                <i class="fas fa-plus-circle"></i> Add Vendor
-            </a>
-        </div>
-        <!-- Decorative Shapes -->
-        <div class="shape circle-1"></div>
-        <div class="shape circle-2"></div>
-        <div class="shape circle-3"></div>
-        <div class="dots"></div>
-    </div>
-</section>
+        </section>
 
-<section class="section premium-dashboard pt-0">
+        <section class="section premium-dashboard pt-0">
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
 
-    <div class="card premium-block">
+            <div class="card premium-block">
 
-        <div class="card-body">
+                <div class="card-body">
 
-            <div class="table-responsive">
+                    <div class="table-responsive">
 
-                <table class="table table-hover align-middle" id="datatable">
+                        <table class="table table-hover align-middle" id="datatable">
 
-                    <thead>
+                            <thead>
 
-                        <tr>
+                                <tr>
 
-                            <th width="60">#</th>
+                                    <th width="60">#</th>
 
-                            <th>Vendor Name</th>
+                                    <th>Vendor Name</th>
 
-                            <th>Contact Person</th>
+                                    <th>Contact Person</th>
 
-                            <th>Phone</th>
+                                    <th>Phone</th>
 
-                            <th>Email</th>
+                                    <th>Email</th>
 
-                            <th>Created On</th>
+                                    <th>Created On</th>
+                                    @can('voucher-vendors.edit')
+                                        <th width="180" class="text-center">Action</th>
+                                    @endcan
+                                </tr>
 
-                            <th width="180" class="text-center">Action</th>
+                            </thead>
 
-                        </tr>
+                            <tbody>
 
-                    </thead>
+                                @forelse($voucherVendors as $key => $vendor)
 
-                    <tbody>
+                                    <tr>
 
-                        @forelse($voucherVendors as $key => $vendor)
+                                        <td>{{ $voucherVendors->firstItem() + $key }}</td>
 
-                            <tr>
+                                        <td>{{ $vendor->vendor_name }}</td>
 
-                                <td>{{ $voucherVendors->firstItem() + $key }}</td>
+                                        <td>{{ $vendor->contact_person ?: '-' }}</td>
 
-                                <td>{{ $vendor->vendor_name }}</td>
+                                        <td>{{ $vendor->phone ?: '-' }}</td>
 
-                                <td>{{ $vendor->contact_person ?: '-' }}</td>
+                                        <td>{{ $vendor->email ?: '-' }}</td>
 
-                                <td>{{ $vendor->phone ?: '-' }}</td>
+                                        <td>{{ $vendor->created_at->format('d M Y') }}</td>
 
-                                <td>{{ $vendor->email ?: '-' }}</td>
+                                        @can('voucher-vendors.edit')
+                                            <td class="text-center">
 
-                                <td>{{ $vendor->created_at->format('d M Y') }}</td>
+                                                <a href="{{ route('voucher-vendors.edit', $vendor->id) }}"
+                                                    class="btn btn-sm btn-warning">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
 
-                                <td class="text-center">
+                                                <form action="{{ route('voucher-vendors.destroy', $vendor->id) }}" method="POST"
+                                                    class="d-inline">
 
-                                    <a href="{{ route('voucher-vendors.edit',$vendor->id) }}"
-                                       class="btn btn-sm btn-warning">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
+                                                    @csrf
+                                                    @method('DELETE')
 
-                                    <form action="{{ route('voucher-vendors.destroy',$vendor->id) }}"
-                                          method="POST"
-                                          class="d-inline">
+                                                    <button type="submit" class="btn btn-sm btn-danger"
+                                                        onclick="return confirm('Are you sure you want to delete this vendor?')">
 
-                                        @csrf
-                                        @method('DELETE')
+                                                        <i class="fas fa-trash"></i>
 
-                                        <button type="submit"
-                                                class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Are you sure you want to delete this vendor?')">
+                                                    </button>
 
-                                            <i class="fas fa-trash"></i>
+                                                </form>
 
-                                        </button>
+                                            </td>
+                                        @endcan
 
-                                    </form>
+                                    </tr>
 
-                                </td>
+                                @empty
 
-                            </tr>
+                                    <tr>
 
-                        @empty
+                                        <td colspan="7" class="text-center py-4">
 
-                            <tr>
+                                            No voucher vendors found.
 
-                                <td colspan="7" class="text-center py-4">
+                                        </td>
 
-                                    No voucher vendors found.
+                                    </tr>
 
-                                </td>
+                                @endforelse
 
-                            </tr>
+                            </tbody>
 
-                        @endforelse
+                        </table>
 
-                    </tbody>
+                    </div>
 
-                </table>
+                    <div class="mt-3">
+
+                        {{ $voucherVendors->links() }}
+
+                    </div>
+
+                </div>
 
             </div>
 
-            <div class="mt-3">
+        </section>
 
-                {{ $voucherVendors->links() }}
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-@endsection
+    @endsection
 @else
     @php
         abort(403);

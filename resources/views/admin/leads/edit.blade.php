@@ -1,3 +1,4 @@
+@can('leads.edit')
 @extends('layouts.app')
 
 @section('title', 'Edit Lead')
@@ -156,3 +157,8 @@
     </section>
 
 @endsection
+@else
+    @php
+        abort(403);
+    @endphp
+@endcan

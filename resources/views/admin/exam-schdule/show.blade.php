@@ -1,3 +1,4 @@
+@can('exam-schedules.show')
 @extends('layouts.app')
 
 @section('content')
@@ -448,5 +449,10 @@
             }
         }
     </style>
-    
+
 @endsection
+@else
+    @php
+        abort(403);
+    @endphp
+@endcan
