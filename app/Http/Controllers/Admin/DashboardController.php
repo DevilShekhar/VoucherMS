@@ -156,7 +156,7 @@ class DashboardController extends Controller
             'availableCount',
             'allocatedCount',
             'usedCount',
-            'expiredCount','cancelledCount'
+            'expiredCount', 'cancelledCount'
         ));
     }
 

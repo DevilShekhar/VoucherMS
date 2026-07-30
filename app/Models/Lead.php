@@ -21,6 +21,7 @@ class Lead extends Model
         'status',
         'remarks',
         'created_by',
+        'location_id'
     ];
 
     public function assignedUser()
