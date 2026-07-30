@@ -15,22 +15,33 @@ use Illuminate\Support\Str;
 class CandidateController extends Controller
 {
     public function index()
-    {
-        $query = Candidate::with([
-            'center',
-            'course',
-            'executive',
-            'payments',
-            'voucherRequest',
-            'examSchedule',
-        ])->where('status', 'Active');
-        if (Auth::user()->role_id == 4) {
-            $query->where('executive_id', Auth::id());
-        }
-        $candidates = $query->get();
-        $centers = Center::orderBy('center_name')->get();
-        return view('admin.candidates.index', compact('candidates', 'centers'));
+{
+    $query = Candidate::with([
+        'center',
+        'course',
+        'executive',
+        'payments',
+        'voucherRequest',
+        'examSchedule',
+    ])->where('status', 'Active');
+
+    // Sales Executive
+    if (optional(Auth::user()->role)->name === 'Sales Executive') {
+        $query->where('executive_id', Auth::id());
     }
+
+    // Center Admin
+    if (optional(Auth::user()->role)->name === 'Center Admin') {
+        $query->whereHas('center', function ($q) {
+            $q->where('center_exe_id', Auth::id());
+        });
+    }
+
+    $candidates = $query->get();
+    $centers = Center::orderBy('center_name')->get();
+
+    return view('admin.candidates.index', compact('candidates', 'centers'));
+}
 
     public function create()
     {
