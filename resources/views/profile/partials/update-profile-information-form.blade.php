@@ -52,13 +52,13 @@
         </div>
 
         <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line); display: flex; gap: 12px; flex-wrap: wrap;">
-            <button type="submit" class="btn btn-create">
+            <button type="submit" class="btn btn-save">
                 {{ __('Save') }}
             </button>
 
             @if (session('status') === 'profile-updated')
                 <span style="color: green; font-size: 13px; display: flex; align-items: center; gap: 6px;">
-                    <i class="fas fa-check-circle"></i> {{ __('Saved.') }}
+                    <i class="fas fa-check-me2"></i> {{ __('Saved.') }}
                 </span>
             @endif
         </div>

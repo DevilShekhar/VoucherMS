@@ -305,21 +305,6 @@
                         <a href="{{ route('profile.edit') }}" class="dropdown-item-custom">
                             <i class="fas fa-user-circle"></i> My Profile
                         </a>
-                        <a href="#" class="dropdown-item-custom">
-                            <i class="fas fa-cog"></i> Account Settings
-                        </a>
-                        <a href="#" class="dropdown-item-custom">
-                            <i class="fas fa-envelope"></i> Messages
-                            <span class="badge-pill"
-                                style="margin-left:auto; background: var(--rust); color:#fff; font-size:10px; padding:2px 8px; border-radius:99px;">3</span>
-                        </a>
-
-                        <div class="dropdown-divider"></div>
-
-                        <a href="#" class="dropdown-item-custom" id="helpLink">
-                            <i class="fas fa-question-circle"></i> Help & Support
-                        </a>
-
                         <form method="POST" action="{{ route('logout') }}" style="width:100%;">
                             @csrf
                             <button type="submit" class="dropdown-item-custom text-danger"
