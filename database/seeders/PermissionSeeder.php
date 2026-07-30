@@ -128,6 +128,7 @@ class PermissionSeeder extends Seeder
             //Exam-schedule
             'exam-schedules.index',
             'exam-schedules.create',
+            'exam-schedules.show',
 
             //reports
             'reports.index',

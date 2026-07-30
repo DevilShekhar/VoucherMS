@@ -1,3 +1,4 @@
+@can('roles.edit')
 @extends('layouts.app')
 
 @section('content')
@@ -18,7 +19,7 @@
 
                 <span class="premium-tag">ROLES MANAGEMENT</span>
 
-                <h2 class="text-white">Edit Role</h2>   
+                <h2 class="text-white">Edit Role</h2>
 
                  <p>Update role details</p>
             </div>
@@ -139,3 +140,8 @@
     </section>
 
 @endsection
+@else
+    @php
+        abort(403);
+    @endphp
+@endcan

@@ -1,3 +1,4 @@
+@can('locations.index')
 @extends('layouts.app')
 
 @section('content')
@@ -11,7 +12,7 @@
                 <div class="premium-header-content">
                     <span class="premium-tag">Location Management</span>
                         <h1 class="text-white">Location</h2>
-                       
+
                 </div>
             </div>
             <div class="premium-header-right">
@@ -25,7 +26,7 @@
             <div class="shape circle-3"></div>
             <div class="dots"></div>
         </div>
-    </section>   
+    </section>
 
     <section class="section premium-dashboard pt-0">
         <div class="card premium-block">
@@ -123,3 +124,8 @@
         });
     </script>
 @endsection
+@else
+    @php
+        abort(403);
+    @endphp
+@endcan

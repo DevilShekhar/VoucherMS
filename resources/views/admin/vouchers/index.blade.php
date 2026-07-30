@@ -63,7 +63,9 @@
                                     <th>Purchase Price</th>
                                     <th>Cost</th>
                                     <th>Status</th>
+                                    @can('vouchers.edit')
                                     <th width="180" class="text-center">Action</th>
+                                    @endcan
 
                                 </tr>
 
@@ -117,7 +119,7 @@
                                         </td>
                                         <td>
                                             @php
-                                                $badgeClass = match($voucher->status) {
+                                                $badgeClass = match ($voucher->status) {
                                                     'Available' => 'success',
                                                     'Allocated' => 'primary',
                                                     'Used' => 'danger',
@@ -131,6 +133,7 @@
                                                 {{ $voucher->status }}
                                             </span>
                                         </td>
+                                        @can('vouchers.edit')
                                         <td class="text-center">
 
                                             <a href="{{ route('vouchers.edit', $voucher->id) }}" class="btn btn-sm btn-warning">
@@ -153,6 +156,7 @@
                                             </form>
 
                                         </td>
+                                        @endcan
 
                                     </tr>
 

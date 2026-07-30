@@ -415,18 +415,38 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($todayLeads as $item)
-                                    <tr>
-                                        <td><strong>{{ $item->lead->lead_no ?? '-' }}</strong></td>
+                                @forelse($todayLeads->groupBy('lead_id') as $leadId => $followups)
+
+                                    @php
+                                        $item = $followups->sortByDesc('followup_date')->first();
+                                    @endphp
+
+                                    <tr style="cursor:pointer"
+                                        onclick="window.location='{{ route('leads.index', ['lead_no' => $item->lead->lead_no]) }}'">
+
+                                        <td>
+                                            <strong>{{ $item->lead->lead_no }}</strong>
+
+                                            @if($followups->count() > 1)
+                                                <br>
+                                                <small class="badge bg-primary">
+                                                    {{ $followups->count() }} Updates
+                                                </small>
+                                            @endif
+                                        </td>
                                         <td>{{ $item->lead->candidate_name }}</td>
                                         <td>{{ $item->lead->mobile }}</td>
                                         <td>{{ $item->lead->assignedUser->name ?? '-' }}</td>
                                         <td>{{ $item->lead->course->course_name ?? '-' }}</td>
                                         <td class="text-primary">
-                                            <strong>{{ \Carbon\Carbon::parse($item->followup_date)->format('d M Y h:i A') }}</strong>
+                                            <strong>
+                                                {{ \Carbon\Carbon::parse($item->followup_date)->format('d M Y h:i A') }}
+                                            </strong>
                                         </td>
                                         <td>
-                                            <span class="badge bg-info">{{ $item->status }}</span>
+                                            <span class="badge bg-info">
+                                                {{ $item->status }}
+                                            </span>
                                         </td>
                                         <td>
                                             @if($item->next_followup)

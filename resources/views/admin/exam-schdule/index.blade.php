@@ -1,3 +1,4 @@
+@can('exam-schedules.index')
 @extends('layouts.app')
 @section('content')
    <section class="section premium-dashboard">
@@ -35,11 +36,11 @@
                     <table class="table table-hover align-middle" id="examScheduleTable">
                         <thead>
                             <tr>
-                                <th>#</th>                               
+                                <th>#</th>
                                 <th>Candidate Name</th>
                                 <th>Course</th>
-                                <th>Center</th>                                
-                                <th>Exam Date Time</th>                               
+                                <th>Center</th>
+                                <th>Exam Date Time</th>
                                 <th>Status</th>
                                 <th>Created By</th>
                                 <th width="140">Action</th>
@@ -48,20 +49,20 @@
                         <tbody>
                             @forelse($examSchedules as $schedule)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>                                   
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>
                                         {{ $schedule->candidate->first_name ?? '' }}
                                         {{ $schedule->candidate->last_name ?? '' }}
-                                        
+
                                     </td>
                                     <td> {{ $schedule->candidate->course->course_name ?? '-' }}</td>
                                     <td>
                                         {{ $schedule->center->center_name ?? '-' }}
-                                    </td>                                    
+                                    </td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($schedule->exam_date)->format('d M Y') }} |   {{ \Carbon\Carbon::parse($schedule->exam_time)->format('h:i A') }}
                                     </td>
-                                     
+
                                     <td>
                                         @if($schedule->exam_status=='Scheduled')
                                             <span class="badge bg-primary">Scheduled</span>
@@ -78,7 +79,7 @@
                                         <a href="{{ route('exam-schedules.show',$schedule->id) }}"
                                             class="btn btn-info btn-sm me-1">
                                                 <i class="fas fa-eye"></i>
-                                            </a>                                                 
+                                            </a>
                                     </td>
                                 </tr>
                             @empty
@@ -96,3 +97,8 @@
         </div>
     </section>
 @endsection
+@else
+    @php
+        abort(403);
+    @endphp
+@endcan

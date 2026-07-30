@@ -1,3 +1,4 @@
+@can('voucher-requests.show')
 @extends('layouts.app')
 
 @section('content')
@@ -428,3 +429,8 @@
         @endif
     </script>
 @endsection
+@else
+    @php
+        abort(403);
+    @endphp
+@endcan

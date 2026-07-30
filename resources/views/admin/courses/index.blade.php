@@ -1,3 +1,4 @@
+@can('courses.index')
 @extends('layouts.app')
 
 @section('content')
@@ -59,7 +60,9 @@
                                 <th>Course Code</th>
                                 <th>Course Name</th>
                                 <th>Status</th>
+                                @can('courses.edit')
                                 <th width="120">Action</th>
+                                @endcan
                             </tr>
                         </thead>
                         <tbody>
@@ -75,6 +78,7 @@
                                             <span class="badge bg-danger text-white">Inactive</span>
                                         @endif
                                     </td>
+                                    @can('courses.edit')
                                     <td>
                                         <a href="{{ route('courses.edit', $course->id) }}"
                                            class="btn btn-warning btn-sm me-1">
@@ -90,6 +94,7 @@
                                             </button>
                                         </form>
                                     </td>
+                                    @endcan
                                 </tr>
                             @empty
                                 <tr>
@@ -104,6 +109,11 @@
             </div>
         </div>
     </section>
-     
+
 
 @endsection
+@else
+    @php
+        abort(403);
+    @endphp
+@endcan

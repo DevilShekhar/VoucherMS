@@ -1,3 +1,4 @@
+@can('centers.index')
 @extends('layouts.app')
 
 @section('content')
@@ -72,8 +73,9 @@
                             <th>Phone</th>
                             <th>City</th>
                             <th>Status</th>
+                            @can('centers.edit')
                             <th width="120">Action</th>
-
+                            @endcan
                         </tr>
 
                     </thead>
@@ -118,6 +120,7 @@
 
                             </td>
 
+                            @can('centers.edit')
                             <td>
 
                                 <a href="{{ route('centers.edit',$center->id) }}"
@@ -145,6 +148,7 @@
                                 </form>
 
                             </td>
+                            @endcan
 
                         </tr>
 
@@ -175,3 +179,8 @@
 </section>
 
 @endsection
+@else
+    @php
+        abort(403);
+    @endphp
+@endcan

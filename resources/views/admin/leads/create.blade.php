@@ -1,3 +1,4 @@
+@can('leads.create')
 @extends('layouts.app')
 
 @section('title', 'Create Lead')
@@ -212,3 +213,8 @@
         });
     </script>
 @endsection
+@else
+    @php
+        abort(403);
+    @endphp
+@endcan

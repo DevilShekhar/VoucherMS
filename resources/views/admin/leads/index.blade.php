@@ -1,3 +1,4 @@
+@can('leads.index')
 @extends('layouts.app')
 
 @section('content')
@@ -282,8 +283,8 @@
                     <table class="table table-hover align-middle" id="datatable">
                         <thead>
                             <tr>
-                                <th>#</th>   
-                                <th>Candidate Mobile No.</th>                             
+                                <th>#</th>
+                                <th>Candidate Mobile No.</th>
                                 <th>Candidate Name</th>
                                 <th>Course</th>
                                 <th>Center</th>
@@ -394,3 +395,8 @@
         });
     </script>
 @endsection
+@else
+    @php
+        abort(403);
+    @endphp
+@endcan

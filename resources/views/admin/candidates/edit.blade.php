@@ -12,7 +12,7 @@
                 <div class="premium-header-content">
                     <span class="premium-tag">Candidate Management</span>
                         <h1 class="text-white">Edit</h2>
-                        <p>Manage all converted candidates</p>
+                        <p>Edit converted candidate</p>
                 </div>
             </div>
             <!-- Decorative Shapes -->
