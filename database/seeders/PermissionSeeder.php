@@ -125,29 +125,32 @@ class PermissionSeeder extends Seeder
             'voucher-request-notifications.latest',
             'voucher-request-notifications.read',
 
-            //Exam-schedule
+            // Exam-schedule
             'exam-schedules.index',
             'exam-schedules.create',
             'exam-schedules.show',
 
-            //reports
+            // reports
             'reports.index',
             'report-index',
 
-            //voucher vendor
+            // voucher vendor
             'voucher-venders-create',
             'voucher-venders-index',
             'voucher-venders-edit',
             'voucher-venders-destory',
 
-            //Location
+            // Location
             'locations.index',
             'locations.create',
             'locations.edit',
             'locations.destory',
 
-            //Download
+            // Download
             'download-excel',
+            'lead-card',
+            'student-data',
+            'scheduledexams',
         ];
 
         foreach ($permissions as $permission) {

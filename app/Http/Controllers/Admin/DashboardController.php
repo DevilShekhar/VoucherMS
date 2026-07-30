@@ -88,7 +88,7 @@ class DashboardController extends Controller
         $totalStudentsQuery = Candidate::query();
 
         if (Auth::user()->role_id == 4) {
-            $totalStudentsQuery->where('executive_id', Auth::id()); // or assigned_to if that's your column
+            $totalStudentsQuery->where('executive_id', Auth::id());
         }
 
         $totalStudents = $totalStudentsQuery->count();
@@ -104,9 +104,15 @@ class DashboardController extends Controller
         $pendingLeads = $pendingLeadQuery
             ->whereNotIn('status', ['Converted', 'Closed'])
             ->count();
+        $scheduledExamQuery = ExamSchedule::where('exam_status', 'Scheduled');
 
-        $scheduledExams = ExamSchedule::query()->where('exam_status', 'Scheduled')
-            ->count();
+        if (Auth::user()->role && Auth::user()->role->name === 'Center Admin') {
+            $scheduledExamQuery->whereHas('center', function ($q) {
+                $q->where('center_exe_id', Auth::id());
+            });
+        }
+
+        $scheduledExams = $scheduledExamQuery->count();
 
         $recentEnrollments = Candidate::with(['course', 'center'])
             ->when(Auth::user()->role_id == 4, function ($query) {
