@@ -333,7 +333,7 @@
         <footer>
             <div>
                 <i class="fas fa-graduation-cap" style="color: var(--ember);"></i>
-                &nbsp;© {{ date('Y') }} {{ config('app.name', 'Admin Panal') }} — Education Admin Panel
+                &nbsp;© {{ date('Y') }} {{ config('app.name', 'Admin Panal') }} - Certificate Voucher Management
             </div>
             <div>
                 <a href="#">Documentation</a>

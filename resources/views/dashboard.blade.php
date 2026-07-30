@@ -74,7 +74,7 @@
     </section>
 {{-- Other users --}}
 
-
+@can('student-data')
 <section class="dashboard-stats">
     <div class="row g-4">
         <!-- Enrolled Students -->
@@ -134,25 +134,32 @@
                 </div>
             </div>
         </div>
+        @endcan
+
+        @can('scheduledexams')
         <!-- Scheduled Exams -->
         <div class="col-xl-3 col-lg-6 col-md-6">
-            <div class="premium-stat-card">
-                <div class="stat-icon purple">
-                    <i class="fas fa-calendar-check"></i>
-                </div>
-                <div class="stat-content">
-                    <div class="stat-top">
-                        <h2>{{ number_format($scheduledExams) }}</h2>
-                        <span class="trend success">
-                            <i class="fas fa-calendar"></i>
-                            Scheduled
-                        </span>
+            <a href="{{ route('exam-schedules.index') }}" class="text-decoration-none">
+                <div class="premium-stat-card">
+                    <div class="stat-icon purple">
+                        <i class="fas fa-calendar-check"></i>
                     </div>
-                    <h5>Scheduled Exams</h5>
-                    <p>Upcoming exams.</p>
+                    <div class="stat-content">
+                        <div class="stat-top">
+                            <h2>{{ number_format($scheduledExams) }}</h2>
+                            <span class="trend success">
+                                <i class="fas fa-calendar"></i>
+                                Scheduled
+                            </span>
+                        </div>
+
+                        <h5>Scheduled Exams</h5>
+                        <p>Upcoming exams.</p>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
+        @endcan
     </div>
 </section>
 @can('view-voucher-earning')
@@ -351,6 +358,7 @@
 </section>
 @endcan
 
+@can('lead-card')
 <section class="section premium-dashboard pt-0">
     <div class="row">
         <div class="col-lg-12">
@@ -474,7 +482,7 @@
         </div>
     </div>
 </section>
-
+@endcan
 
 
     <style>

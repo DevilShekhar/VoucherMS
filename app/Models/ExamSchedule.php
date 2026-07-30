@@ -22,10 +22,14 @@ class ExamSchedule extends Model
         return $this->belongsTo(Candidate::class, 'candidate_id');
     }
 
+    // public function center()
+    // {
+    //     return $this->belongsTo(Center::class, 'center_id');
+    // }
     public function center()
-    {
-        return $this->belongsTo(Center::class, 'center_id');
-    }
+{
+    return $this->belongsTo(Center::class);
+}
 
     public function createdBy()
     {
