@@ -42,6 +42,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show">
+                    {!! session('error') !!}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
 
             <div class="card premium-block">
 
@@ -64,7 +70,7 @@
                                     <th>Cost</th>
                                     <th>Status</th>
                                     @can('vouchers.edit')
-                                    <th width="180" class="text-center">Action</th>
+                                        <th width="180" class="text-center">Action</th>
                                     @endcan
 
                                 </tr>
@@ -134,28 +140,28 @@
                                             </span>
                                         </td>
                                         @can('vouchers.edit')
-                                        <td class="text-center">
+                                            <td class="text-center">
 
-                                            <a href="{{ route('vouchers.edit', $voucher->id) }}" class="btn btn-sm btn-warning">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                                                <a href="{{ route('vouchers.edit', $voucher->id) }}" class="btn btn-sm btn-warning">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
 
-                                            <form action="{{ route('vouchers.destroy', $voucher->id) }}" method="POST"
-                                                class="d-inline">
+                                                <form action="{{ route('vouchers.destroy', $voucher->id) }}" method="POST"
+                                                    class="d-inline">
 
-                                                @csrf
-                                                @method('DELETE')
+                                                    @csrf
+                                                    @method('DELETE')
 
-                                                <button type="submit" class="btn btn-sm btn-danger"
-                                                    onclick="return confirm('Are you sure you want to delete this voucher?')">
+                                                    <button type="submit" class="btn btn-sm btn-danger"
+                                                        onclick="return confirm('Are you sure you want to delete this voucher?')">
 
-                                                    <i class="fas fa-trash"></i>
+                                                        <i class="fas fa-trash"></i>
 
-                                                </button>
+                                                    </button>
 
-                                            </form>
+                                                </form>
 
-                                        </td>
+                                            </td>
                                         @endcan
 
                                     </tr>

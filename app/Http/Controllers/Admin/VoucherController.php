@@ -8,6 +8,7 @@ use App\Models\Voucher;
 use App\Models\VoucherVendor;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Throwable;
 
 class VoucherController extends Controller
 {
@@ -17,6 +18,7 @@ class VoucherController extends Controller
 
         return view('admin.vouchers.index', compact('vouchers'));
     }
+
     public function status($status)
     {
         $vouchers = Voucher::where('status', ucfirst($status))->paginate(10);
@@ -98,6 +100,38 @@ class VoucherController extends Controller
 
     public function bulkUpload(Request $request)
     {
+        $rows = Excel::toArray([], $request->file('file'));
+
+        if (empty($rows) || empty($rows[0])) {
+            return redirect()->route('vouchers.index')
+                ->with('error', 'The uploaded Excel file is empty.');
+        }
+
+        $headers = array_map(function ($header) {
+            return strtolower(trim($header));
+        }, $rows[0][0]);
+
+        $requiredHeaders = [
+            'voucher_code',
+            'vendor_name',
+            'purchase_date',
+            'expiry_date',
+            'purchase_price',
+            'cost',
+        ];
+
+        $missing = array_diff($requiredHeaders, $headers);
+
+        if (! empty($missing)) {
+
+            return redirect()->route('vouchers.index')
+                ->with(
+                    'error',
+                    'Invalid Excel format. Missing or incorrect column(s): <strong>'
+                    .implode(', ', $missing)
+                    .'</strong>. Please use the provided sample template.'
+                );
+        }
         $request->validate([
             'file' => 'required|mimes:xlsx,xls,csv|max:2048',
         ]);
@@ -105,42 +139,66 @@ class VoucherController extends Controller
         VoucherImport::$duplicates = [];
         VoucherImport::$vendors = [];
 
-        Excel::import(new VoucherImport, $request->file('file'));
+        try {
 
-        $message = '<strong>✅ Vouchers uploaded successfully.</strong>';
+            Excel::import(new VoucherImport, $request->file('file'));
 
-        if (! empty(VoucherImport::$duplicates)) {
-            $message .= '
+            $message = '<strong>✅ Vouchers uploaded successfully.</strong>';
+
+            if (! empty(VoucherImport::$duplicates)) {
+
+                $message .= '
             <div class="mt-2">
                 <span class="text-danger fw-bold">Duplicate Voucher Codes (Skipped):</span>
                 <ul class="mb-0 text-danger">';
 
-            foreach (VoucherImport::$duplicates as $code) {
-                $message .= "<li>{$code}</li>";
-            }
-
-            $message .= '</ul></div>';
-        }
-
-        if (! empty(VoucherImport::$vendors)) {
-            $vendors = array_filter(array_unique(VoucherImport::$vendors));
-
-            if (count($vendors)) {
-                $message .= '
-                <div class="mt-2">
-                    <span class="text-danger fw-bold">Vendor Not Found:</span>
-                    <ul class="mb-0 text-danger">';
-
-                foreach ($vendors as $vendor) {
-                    $message .= "<li>{$vendor}</li>";
+                foreach (VoucherImport::$duplicates as $code) {
+                    $message .= "<li>{$code}</li>";
                 }
 
                 $message .= '</ul></div>';
             }
-        }
 
-        return redirect()
-            ->route('vouchers.index')
-            ->with('success', $message);
+            if (! empty(VoucherImport::$vendors)) {
+
+                $vendors = array_filter(array_unique(VoucherImport::$vendors));
+
+                if (count($vendors)) {
+
+                    $message .= '
+                <div class="mt-2">
+                    <span class="text-danger fw-bold">Vendor Not Found:</span>
+                    <ul class="mb-0 text-danger">';
+
+                    foreach ($vendors as $vendor) {
+                        $message .= "<li>{$vendor}</li>";
+                    }
+
+                    $message .= '</ul></div>';
+                }
+            }
+
+            return redirect()
+                ->route('vouchers.index')
+                ->with('success', $message);
+
+        } catch (Throwable $e) {
+
+            // Missing Excel column
+            if (str_contains($e->getMessage(), 'Undefined array key')) {
+
+                preg_match('/"([^"]+)"/', $e->getMessage(), $matches);
+
+                $column = $matches[1] ?? '';
+
+                return redirect()
+                    ->route('vouchers.index')
+                    ->with('error', "Invalid Excel file. Required column '{$column}' is missing or the column name is incorrect.");
+            }
+
+            return redirect()
+                ->route('vouchers.index')
+                ->with('error', 'Failed to import Excel file. Please make sure you are using the correct template.');
+        }
     }
 }
