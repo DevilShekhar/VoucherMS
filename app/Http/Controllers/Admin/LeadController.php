@@ -59,7 +59,6 @@ class LeadController extends Controller
             'Interested' => (clone $countQuery)->whereHas('followups', fn ($q) => $q->where('status', 'Interested'))->count(),
             'Not Interested' => (clone $countQuery)->whereHas('followups', fn ($q) => $q->where('status', 'Not Interested'))->count(),
             'Converted' => (clone $countQuery)->whereHas('followups', fn ($q) => $q->where('status', 'Converted'))->count(),
-            // 'Closed' => (clone $countQuery)->whereHas('followups', fn ($q) => $q->where('status', 'Closed'))->count(),
             'High' => (clone $countQuery)->where('priority', 'High')->count(),
             'Medium' => (clone $countQuery)->where('priority', 'Medium')->count(),
             'Low' => (clone $countQuery)->where('priority', 'Low')->count(),
@@ -106,14 +105,12 @@ class LeadController extends Controller
 
         $currentUser = Auth::user();
 
-        // === Handle "Other" Course ===
         $courseId = $request->course_id;
 
         if ($request->course_id === 'other' && $request->other_course_name) {
 
             $courseName = trim($request->other_course_name);
 
-            // Generate Course Code (e.g., CRS-20260720-001)
             $date = now()->format('Ymd');
             $lastCourse = Course::latest('id')->first();
             $next = $lastCourse
@@ -131,7 +128,6 @@ class LeadController extends Controller
             $courseId = $newCourse->id;
         }
 
-        // === ASSIGNMENT LOGIC ===
         $assignedTo = $request->assigned_to;
         if ($currentUser->role_id === 4) {
             $assignedTo = $currentUser->id;
@@ -139,14 +135,14 @@ class LeadController extends Controller
             $assignedTo = $this->getNextSalesExecutive($request->location_id);
         }
 
-        // Generate Lead Number
         $date = now()->format('Ymd');
         $lastLead = Lead::whereDate('created_at', today())->latest('id')->first();
         $nextNumber = $lastLead
             ? str_pad((int) substr($lastLead->lead_no, -3) + 1, 3, '0', STR_PAD_LEFT)
             : '001';
         $leadNo = "L-{$date}-{$nextNumber}";
-
+        $assignedUser = User::find($assignedTo);
+        $locationId = $assignedUser?->location_id;
         $lead = Lead::create([
             'lead_no' => $leadNo,
             'assigned_to' => $assignedTo,
@@ -160,7 +156,7 @@ class LeadController extends Controller
             'priority' => $request->priority,
             'status' => $request->status,
             'remarks' => $request->remarks,
-            'location_id' => $request->location_id,
+            'location_id'    => $locationId,
             'created_by' => Auth::id(),
         ]);
 
@@ -308,7 +304,7 @@ class LeadController extends Controller
             abort(403, 'You can only add followups to your assigned leads.');
         }
 
-        $request->validate([            
+        $request->validate([
             'discussion' => 'required|string',
             'next_followup' => 'nullable|date',
             'status' => 'required|in:Pending,Contacted,Interested,Not Interested,Converted,Closed',
@@ -316,7 +312,7 @@ class LeadController extends Controller
 
         $followup = LeadFollowUp::create([
             'lead_id' => $lead->id,
-           'followup_date' => now(),       // ← Fixed
+            'followup_date' => now(),       // ← Fixed
             'discussion' => $request->discussion,
             'next_followup' => $request->next_followup,        // ← Must save time
             'status' => $request->status,

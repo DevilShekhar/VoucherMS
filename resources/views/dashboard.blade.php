@@ -373,6 +373,7 @@
             <div class="card-header bg-white">
                         <form method="GET" action="{{ route('dashboard') }}">
                             <div class="row align-items-end">
+                                @can('locations.index')
                                 <div class="col-md-4">
                                     <label class="form-label">Location</label>
                                     <select name="location_id"
@@ -394,7 +395,7 @@
 
                                     </select>
                                 </div>
-
+                                @endcan
                             </div>
                         </form>
 
