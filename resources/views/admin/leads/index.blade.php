@@ -288,7 +288,7 @@
                                 <th>Candidate Name</th>
                                 <th>Course</th>
                                 <th>Center</th>
-                                @if (in_array(auth()->user()->role_id, [1, 2]))
+                                @if (in_array(auth()->user()->role_id, [1, 2,3]))
                                     <th>Assigned To</th>
                                 @endif
                                 <th>Added By</th>
