@@ -22,6 +22,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login', function () {
     return view('welcome');
 });
+Route::get('/server', function () {
+    return view('errors.500');
+});
 Route::get('/verify-otp', [OtpController::class, 'show'])->name('otp.form');
 Route::post('/verify-otp', [OtpController::class, 'verify'])->name('otp.verify');
 Route::post('/resend-otp', [OtpController::class, 'resend'])->name('otp.resend');
