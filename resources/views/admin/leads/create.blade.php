@@ -50,53 +50,56 @@
                 <div class="card premium-block">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-6 mb-3 position-relative">
                                 <label class="form-label">Mobile <span class="text-danger">*</span></label>
-                                <input type="tel" name="mobile" class="form-control" value="{{ old('mobile') }}">
+                                <input type="tel" name="mobile" id="mobile" class="form-control" value="{{ old('mobile') }}"
+                                    autocomplete="off">
+                                <div id="mobile-suggestions" class="list-group position-absolute w-100 shadow-sm"
+                                    style="z-index: 1050; display: none; max-height: 250px; overflow-y: auto;"></div>
                                 @error('mobile')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                             @if(Auth::user()->hasAnyRole(['Manager', 'Owner', 'Super Admin']))
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label">
-                                                    Distribution Location <small class="text-muted">(Where vouchers will be distributed)</small>
-                                                </label>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        Distribution Location <small class="text-muted">(Where vouchers will be distributed)</small>
+                                    </label>
 
-                                                <select name="location_id" id="location" class="form-select">
+                                    <select name="location_id" id="location" class="form-select">
 
-                                                    <option value="">Select Location</option>
+                                        <option value="">Select Location</option>
 
-                                                    @foreach($locations as $location)
+                                        @foreach($locations as $location)
 
-                                                        <option value="{{ $location->id }}">
-                                                            {{ $location->name }}
-                                                        </option>
+                                            <option value="{{ $location->id }}">
+                                                {{ $location->name }}
+                                            </option>
 
-                                                    @endforeach
+                                        @endforeach
 
-                                                </select>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label">Assign To
-                                                    <small class="text-muted">(Leave empty for auto assignment)</small>
-                                                </label>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Assign To
+                                        <small class="text-muted">(Leave empty for auto assignment)</small>
+                                    </label>
 
-                                                <select name="assigned_to" class="form-select" id="assigned_to">
-                                                    <!-- Required for Select2 placeholder to work -->
-                                                    <option value=""></option>
-                                                    <!-- User list -->
-                                                    @foreach($users as $user)
-                                                        <option value="{{ $user->id }}" {{ old('assigned_to') == $user->id ? 'selected' : '' }}>
-                                                            {{ $user->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
+                                    <select name="assigned_to" class="form-select" id="assigned_to">
+                                        <!-- Required for Select2 placeholder to work -->
+                                        <option value=""></option>
+                                        <!-- User list -->
+                                        @foreach($users as $user)
+                                            <option value="{{ $user->id }}" {{ old('assigned_to') == $user->id ? 'selected' : '' }}>
+                                                {{ $user->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
 
-                                                @error('assigned_to')
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
-                                            </div>
+                                    @error('assigned_to')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
                             @endif
 
 
@@ -209,7 +212,7 @@
                             options += `<option value="${user.id}">${user.name}</option>`;
                         });
 
-                        $('select[name="assigned_to"]').html(options); // Replace old options
+                        $('select[name="assigned_to"]').html(options);
                     }
                 });
 
@@ -217,15 +220,92 @@
         </script>
 
         <script>
-    $(document).ready(function() {
-        $('#assigned_to').select2({
-            theme: 'bootstrap-5',
-            placeholder: 'Search User...',
-            allowClear: true,
-            width: '100%'
-        });
-    });
-</script>
+            $(document).ready(function() {
+                $('#assigned_to').select2({
+                    theme: 'bootstrap-5',
+                    placeholder: 'Search User...',
+                    allowClear: true,
+                    width: '100%'
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                let typingTimer;
+                const $input = $('#mobile');
+                const $dropdown = $('#mobile-suggestions');
+
+                $input.on('input', function () {
+                    clearTimeout(typingTimer);
+                    let mobile = $(this).val().trim();
+
+                    if (mobile.length < 3) {
+                        $dropdown.hide().empty();
+                        return;
+                    }
+
+                    typingTimer = setTimeout(function () {
+                        $.ajax({
+                            url: "{{ route('check-mobile') }}",
+                            type: "GET",
+                            data: { mobile: mobile },
+                            success: function (leads) {
+                                $dropdown.empty();
+
+                                if (leads.length === 0) {
+                                    $dropdown.hide();
+                                    return;
+                                }
+
+                                leads.forEach(function (lead) {
+                                    let assignedName = lead.assigned_user ? lead.assigned_user.name : 'Not Assigned';
+
+                                    let item = `
+                                        <a href="javascript:void(0)" class="list-group-item list-group-item-action mobile-item"
+                                        data-mobile="${lead.mobile}"
+                                        data-name="${lead.candidate_name || ''}"
+                                        data-email="${lead.email || ''}"
+                                        data-company="${lead.company || ''}"
+                                        data-city="${lead.city || ''}"
+                                        data-remarks="${lead.remarks || ''}"
+                                        data-assigned="${lead.assigned_to || ''}">
+                                            <div class="d-flex justify-content-between">
+                                                <strong>${lead.mobile}</strong>
+                                                <small class="text-primary">${assignedName}</small>
+                                            </div>
+                                            <small class="text-muted d-block">${lead.candidate_name || 'No Name'}</small>
+                                        </a>`;
+                                    $dropdown.append(item);
+                                });
+
+                                $dropdown.show();
+                            }
+                        });
+                    }, 300);
+                });
+
+                $(document).on('click', '.mobile-item', function () {
+                    let $this = $(this);
+
+                    $('#mobile').val($this.data('mobile'));
+                    $('input[name="candidate_name"]').val($this.data('name'));
+                    $('input[name="email"]').val($this.data('email'));
+                    $('input[name="company"]').val($this.data('company'));
+                    $('input[name="city"]').val($this.data('city'));
+                    $('input[name="remarks"]').val($this.data('remarks'));
+
+                    let assignedTo = $this.data('assigned');
+                    if (assignedTo) {
+                        $('#assigned_to').val(assignedTo).trigger('change');
+                    } else {
+                        $('#assigned_to').val('').trigger('change');
+                    }
+
+                    $('#mobile-suggestions').hide().empty();
+                });
+            });
+        </script>
+
     @endsection
 @else
 @php

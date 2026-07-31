@@ -76,7 +76,7 @@ class ExamScheduleController extends Controller
             'exam_date' => 'required|date',
             'exam_time' => 'required',
         ]);
-        $exists = ExamSchedule::where('candidate_id', $request->candidate_id)->exists();
+        $exists = ExamSchedule::query()->where('candidate_id', $request->candidate_id)->exists();
         if ($exists) {
             return response()->json([
                 'status' => false,
@@ -95,7 +95,7 @@ class ExamScheduleController extends Controller
                 'created_by'      => Auth::id(),
                 'center_admin_id' => $center->center_exe_id,
             ]);
-            Candidate::where('id', $request->candidate_id)->update(['status' => 'Exam Scheduled',]);
+            Candidate::query()->where('id', $request->candidate_id)->update(['status' => 'Exam Scheduled',]);
         });
         return response()->json(['status' => true,'message' => 'Exam schedule created successfully.',
         ]);
