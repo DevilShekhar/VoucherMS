@@ -81,66 +81,105 @@
                                             $voucherRequest = $candidate->voucherRequest;
                                             $examScheduled = $candidate->examSchedule;
                                         @endphp
-                                        <td class="text-nowrap">
-                                            <a href="{{ route('candidates.show', $candidate->id) }}"
-                                                class="btn btn-sm btn-info text-white">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="{{ route('candidates.edit', $candidate) }}"
-                                                class="btn btn-sm btn-primary text-white">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <button type="button" class="btn btn-sm btn-success upload-doc-btn"
-                                                data-candidate-id="{{ $candidate->id }}"
-                                                data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
-                                                data-candidate-code="{{ $candidate->candidate_code }}">
-                                                <i class="fas fa-upload"></i>
-                                            </button>
-                                            @if(!$paymentReceived)
-                                                <button type="button" class="btn btn-sm btn-warning payment-btn"
-                                                    data-id="{{ $candidate->id }}"
-                                                    data-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
-                                                    data-code="{{ $candidate->candidate_code }}"
-                                                    data-course="{{ $candidate->course->course_name ?? '-' }}"
-                                                    data-center="{{ $candidate->center->center_name ?? '-' }}">
-                                                    <i class="fas fa-money-bill-wave"></i>
-                                                </button>
-                                            @elseif(!$voucherRequest)
-                                                <button type="button" class="btn btn-sm btn-dark request-voucher-btn"
-                                                    data-candidate-id="{{ $candidate->id }}"
-                                                    data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
-                                                    data-candidate-code="{{ $candidate->candidate_code }}"
-                                                    data-center-id="{{ $candidate->center_id }}">
-                                                    <i class="fas fa-paper-plane"></i>
-                                                </button>
-                                            @elseif($voucherRequest->status == 'Pending')
-                                                <span class="badge bg-warning text-dark">
-                                                    <i class="fas fa-clock"></i> Request Pending
-                                                </span>
-                                            @elseif($voucherRequest->status == 'Rejected')
-                                                <span class="badge bg-danger" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    data-bs-html="true"
-                                                    title="<strong>Reason:</strong><br>{{ $voucherRequest->remarks ?? 'No reason provided.' }}">
-                                                    <i class="fas fa-times"></i> Rejected
-                                                </span>
-                                                <button type="button" class="btn btn-sm btn-dark request-voucher-btn text-white"
-                                                    data-candidate-id="{{ $candidate->id }}"
-                                                    data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
-                                                    data-candidate-code="{{ $candidate->candidate_code }}"
-                                                    data-center-id="{{ $candidate->center_id }}">
-                                                    <i class="fas fa-paper-plane"></i>Re-Send
-                                                </button>
-                                            @elseif(in_array($voucherRequest->status, ['Approved', 'Allocated']))
-
-                                                <button type="button" class="btn btn-sm btn-primary exam-schedule-btn text-white"
-                                                    data-id="{{ $candidate->id }}"
-                                                    data-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
-                                                    data-center="{{ $candidate->center_id }}"
-                                                    data-voucher="{{ $voucherRequest->voucher_id }}">
-                                                    <i class="fas fa-calendar-alt"></i>
+                                        <td class="text-nowrap text-end">
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-light border" type="button" data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-v"></i>
                                                 </button>
 
-                                            @endif
+                                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+
+                                                    {{-- View --}}
+                                                    <li>
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('candidates.show', $candidate->id) }}">
+                                                            <i class="fas fa-eye me-2 text-info"></i> View
+                                                        </a>
+                                                    </li>
+
+                                                    {{-- Edit --}}
+                                                    <li>
+                                                        <a class="dropdown-item" href="{{ route('candidates.edit', $candidate) }}">
+                                                            <i class="fas fa-edit me-2 text-primary"></i> Edit
+                                                        </a>
+                                                    </li>
+
+                                                    {{-- Upload Document --}}
+                                                    <li>
+                                                        <button type="button" class="dropdown-item upload-doc-btn"
+                                                            data-candidate-id="{{ $candidate->id }}"
+                                                            data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
+                                                            data-candidate-code="{{ $candidate->candidate_code }}">
+                                                            <i class="fas fa-upload me-2 text-success"></i> Upload Document
+                                                        </button>
+                                                    </li>
+
+                                                    @if(!$paymentReceived)
+                                                        {{-- Payment --}}
+                                                        <li>
+                                                            <button type="button" class="dropdown-item payment-btn"
+                                                                data-id="{{ $candidate->id }}"
+                                                                data-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
+                                                                data-code="{{ $candidate->candidate_code }}"
+                                                                data-course="{{ $candidate->course->course_name ?? '-' }}"
+                                                                data-center="{{ $candidate->center->center_name ?? '-' }}">
+                                                                <i class="fas fa-money-bill-wave me-2 text-warning"></i> Payment
+                                                            </button>
+                                                        </li>
+
+                                                    @elseif(!$voucherRequest)
+                                                        {{-- Request Voucher --}}
+                                                        <li>
+                                                            <button type="button" class="dropdown-item request-voucher-btn"
+                                                                data-candidate-id="{{ $candidate->id }}"
+                                                                data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
+                                                                data-candidate-code="{{ $candidate->candidate_code }}"
+                                                                data-center-id="{{ $candidate->center_id }}">
+                                                                <i class="fas fa-paper-plane me-2"></i> Request Voucher
+                                                            </button>
+                                                        </li>
+
+                                                    @elseif($voucherRequest->status == 'Pending')
+                                                        <li>
+                                                            <span class="dropdown-item text-muted">
+                                                                <i class="fas fa-clock me-2 text-warning"></i> Request Pending
+                                                            </span>
+                                                        </li>
+
+                                                    @elseif($voucherRequest->status == 'Rejected')
+                                                        <li>
+                                                            <span class="dropdown-item text-danger" data-bs-toggle="tooltip"
+                                                                data-bs-placement="left" data-bs-html="true"
+                                                                title="<strong>Reason:</strong><br>{{ $voucherRequest->remarks ?? 'No reason provided.' }}">
+                                                                <i class="fas fa-times me-2"></i> Rejected
+                                                            </span>
+                                                        </li>
+                                                        <li>
+                                                            <button type="button" class="dropdown-item request-voucher-btn"
+                                                                data-candidate-id="{{ $candidate->id }}"
+                                                                data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
+                                                                data-candidate-code="{{ $candidate->candidate_code }}"
+                                                                data-center-id="{{ $candidate->center_id }}">
+                                                                <i class="fas fa-paper-plane me-2"></i> Re-Send Request
+                                                            </button>
+                                                        </li>
+
+                                                    @elseif(in_array($voucherRequest->status, ['Approved', 'Allocated']))
+                                                        {{-- Exam Schedule --}}
+                                                        <li>
+                                                            <button type="button" class="dropdown-item exam-schedule-btn"
+                                                                data-id="{{ $candidate->id }}"
+                                                                data-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
+                                                                data-center="{{ $candidate->center_id }}"
+                                                                data-voucher="{{ $voucherRequest->voucher_id }}">
+                                                                <i class="fas fa-calendar-alt me-2 text-primary"></i> Exam Schedule
+                                                            </button>
+                                                        </li>
+                                                    @endif
+
+                                                </ul>
+                                            </div>
                                         </td>
                                     </tr>
                                 @empty
@@ -198,8 +237,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-secondary" data-bs-dismiss="modal" type="button"> Close</button>
-                            <button class="btn btn-success" type="submit"><i class="fas fa-save"></i> Save Schedule</button>
+                            <button class="btn btn-cancel" data-bs-dismiss="modal" type="button"> Close</button>
+                            <button class="btn btn-save" type="submit"><i class="fas fa-save"></i> Save Schedule</button>
                         </div>
                     </div>
                 </form>
@@ -242,8 +281,8 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" id="submitUploadBtn" class="btn btn-success">Upload</button>
+                        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" id="submitUploadBtn" class="btn btn-save">Upload</button>
                     </div>
                 </div>
             </div>
@@ -383,11 +422,11 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
                                 Cancel
                             </button>
 
-                            <button type="submit" class="btn btn-success">
+                            <button type="submit" class="btn btn-save">
                                 <i class="fas fa-paper-plane"></i>
                                 Send Request
                             </button>

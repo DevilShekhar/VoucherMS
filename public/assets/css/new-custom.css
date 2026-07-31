@@ -973,11 +973,11 @@ html[data-theme="dark"] .theme-switch .knob {
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    background: #ffffff;
+    background: #4d78d2;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #1A1410;
+    color: #ffffff;
     font-weight: 700;
     font-size: 13px;
     box-shadow: var(--gold-glow);
