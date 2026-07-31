@@ -141,7 +141,7 @@ class LeadController extends Controller
             ? str_pad((int) substr($lastLead->lead_no, -3) + 1, 3, '0', STR_PAD_LEFT)
             : '001';
         $leadNo = "L-{$date}-{$nextNumber}";
-        $assignedUser = User::find($assignedTo);
+        $assignedUser = User::query()->find($assignedTo);
         $locationId = $assignedUser?->location_id;
         $lead = Lead::create([
             'lead_no' => $leadNo,
@@ -156,7 +156,7 @@ class LeadController extends Controller
             'priority' => $request->priority,
             'status' => $request->status,
             'remarks' => $request->remarks,
-            'location_id'    => $locationId,
+            'location_id' => $locationId,
             'created_by' => Auth::id(),
         ]);
 
@@ -402,7 +402,7 @@ class LeadController extends Controller
             ->whereBetween('next_followup', [$now, $fiveMinutesLater])
             ->where('reminder_sent', 0)
             ->whereHas('lead', function ($q) {
-                $q->where('assigned_to', Auth::id()); // Only assigned user's reminders
+                $q->where('assigned_to', Auth::id());
             })
             ->get();
 
@@ -445,5 +445,23 @@ class LeadController extends Controller
                 ->select('id', 'name')
                 ->get()
         );
+    }
+
+    public function checkMobile(Request $request)
+    {
+        $mobile = $request->mobile;
+
+        if (! $mobile || strlen($mobile) < 3) {
+            return response()->json([]);
+        }
+
+        $leads = Lead::query()
+            ->with(['assignedUser:id,name'])
+            ->where('mobile', 'like', $mobile.'%')
+            ->latest()
+            ->limit(8)
+            ->get(['id', 'mobile', 'candidate_name', 'email', 'company', 'city', 'assigned_to']);
+
+        return response()->json($leads);
     }
 }

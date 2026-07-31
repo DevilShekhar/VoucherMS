@@ -159,6 +159,7 @@ Route::middleware(['auth', 'otp'])->group(function () {
     Route::patch('/vouchers/{voucher}/mark-used',
         [ExamScheduleController::class, 'markUsed'])
         ->name('vouchers.mark-used');
+    Route::get('check-mobile', [LeadController::class, 'checkMobile'])->name('check-mobile');
 });
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth')->name('logout');
 require __DIR__.'/auth.php';

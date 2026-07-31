@@ -21,7 +21,7 @@ class VoucherController extends Controller
 
     public function status($status)
     {
-        $vouchers = Voucher::where('status', ucfirst($status))->paginate(10);
+        $vouchers = Voucher::query()->where('status', ucfirst($status))->paginate(10);
 
         return view('admin.vouchers.index', compact('vouchers'));
     }
@@ -133,7 +133,7 @@ class VoucherController extends Controller
                 );
         }
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv|max:2048',
+            'file' => 'required|mimes:xlsx,xls,csv',
         ]);
 
         VoucherImport::$duplicates = [];
