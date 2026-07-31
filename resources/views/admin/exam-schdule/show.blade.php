@@ -68,7 +68,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-8">
                         <div class="d-flex align-items-center">
-                            <div class="student-avatar">
+                            <div class="student-avatar mt-1">
                                 <i class="fas fa-user-graduate"></i>
                             </div>
                             <div class="student-details">
@@ -210,7 +210,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">
-                            <i class="fas fa-check-circle me-2 text-warning"></i>
+                            <i class="fas fa-check-circle me-2 text-primary"></i>
                             Mark Voucher as Used
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -237,7 +237,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" data-bs-dismiss="modal">
+                        <button class="btn btn-cancel" data-bs-dismiss="modal">
                             <i class="fas fa-times me-1"></i>Cancel
                         </button>
                         <button class="btn btn-save">

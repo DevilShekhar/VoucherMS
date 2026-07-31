@@ -15,7 +15,6 @@
                 </div>
             </div>
 
-            
         <!-- Decorative Shapes -->
         <div class="shape circle-1"></div>
         <div class="shape circle-2"></div>
@@ -56,7 +55,7 @@
                             </td>
                             <td>{{ $payment->payment_date ? $payment->payment_date->format('d M Y') : '-' }}</td>
                             <td>
-                                <a href="{{ route('payments.show', $payment->id) }}" class="btn btn-sm btn-primary">
+                                <a href="{{ route('payments.show', $payment->id) }}" class="btn btn-sm btn-primary text-white">
                                     View
                                 </a>
                             </td>
