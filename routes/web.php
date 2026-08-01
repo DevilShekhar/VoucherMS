@@ -122,6 +122,9 @@ Route::middleware(['auth', 'otp'])->group(function () {
         ->name('vouchers.dashboard');
 
     Route::get('/exam-schedules', [ExamScheduleController::class, 'index'])->name('exam-schedules.index');
+    Route::get('/exam-schedules/center', [ExamScheduleController::class, 'center'])->name('exam-schedules.center');
+
+    Route::get('/exam-schedules/online', [ExamScheduleController::class, 'online'])->name('exam-schedules.online');
     Route::get('/exam-schedules/{examSchedule}', [ExamScheduleController::class, 'show'])->name('exam-schedules.show');
     Route::post('/exam-schedules', [ExamScheduleController::class, 'store'])->name('exam-schedules.store');
     Route::get('/locations/{id}/users',
@@ -158,9 +161,7 @@ Route::middleware(['auth', 'otp'])->group(function () {
         ->name('reports.index');
     Route::get('/dashboard/export/vouchers', [DashboardController::class, 'exportVouchers'])
         ->name('dashboard.export.vouchers');
-    Route::patch('/vouchers/{voucher}/mark-used',
-        [ExamScheduleController::class, 'markUsed'])
-        ->name('vouchers.mark-used');
+    Route::patch('/vouchers/{voucher}/mark-used',[ExamScheduleController::class, 'markUsed'])->name('vouchers.mark-used');
     Route::get('check-mobile', [LeadController::class, 'checkMobile'])->name('check-mobile');
     Route::get('/dashboard/export/leads/filter', [DashboardController::class, 'exportFilteredLeads'])->name('dashboard.export.leads.filter');
     Route::get('/dashboard/export/vouchers/filter', [DashboardController::class, 'exportFilteredVouchers'])->name('dashboard.export.vouchers.filter');

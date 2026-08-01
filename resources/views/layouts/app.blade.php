@@ -148,12 +148,29 @@
                 </li>
             @endcan
             @can('exam-schedules.index')
-                <li>
-                    <a href="{{ route('exam-schedules.index') }}"
-                        class="sb-link {{ request()->routeIs('exam-schedules.*') ? 'active' : '' }}">
+                <li class="sb-item">
+                    <a href="javascript:void(0);" class="sb-link {{ request()->routeIs('exam-schedules.*') ? 'active' : '' }}" id="examScheduleMenu">
                         <i class="fas fa-calendar-alt"></i>
                         <span>Exam Schedule</span>
+                        <i class="fas fa-chevron-down ms-auto" id="examScheduleArrow"></i>
                     </a>
+                    <ul class="sb-submenu" id="examScheduleSubmenu">
+                        <li>
+                             <a href="{{ route('exam-schedules.index') }}" class="{{ request()->routeIs('exam-schedules.index') ? 'active' : '' }}">
+                                All
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('exam-schedules.center') }}" class="{{ request()->routeIs('exam-schedules.center') ? 'active' : '' }}">
+                                Center Exam
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('exam-schedules.online') }}" class="{{ request()->routeIs('exam-schedules.online') ? 'active' : '' }}">
+                                Online Exam
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             @endcan
 
@@ -870,6 +887,13 @@
                 'voucherRequestMenu',
                 'voucherRequestSubmenu',
                 'voucherRequestArrow'
+            );
+
+            // Exam Schedule
+            initSidebarDropdown(
+                'examScheduleMenu',
+                'examScheduleSubmenu',
+                'examScheduleArrow'
             );
 
         });
