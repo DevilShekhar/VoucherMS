@@ -235,19 +235,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Candidate</label>
                                 <input type="text" id="exam_candidate_name" class="form-control" readonly>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">
-                                    Exam Mode <span class="text-danger">*</span>
-                                </label>
-
-                                <select class="form-select" name="exam_mode" id="exam_mode" required>
-                                    <option value="">-- Select Exam Mode --</option>
-                                    <option value="center">Center</option>
-                                    <option value="online">Online</option>
-                                </select>
-                            </div>
+                            </div>                          
 
                             <div class="mb-3">
                                 <label class="form-label">
@@ -261,6 +249,17 @@
                                     Exam Time <span class="text-danger">*</span>
                                 </label>
                                 <input type="time" class="form-control" name="exam_time" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    Exam Mode <span class="text-danger">*</span>
+                                </label>
+
+                                <select class="form-select" name="exam_mode" id="exam_mode" required>
+                                    <option value="">-- Select Exam Mode --</option>
+                                    <option value="center">Center</option>
+                                    <option value="online">Online</option>
+                                </select>
                             </div>
 
                             <div class="mb-3" id="center_div" style="display:none;">

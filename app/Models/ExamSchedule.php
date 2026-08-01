@@ -8,8 +8,9 @@ class ExamSchedule extends Model
 {
     protected $fillable = [
         'candidate_id',
-        'center_id',
         'voucher_id',
+        'exam_mode',
+        'center_id',
         'exam_date',
         'exam_time',
         'exam_status',
