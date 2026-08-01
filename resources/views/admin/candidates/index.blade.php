@@ -80,6 +80,7 @@
                                             $paymentReceived = $candidate->payments->count() > 0;
                                             $voucherRequest = $candidate->voucherRequest;
                                             $examScheduled = $candidate->examSchedule;
+                                            $canRequestVoucher = !empty($candidate->course_id) && !empty($candidate->center_id);
                                         @endphp
                                         <td class="text-nowrap text-end">
                                             <div class="dropdown">
@@ -131,13 +132,27 @@
                                                     @elseif(!$voucherRequest)
                                                         {{-- Request Voucher --}}
                                                         <li>
-                                                            <button type="button" class="dropdown-item request-voucher-btn"
-                                                                data-candidate-id="{{ $candidate->id }}"
-                                                                data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
-                                                                data-candidate-code="{{ $candidate->candidate_code }}"
-                                                                data-center-id="{{ $candidate->center_id }}">
-                                                                <i class="fas fa-paper-plane me-2"></i> Request Voucher
-                                                            </button>
+                                                        <li>
+                                                            @if($canRequestVoucher)
+                                                                <button type="button" class="dropdown-item request-voucher-btn"
+                                                                    data-candidate-id="{{ $candidate->id }}"
+                                                                    data-candidate-name="{{ $candidate->first_name }} {{ $candidate->last_name }}"
+                                                                    data-candidate-code="{{ $candidate->candidate_code }}"
+                                                                    data-center-id="{{ $candidate->center_id }}">
+                                                                    <i class="fas fa-paper-plane me-2"></i>
+                                                                    Request Voucher
+                                                                </button>
+                                                            @else
+                                                                <span data-bs-toggle="tooltip" data-bs-placement="left"
+                                                                    title="Request Voucher is disabled because the candidate does not have a Course and/or Center assigned.click on edit to add">
+                                                                    <button type="button" class="dropdown-item text-muted" disabled
+                                                                        style="pointer-events: none;">
+                                                                        <i class="fas fa-lock me-2"></i>
+                                                                        Request Voucher
+                                                                    </button>
+                                                                </span>
+                                                            @endif
+                                                        </li>
                                                         </li>
 
                                                     @elseif($voucherRequest->status == 'Pending')

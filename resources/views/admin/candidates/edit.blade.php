@@ -73,7 +73,8 @@
 
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Center <span class="text-danger">*</span></label>
-                        <select name="center_id" class="form-select" required>
+                        <select name="center_id" class="form-select">
+                             <option value="">Select Center</option>
                             @foreach($centers as $center)
                                 <option value="{{ $center->id }}" {{ $candidate->center_id == $center->id ? 'selected' : '' }}>
                                     {{ $center->center_name }}
@@ -83,7 +84,8 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Course <span class="text-danger">*</span></label>
-                        <select name="course_id" class="form-select" required>
+                        <select name="course_id" class="form-select">
+                             <option value="">Select Course</option>
                             @foreach($courses as $course)
                                 <option value="{{ $course->id }}" {{ $candidate->course_id == $course->id ? 'selected' : '' }}>
                                     {{ $course->course_name }}

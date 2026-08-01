@@ -19,6 +19,9 @@ use App\Http\Controllers\Admin\VoucherVendorController;
 use App\Http\Controllers\Auth\OtpController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+
 
 Route::get('/login', function () {
     return view('welcome');
@@ -30,9 +33,6 @@ Route::get('/verify-otp', [OtpController::class, 'show'])->name('otp.form');
 Route::post('/verify-otp', [OtpController::class, 'verify'])->name('otp.verify');
 Route::post('/resend-otp', [OtpController::class, 'resend'])->name('otp.resend');
 
-use App\Http\Controllers\Admin\LocationController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Models\CourseCategory;
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'otp'])
@@ -168,7 +168,8 @@ Route::middleware(['auth', 'otp'])->group(function () {
     Route::post('admin/payments/{payment}/generate-invoice', [PaymentController::class, 'generateInvoice'])->name('payments.generateInvoice');
     Route::get('admin/invoices/{invoice}/download', [PaymentController::class, 'downloadInvoice'])->name('invoices.download');
     Route::get('/courses/by-category/{category}', [VoucherController::class, 'getCourses'])
-    ->name('courses.by-category');
+        ->name('courses.by-category');
+    Route::post('voucher-requests/{voucherRequest}/assign-voucher', [VoucherRequestController::class, 'assignVoucher'])->name('voucher-requests.assign-voucher');
 
 });
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth')->name('logout');
