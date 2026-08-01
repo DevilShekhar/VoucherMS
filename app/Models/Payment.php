@@ -50,5 +50,8 @@ class Payment extends Model
     {
         return $this->hasMany(PaymentTransaction::class);
     }
-
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
 }

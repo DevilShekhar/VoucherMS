@@ -256,15 +256,45 @@
             </div>
         </div>
         <div class="card premium-block">
-            <div class="premium-request-header">
+            <div class="premium-request-header d-flex justify-content-between align-items-center">
+
                 <div class="d-flex align-items-center">
                     <div class="header-icon me-3">
                         <i class="fas fa-history text-white"></i>
                     </div>
+
                     <div>
-                        <h5 class="mb-0">Payment History</h5>                        
+                        <h5 class="mb-0">Payment History</h5>
                     </div>
                 </div>
+
+                @if(!$payment->invoice)
+
+                    <form action="{{ route('payments.generateInvoice',$payment) }}"
+                        method="POST"
+                        onsubmit="return confirm('Are you sure you want to generate this invoice?')">
+
+                        @csrf
+
+                        <button class="btn btn-light">
+                            <i class="fas fa-file-invoice"></i>
+                            Generate Invoice
+                        </button>
+
+                    </form>
+
+                @else
+
+                    <a href="{{ route('invoices.download',$payment->invoice->id) }}"
+                    class="btn btn-success">
+
+                        <i class="fas fa-download"></i>
+                        Download Invoice
+
+                    </a>
+
+                @endif
+
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -278,7 +308,8 @@
                                 <th>Paid</th>
                                 <th>Pending</th>
                                 <th>Status</th>
-                                <th>Mode</th>                         
+                                <th>Mode</th>  
+                                <th>Invoice</th>                       
                             </tr>
                         </thead>
                         <tbody>
@@ -307,7 +338,34 @@
                                     </td>
                                     <td>
                                         {{ $history->transactions->first()->payment_mode ?? '-' }}
-                                    </td>                                   
+                                    </td>         
+                                    <td>
+                                    @if($history->invoice)
+
+                                    <a href="{{ route('invoices.download',$history->invoice->id) }}"
+                                    class="btn btn-success btn-sm">
+
+                                        <i class="fas fa-download"></i>
+
+                                    </a>
+
+                                    @else
+
+                                    <form action="{{ route('payments.generateInvoice',$history) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('Generate Invoice?')">
+
+                                        @csrf
+
+                                        <button class="btn btn-primary btn-sm">
+                                            <i class="fas fa-file-invoice"></i>
+                                        </button>
+
+                                    </form>
+
+                                    @endif
+
+                                </td>                               
                                 </tr>
                             @empty
                                 <tr>
