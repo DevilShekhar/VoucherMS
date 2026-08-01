@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::table('courses', function (Blueprint $table) {
             $table->foreignId('course_category_id')
                 ->after('id')
-                ->constrained('course_categories')
+                ->constrained('course_category')
                 ->cascadeOnDelete();
         });
     }
