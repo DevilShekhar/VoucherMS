@@ -49,7 +49,7 @@
                 <div class="card premium-block">
                     <div class="card-body">
                         <div class="row">
-                            <div class="mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label class="form-label">Course Category</label>
 
                                 <select name="course_category_id"
@@ -67,7 +67,7 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label class="form-label">Course Code</label>
                                 <input type="text" name="course_code" class="form-control check-unique"
                                     value="{{ old('course_code') }}" placeholder="Enter course code" data-table="courses"
@@ -77,7 +77,7 @@
                                 @enderror
                             </div>
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label class="form-label">Course Name</label>
                                 <input type="text" name="course_name" class="form-control" value="{{ old('course_name') }}"
                                     placeholder="Enter course name">

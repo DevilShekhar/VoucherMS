@@ -55,7 +55,7 @@ class CourseController extends Controller
 
     public function edit(Course $course)
     {
-        $categories = CourseCategory::query()->where('status', 1)->orderBy('name')->get();
+        $categories = CourseCategory::query()->orderBy('name')->get();
         return view('admin.courses.edit', compact('course', 'categories'));
     }
 
