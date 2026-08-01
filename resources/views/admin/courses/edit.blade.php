@@ -50,7 +50,25 @@
             <div class="card premium-block">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
+                                <label class="form-label">Course Category</label>
+
+                                <select name="course_category_id"
+                                    class="form-select @error('course_category_id') is-invalid @enderror">
+                                    <option value="">Select Category</option>
+
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ old('course_category_id', $course->course_category_id ?? '') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                @error('course_category_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        <div class="col-md-4 mb-3">
                             <label class="form-label">Course Code</label>
                             <input type="text" name="course_code" class="form-control"
                                    value="{{ old('course_code', $course->course_code) }}"
@@ -60,7 +78,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label class="form-label">Course Name</label>
                             <input type="text" name="course_name" class="form-control"
                                    value="{{ old('course_name', $course->course_name) }}"

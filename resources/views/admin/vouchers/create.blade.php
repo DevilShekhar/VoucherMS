@@ -52,22 +52,27 @@
 
                         <div class="row">
 
-                            <div class="mb-3">
-                                <label class="form-label">Course <span class="text-danger">*</span></label>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Course Category <span class="text-danger">*</span></label>
 
-                                <select name="course_id" class="form-select @error('course_id') is-invalid @enderror">
-                                    <option value="">Select Course</option>
+                                <select name="course_category_id" id="course_category_id" class="form-select" required>
 
-                                    @foreach($courses as $course)
-                                        <option value="{{ $course->id }}" {{ old('course_id', $voucher->course_id ?? '') == $course->id ? 'selected' : '' }}>
-                                            {{ $course->course_name }}
+                                    <option value="">Select Category</option>
+
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}">
+                                            {{ $category->name }}
                                         </option>
                                     @endforeach
                                 </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Course <span class="text-danger">*</span></label>
 
-                                @error('course_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <select name="course_id" id="course_id" class="form-select" required>
+
+                                    <option value="">Select Course</option>
+                                </select>
                             </div>
                             <!-- Voucher Code -->
                             <div class="col-md-6 mb-3">
@@ -163,26 +168,6 @@
                                 @enderror
                             </div>
 
-                            <!-- Status -->
-                            {{-- <div class="col-md-6 mb-3">
-                                <label class="form-label">
-                                    Status
-                                </label>
-
-                                <select name="status" class="form-control">
-                                    <option value="1" {{ old('status',1)==1 ? 'selected' : '' }}>
-                                        Active
-                                    </option>
-                                    <option value="0" {{ old('status')==='0' ? 'selected' : '' }}>
-                                        Inactive
-                                    </option>
-                                </select>
-
-                                @error('status')
-                                <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div> --}}
-
                             <!-- Remarks -->
                             <div class="col-md-12 mb-3">
                                 <label class="form-label">
@@ -223,6 +208,42 @@
 
         </section>
 
+        <script>
+            $(document).ready(function () {
+
+                $('#course_category_id').change(function () {
+
+                    let categoryId = $(this).val();
+
+                    $('#course_id').html('<option value="">Loading...</option>');
+
+                    if (categoryId == '') {
+                        $('#course_id').html('<option value="">Select Course</option>');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: '/courses/by-category/' + categoryId,
+                        type: 'GET',
+                        success: function (response) {
+
+                            let options = '<option value="">Select Course</option>';
+
+                            $.each(response, function (index, course) {
+                                options += `<option value="${course.id}">
+                                            ${course.course_name}
+                                        </option>`;
+                            });
+
+                            $('#course_id').html(options);
+                        }
+                    });
+
+                });
+
+            });
+
+        </script>
     @endsection
 @else
     @php

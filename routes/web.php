@@ -167,6 +167,9 @@ Route::middleware(['auth', 'otp'])->group(function () {
     Route::resource('course-category', CourseCategoryController::class);
     Route::post('admin/payments/{payment}/generate-invoice', [PaymentController::class, 'generateInvoice'])->name('payments.generateInvoice');
     Route::get('admin/invoices/{invoice}/download', [PaymentController::class, 'downloadInvoice'])->name('invoices.download');
+    Route::get('/courses/by-category/{category}', [VoucherController::class, 'getCourses'])
+    ->name('courses.by-category');
+
 });
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth')->name('logout');
 require __DIR__.'/auth.php';
