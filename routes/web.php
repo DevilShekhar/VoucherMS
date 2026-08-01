@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CandidateController;
 use App\Http\Controllers\Admin\CenterController;
+use App\Http\Controllers\Admin\CourseCategoryController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExamScheduleController;
@@ -31,6 +32,7 @@ Route::post('/resend-otp', [OtpController::class, 'resend'])->name('otp.resend')
 
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Models\CourseCategory;
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'otp'])
@@ -160,6 +162,9 @@ Route::middleware(['auth', 'otp'])->group(function () {
         [ExamScheduleController::class, 'markUsed'])
         ->name('vouchers.mark-used');
     Route::get('check-mobile', [LeadController::class, 'checkMobile'])->name('check-mobile');
+
+    Route::resource('course-category', CourseCategoryController::class);
+
 });
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth')->name('logout');
 require __DIR__.'/auth.php';
