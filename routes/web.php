@@ -162,9 +162,9 @@ Route::middleware(['auth', 'otp'])->group(function () {
         [ExamScheduleController::class, 'markUsed'])
         ->name('vouchers.mark-used');
     Route::get('check-mobile', [LeadController::class, 'checkMobile'])->name('check-mobile');
-
+    Route::get('/dashboard/export/leads/filter', [DashboardController::class, 'exportFilteredLeads'])->name('dashboard.export.leads.filter');
+    Route::get('/dashboard/export/vouchers/filter', [DashboardController::class, 'exportFilteredVouchers'])->name('dashboard.export.vouchers.filter');
     Route::resource('course-category', CourseCategoryController::class);
-
 });
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth')->name('logout');
 require __DIR__.'/auth.php';

@@ -5475,3 +5475,47 @@ small.text-muted{
 .modal-body{
     background:#fafcff;
 }
+.report-filter-card{
+    border-radius:18px;
+    overflow:hidden;
+}
+
+.report-filter-card .card-header{
+    background:linear-gradient(135deg,#0f766e,#0ea5a4);
+}
+
+.filter-icon{
+    width:55px;
+    height:55px;
+    border-radius:14px;
+    background:rgba(255,255,255,.18);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-size:22px;
+}
+
+.filter-input{
+    border-radius:12px;
+    height:48px;
+    border:1px solid #dce3ea;
+    transition:.3s;
+}
+
+.filter-input:focus{
+    border-color:#0ea5a4;
+    box-shadow:0 0 0 .2rem rgba(14,165,164,.15);
+}
+
+.export-btn{
+    height:48px;
+    border-radius:12px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.export-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 20px rgba(25,135,84,.25);
+}

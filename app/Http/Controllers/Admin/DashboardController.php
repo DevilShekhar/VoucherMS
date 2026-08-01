@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exports\LeadsExport;
+use App\Exports\FilteredLeadsExport;
+use App\Exports\FilteredVouchersExport;
 use App\Exports\VouchersExport;
 use App\Http\Controllers\Controller;
 use App\Models\Candidate;
@@ -14,6 +16,7 @@ use App\Models\Location;
 use App\Models\Payment;
 use App\Models\User;
 use App\Models\Voucher;
+use App\Models\VoucherVendor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -144,6 +147,8 @@ class DashboardController extends Controller
         $vouchers = Voucher::with('vendor')
             ->latest()
             ->paginate(30);
+        $executives = User::where('role_id',4)->orderBy('name')->get();
+        $vendors = VoucherVendor::orderBy('vendor_name')->get();
 
         return view('dashboard', compact(
             'todayLeads',
@@ -162,7 +167,7 @@ class DashboardController extends Controller
             'availableCount',
             'allocatedCount',
             'usedCount',
-            'expiredCount', 'cancelledCount'
+            'expiredCount', 'cancelledCount','executives','vendors'
         ));
     }
 
@@ -260,5 +265,20 @@ class DashboardController extends Controller
         return response()->json([
             'exists' => $exists,
         ]);
+    }    
+    public function exportFilteredLeads(Request $request)
+    {
+
+        return Excel::download(
+            new FilteredLeadsExport($request),
+            'Filtered_Leads_' . now()->format('d-m-Y_H-i-s') . '.xlsx'
+        );
+    }
+    public function exportFilteredVouchers(Request $request)
+    {
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new FilteredVouchersExport($request),
+            'Filtered_Vouchers_' . now()->format('d-m-Y_H-i-s') . '.xlsx'
+        );
     }
 }

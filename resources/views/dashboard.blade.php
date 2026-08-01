@@ -72,6 +72,260 @@
             </div>
         </div>
     </section>
+    <section class="mb-4">
+        <div class="card border-0 shadow-lg rounded-4 report-filter-card">
+            <div class="card-header border-0 py-3 px-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <div class="d-flex align-items-center">
+                        <div class="filter-icon">
+                            <i class="fas fa-filter"></i>
+                        </div>
+                        <div class="ms-3">
+                            <h4 class="mb-0 text-white">Lead Report</h4>
+                            <small class="text-white-50">
+                                Filter leads and export professional Excel reports
+                            </small>
+                        </div>
+                    </div>
+                    <span class="badge bg-light text-dark px-3 py-2 rounded-pill">
+                        <i class="fas fa-file-excel text-success me-1"></i>
+                        Excel Export
+                    </span>
+                </div>
+            </div>
+            <div class="card-body p-4">
+                <form action="{{ route('dashboard.export.leads.filter') }}" method="GET">
+                    <div class="row g-3">
+                        <div class="col-lg-4 col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-calendar-alt text-primary me-1"></i>
+                                From Date
+                            </label>
+                            <input type="date"
+                                name="from_date"
+                                value="{{ request('from_date') }}"
+                                class="form-control filter-input">
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-calendar-check text-success me-1"></i>
+                                To Date
+                            </label>
+                            <input type="date"
+                                name="to_date"
+                                value="{{ request('to_date') }}"
+                                class="form-control filter-input">
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-map-marker-alt text-danger me-1"></i>
+                                Location
+                            </label>
+                            <select name="location_id" class="form-select filter-input">
+                                <option value="">All Locations</option>
+                                @foreach($locations as $location)
+                                    <option value="{{ $location->id }}"
+                                        {{ request('location_id') == $location->id ? 'selected' : '' }}>
+                                        {{ $location->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-flag text-warning me-1"></i>
+                                Status
+                            </label>
+                            <select name="status" class="form-select filter-input">
+                                <option value="">All Status</option>
+                                @foreach(['New','Contacted','Interested','Not Interested','Converted','Closed'] as $status)
+                                    <option value="{{ $status }}"
+                                        {{ request('status')==$status ? 'selected' : '' }}>
+                                        {{ $status }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-user-tie text-info me-1"></i>
+                                Sales Executive
+                            </label>
+                            <select name="executive_id" class="form-select filter-input">
+                                <option value="">All Executives</option>
+                                @foreach($executives as $executive)
+                                    <option value="{{ $executive->id }}"
+                                        {{ request('executive_id')==$executive->id ? 'selected' : '' }}>
+                                        {{ $executive->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-4 d-flex align-items-end">
+                            <div class="d-grid w-100">
+                                <button type="submit" class="btn btn-success btn-lg export-btn">
+                                    <i class="fas fa-file-excel me-2"></i>
+                                    Export Excel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <section class="mb-4">
+    <div class="card border-0 shadow-lg rounded-4 report-filter-card">
+
+        <div class="card-header border-0 py-3 px-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+
+                <div class="d-flex align-items-center">
+
+                    <div class="filter-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+
+                    <div class="ms-3">
+                        <h4 class="mb-0 text-white">
+                            Voucher Report
+                        </h4>
+
+                        <small class="text-white-50">
+                            Filter vouchers and export professional Excel reports
+                        </small>
+                    </div>
+
+                </div>
+
+                <span class="badge bg-light text-dark px-3 py-2 rounded-pill">
+                    <i class="fas fa-file-excel text-success me-1"></i>
+                    Excel Export
+                </span>
+
+            </div>
+        </div>
+
+        <div class="card-body p-4">
+
+            <form action="{{ route('dashboard.export.vouchers.filter') }}" method="GET">
+
+                <div class="row g-3">
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-calendar-alt text-primary me-1"></i>
+                            From Date
+                        </label>
+
+                        <input type="date"
+                               name="from_date"
+                               value="{{ request('from_date') }}"
+                               class="form-control filter-input">
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-calendar-check text-success me-1"></i>
+                            To Date
+                        </label>
+
+                        <input type="date"
+                               name="to_date"
+                               value="{{ request('to_date') }}"
+                               class="form-control filter-input">
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-building text-warning me-1"></i>
+                            Vendor
+                        </label>
+
+                        <select name="vendor_id" class="form-select filter-input">
+
+                            <option value="">All Vendors</option>
+
+                            @foreach($vendors as $vendor)
+
+                                <option value="{{ $vendor->id }}"
+                                    {{ request('vendor_id') == $vendor->id ? 'selected' : '' }}>
+
+                                    {{ $vendor->vendor_name }}
+
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-layer-group text-danger me-1"></i>
+                            Status
+                        </label>
+
+                        <select name="status" class="form-select filter-input">
+
+                            <option value="">All Status</option>
+
+                            @foreach(['Available','Allocated','Used','Expired','Cancelled'] as $status)
+
+                                <option value="{{ $status }}"
+                                    {{ request('status') == $status ? 'selected' : '' }}>
+
+                                    {{ $status }}
+
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-12 mt-4">
+
+                        <div class="d-flex justify-content-end gap-2">
+
+                            <a href="{{ route('dashboard') }}"
+                               class="btn btn-outline-secondary px-4">
+
+                                <i class="fas fa-rotate-left me-2"></i>
+
+                                Reset
+
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-success export-btn px-4">
+
+                                <i class="fas fa-file-excel me-2"></i>
+
+                                Export Voucher Excel
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+</section>
 {{-- Other users --}}
 
 @can('student-data')
