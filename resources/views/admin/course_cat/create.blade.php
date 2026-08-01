@@ -1,0 +1,69 @@
+
+@extends('layouts.app')
+
+@section('content')
+    <section class="section premium-dashboard">
+    <div class="premium-header">
+        <div class="premium-header-overlay"></div>
+        <div class="premium-header-left">
+            <div class="premium-header-icon">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <div class="premium-header-content">
+                <span class="premium-tag">Course Category Management</span>
+                <h2 class="text-white">Create New Course Category</h2>
+                <p>Add a new course category to the system</p>
+            </div>
+        </div>
+        <div class="premium-header-right">
+            <a href="{{ route('roles.index') }}" class="premium-back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Course Category
+            </a>
+        </div>
+        <!-- Decorative Shapes -->
+        <div class="shape circle-1"></div>
+        <div class="shape circle-2"></div>
+        <div class="shape circle-3"></div>
+        <div class="dots"></div>
+    </div>
+</section>
+
+    <section class="section premium-dashboard pt-0">
+        <form method="POST" action="{{ route('course-category.store') }}">
+            @csrf
+
+            <div class="card premium-block">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="roleName" class="form-label" style="font-weight: 600; font-size: 13px; color: var(--ink); margin-bottom: 6px; display: block;">
+                            Course Category Name
+                        </label>
+                        <input
+                            type="text"
+                            name="name"
+                            class="form-control"
+                            placeholder="Enter Course Category name"
+                            style="width: 100%; padding: 10px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--ink); font-size: 14px; transition: all .2s ease;"
+                            required
+                        >
+                        @error('name')
+                            <span style="color: var(--rust); font-size: 12px; margin-top: 4px; display: block;">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-footer">
+                        <a href="{{ route('course-category.index') }}" class="btn btn-cancel">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn-save">
+                            <i class="fas fa-plus-circle me-2"></i>
+                            Create Course Category
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+@endsection
