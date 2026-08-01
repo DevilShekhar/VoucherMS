@@ -21,8 +21,7 @@ class VoucherRequest extends Model
         'remarks',
         'requested_at',
         'approved_at',
-        'selling_price',
-
+        'selling_price','gst_type'
     ];
 
     protected $casts = [

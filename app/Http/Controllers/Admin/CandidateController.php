@@ -121,7 +121,7 @@ class CandidateController extends Controller
     {
         $request->validate([
             'lead_id' => 'nullable|exists:leads,id',
-            'center_id' => 'required|exists:centers,id',
+            'center_id' => 'nullable|exists:centers,id',
             'course_id' => 'nullable|exists:courses,id',
             'first_name' => 'required|string|max:255',
             'last_name' => 'nullable|string|max:255',

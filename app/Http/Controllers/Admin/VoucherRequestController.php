@@ -60,6 +60,7 @@ class VoucherRequestController extends Controller
         $request->validate([
             'candidate_id' => 'required|exists:candidates,id',
             'remarks' => 'nullable|string',
+            'gst_type' => 'required|in:GST,Non GST',
         ]);
 
         $candidate = Candidate::findOrFail($request->candidate_id);
@@ -101,25 +102,34 @@ class VoucherRequestController extends Controller
             'superadmin_approval' => 'Pending',
 
             'remarks' => $request->remarks,
+            'gst_type' => $request->gst_type,
             'requested_at' => now(),
         ]);
 
-        if ($admin) {
-            VoucherRequestNotification::create([
-                'voucher_request_id' => $voucherRequest->id,
-                'user_id' => $admin->id,
-                'title' => 'New Voucher Request',
-                'message' => 'Voucher request '.$voucherRequest->request_no.' requires your approval.',
-            ]);
-        }
+        if ($voucherRequest->gst_type == 'GST') {
 
-        if ($superAdmin) {
-            VoucherRequestNotification::create([
-                'voucher_request_id' => $voucherRequest->id,
-                'user_id' => $superAdmin->id,
-                'title' => 'New Voucher Request',
-                'message' => 'Voucher request '.$voucherRequest->request_no.' requires your approval.',
-            ]);
+            // Notify only Super Admin
+            if ($superAdmin) {
+                VoucherRequestNotification::create([
+                    'voucher_request_id' => $voucherRequest->id,
+                    'user_id' => $superAdmin->id,
+                    'title' => 'New GST Voucher Request',
+                    'message' => 'GST voucher request '.$voucherRequest->request_no.' requires your approval.',
+                ]);
+            }
+
+        } else {
+
+            // Notify only Admin
+            if ($admin) {
+                VoucherRequestNotification::create([
+                    'voucher_request_id' => $voucherRequest->id,
+                    'user_id' => $admin->id,
+                    'title' => 'New Non-GST Voucher Request',
+                    'message' => 'Non-GST voucher request '.$voucherRequest->request_no.' requires your approval.',
+                ]);
+            }
+
         }
 
         return back()->with('success', 'Voucher request sent successfully. Voucher has been reserved.');

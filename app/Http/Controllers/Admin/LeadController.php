@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Candidate;
 use App\Models\Center;
 use App\Models\Course;
+use App\Models\CourseCategory;
 use App\Models\Lead;
 use App\Models\LeadFollowUp;
 use App\Models\LeadNotification;
@@ -75,11 +76,12 @@ class LeadController extends Controller
         $locations = Location::query()->get();
         $users = User::query()->where('role_id', 4)->get();
         $centers = Center::query()->where('status', 1)->get();
+        $categories = CourseCategory::orderBy('name')->get();
         $courses = Course::query()->where('status', 1)->get();
 
         return view(
             'admin.leads.create',
-            compact('users', 'centers', 'courses', 'locations')
+            compact('users', 'centers', 'courses', 'locations', 'categories')
         );
     }
 
@@ -90,6 +92,7 @@ class LeadController extends Controller
     {
         $request->validate([
             'center_id' => 'nullable|exists:centers,id',
+            'course_category_id' => 'nullable|exists:course_category,id',
             'course_id' => 'nullable',
             'candidate_name' => 'nullable|string|max:255',
             'email' => 'nullable|email|max:255',
@@ -147,6 +150,7 @@ class LeadController extends Controller
             'lead_no' => $leadNo,
             'assigned_to' => $assignedTo,
             'center_id' => $request->center_id,
+            'course_category_id' => $request->course_category_id,
             'course_id' => $courseId,
             'candidate_name' => $request->candidate_name,
             'email' => $request->email,
@@ -214,9 +218,10 @@ class LeadController extends Controller
     {
         $users = User::query()->where('role_id', 4)->get();
         $centers = Center::query()->where('status', 1)->get();
+        $categories = CourseCategory::orderBy('name')->get();
         $courses = Course::query()->where('status', 1)->get();
 
-        return view('admin.leads.edit', compact('lead', 'users', 'centers', 'courses'));
+        return view('admin.leads.edit', compact('lead', 'users', 'centers', 'courses','categories'));
     }
 
     public function show(Lead $lead)
@@ -251,6 +256,7 @@ class LeadController extends Controller
         $request->validate([
             'assigned_to' => 'nullable|exists:users,id',
             'center_id' => 'nullable|exists:centers,id',
+            'course_category_id' => 'nullable|exists:course_category,id',
             'course_id' => 'nullable|exists:courses,id',
             'candidate_name' => 'nullable|string|max:255',
             'email' => 'nullable|email|max:255',
@@ -264,6 +270,7 @@ class LeadController extends Controller
 
         $data = [
             'center_id' => $request->center_id,
+            'course_category_id' => $request->course_category_id,
             'course_id' => $request->course_id,
             'candidate_name' => $request->candidate_name,
             'email' => $request->email,

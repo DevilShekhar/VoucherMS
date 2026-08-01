@@ -228,6 +228,7 @@
                         </div>
                     </div>
                     <!-- Voucher Panel -->
+                    @if(auth()->user()->hasAnyRole(['Super Admin', 'Admin', 'Manager']) && $voucherRequest->status == 'Pending')
                     <div class="voucher-panel mt-4">
                         <div class="voucher-header">
                             <div class="voucher-title">
@@ -322,8 +323,10 @@
 
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
+            @if(auth()->user()->hasAnyRole(['Super Admin', 'Admin', 'Manager']))
             @if($voucherRequest->status == 'Pending' && $voucherRequest->voucher_id)
                 <div class="row g-4">
                     <!-- Approval Form -->
@@ -428,6 +431,7 @@
                         </div>
                     </div>
                 </div>
+            @endif
             @endif
         </section>
         <script>
