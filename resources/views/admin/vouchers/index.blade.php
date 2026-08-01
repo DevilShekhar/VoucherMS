@@ -70,6 +70,8 @@
                                     <th>Purchase Price</th>
                                     <th>Cost</th>
                                     <th>Status</th>
+                                    <th>Created By</th>
+                                    <th>Update By</th>
                                     @can('vouchers.edit')
                                         <th width="180" class="text-center">Action</th>
                                     @endcan
@@ -141,6 +143,8 @@
                                                 {{ $voucher->status }}
                                             </span>
                                         </td>
+                                        <td>{{ $voucher->creator->name ?? '-' }}</td>
+<td>{{ $voucher->updater->name ?? '-' }}</td>
                                         @can('vouchers.edit')
                                             <td class="text-center">
 

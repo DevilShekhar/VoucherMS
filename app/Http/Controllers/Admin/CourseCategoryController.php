@@ -25,17 +25,19 @@ class CourseCategoryController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:course_category,name',
-            'created_by' => Auth::id(),
+
         ]);
 
         CourseCategory::create([
             'name' => $request->name,
+            'created_by' => Auth::id(),
         ]);
 
         return redirect()
             ->route('course-category.index')
             ->with('success', 'Course Category created successfully.');
     }
+
     public function edit(CourseCategory $courseCategory)
     {
         return view('admin.course_cat.edit', compact('courseCategory'));
