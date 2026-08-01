@@ -240,4 +240,21 @@ class VoucherRequestController extends Controller
 
         return back()->with('success', 'Voucher allocated successfully.Now Candidate Can use this code to get Discount');
     }
+
+    public function assignVoucher(Request $request, VoucherRequest $voucherRequest)
+    {
+        $request->validate([
+            'voucher_id' => 'required|exists:vouchers,id',
+        ]);
+
+        $voucher = Voucher::query()->where('id', $request->voucher_id)
+            ->where('status', 'Available')
+            ->firstOrFail();
+
+        $voucherRequest->update([
+            'voucher_id' => $voucher->id,
+        ]);
+
+        return back()->with('success', 'Voucher selected successfully.');
+    }
 }

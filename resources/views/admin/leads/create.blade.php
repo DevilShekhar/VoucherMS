@@ -50,7 +50,7 @@
                 <div class="card premium-block">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6 mb-3 position-relative">
+                            <div class="col-md-4 mb-3 position-relative">
                                 <label class="form-label">Mobile <span class="text-danger">*</span></label>
                                 <input type="tel" name="mobile" id="mobile" class="form-control" value="{{ old('mobile') }}"
                                     autocomplete="off">
@@ -61,7 +61,7 @@
                                 @enderror
                             </div>
                             @if(Auth::user()->hasAnyRole(['Manager', 'Owner', 'Super Admin']))
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <label class="form-label">
                                         Distribution Location <small class="text-muted">(Where vouchers will be distributed)</small>
                                     </label>
@@ -80,7 +80,7 @@
 
                                     </select>
                                 </div>
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <label class="form-label">Assign To
                                         <small class="text-muted">(Leave empty for auto assignment)</small>
                                     </label>
@@ -103,7 +103,7 @@
                             @endif
 
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label class="form-label">Candidate Name </label>
                                 <input type="text" name="candidate_name" class="form-control"
                                     value="{{ old('candidate_name') }}">
@@ -114,7 +114,7 @@
 
 
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label class="form-label">Email</label>
                                 <input type="email" name="email" class="form-control" value="{{ old('email') }}">
                                 @error('email')
@@ -122,7 +122,7 @@
                                 @enderror
                             </div>
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label class="form-label">Company</label>
                                 <input type="text" name="company" class="form-control" value="{{ old('company') }}">
                                 @error('company')
@@ -130,31 +130,20 @@
                                 @enderror
                             </div>
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label class="form-label">City</label>
                                 <input type="text" name="city" class="form-control" value="{{ old('city') }}">
                                 @error('city')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
-                            <div class="col-md-6 mb-3" id="other_course_div" style="display: none;">
+                            <div class="col-md-4 mb-3" id="other_course_div" style="display: none;">
                                 <label class="form-label">New Course Name <span class="text-danger">*</span></label>
                                 <input type="text" name="other_course_name" id="other_course_name" class="form-control"
                                     value="{{ old('other_course_name') }}" placeholder="Enter new course name">
                             </div>
 
-                            <script>
-                                document.getElementById('course_id').addEventListener('change', function () {
-                                    const div = document.getElementById('other_course_div');
-                                    div.style.display = (this.value === 'other') ? 'block' : 'none';
-                                });
-
-                                // Trigger on page load if "other" was selected
-                                if (document.getElementById('course_id').value === 'other') {
-                                    document.getElementById('other_course_div').style.display = 'block';
-                                }
-                            </script>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label class="form-label">Priority</label>
                                 <select name="priority" class="form-select">
                                     <option value="Low" {{ old('priority') == 'Low' ? 'selected' : '' }}>Low</option>
@@ -220,7 +209,7 @@
         </script>
 
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $('#assigned_to').select2({
                     theme: 'bootstrap-5',
                     placeholder: 'Search User...',
@@ -261,20 +250,20 @@
                                     let assignedName = lead.assigned_user ? lead.assigned_user.name : 'Not Assigned';
 
                                     let item = `
-                                        <a href="javascript:void(0)" class="list-group-item list-group-item-action mobile-item"
-                                        data-mobile="${lead.mobile}"
-                                        data-name="${lead.candidate_name || ''}"
-                                        data-email="${lead.email || ''}"
-                                        data-company="${lead.company || ''}"
-                                        data-city="${lead.city || ''}"
-                                        data-remarks="${lead.remarks || ''}"
-                                        data-assigned="${lead.assigned_to || ''}">
-                                            <div class="d-flex justify-content-between">
-                                                <strong>${lead.mobile}</strong>
-                                                <small class="text-primary">${assignedName}</small>
-                                            </div>
-                                            <small class="text-muted d-block">${lead.candidate_name || 'No Name'}</small>
-                                        </a>`;
+                                                <a href="javascript:void(0)" class="list-group-item list-group-item-action mobile-item"
+                                                data-mobile="${lead.mobile}"
+                                                data-name="${lead.candidate_name || ''}"
+                                                data-email="${lead.email || ''}"
+                                                data-company="${lead.company || ''}"
+                                                data-city="${lead.city || ''}"
+                                                data-remarks="${lead.remarks || ''}"
+                                                data-assigned="${lead.assigned_to || ''}">
+                                                    <div class="d-flex justify-content-between">
+                                                        <strong>${lead.mobile}</strong>
+                                                        <small class="text-primary">${assignedName}</small>
+                                                    </div>
+                                                    <small class="text-muted d-block">${lead.candidate_name || 'No Name'}</small>
+                                                </a>`;
                                     $dropdown.append(item);
                                 });
 
@@ -304,6 +293,17 @@
                     $('#mobile-suggestions').hide().empty();
                 });
             });
+        </script>
+        <script>
+            document.getElementById('course_id').addEventListener('change', function () {
+                const div = document.getElementById('other_course_div');
+                div.style.display = (this.value === 'other') ? 'block' : 'none';
+            });
+
+            // Trigger on page load if "other" was selected
+            if (document.getElementById('course_id').value === 'other') {
+                document.getElementById('other_course_div').style.display = 'block';
+            }
         </script>
 
     @endsection
