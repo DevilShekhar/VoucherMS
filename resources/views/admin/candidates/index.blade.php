@@ -201,7 +201,9 @@
             <div class="modal-dialog">
                 <form id="examScheduleForm">
                     @csrf
+
                     <div class="modal-content">
+
                         <div class="modal-header">
                             <h5 class="modal-title">
                                 <i class="fas fa-calendar-alt text-primary"></i>
@@ -209,37 +211,72 @@
                             </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
+
                         <div class="modal-body">
+
                             <input type="hidden" name="candidate_id" id="exam_candidate_id">
                             <input type="hidden" name="voucher_id" id="exam_voucher_id">
+
                             <div class="mb-3">
                                 <label class="form-label">Candidate</label>
                                 <input type="text" id="exam_candidate_name" class="form-control" readonly>
                             </div>
+
                             <div class="mb-3">
-                                <label class="form-label"> Exam Date</label>
+                                <label class="form-label">
+                                    Exam Mode <span class="text-danger">*</span>
+                                </label>
+
+                                <select class="form-select" name="exam_mode" id="exam_mode" required>
+                                    <option value="">-- Select Exam Mode --</option>
+                                    <option value="center">Center</option>
+                                    <option value="online">Online</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    Exam Date <span class="text-danger">*</span>
+                                </label>
                                 <input type="date" class="form-control" name="exam_date" required>
                             </div>
+
                             <div class="mb-3">
-                                <label class="form-label"> Exam Time</label>
+                                <label class="form-label">
+                                    Exam Time <span class="text-danger">*</span>
+                                </label>
                                 <input type="time" class="form-control" name="exam_time" required>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label"> Exam Center <span class="text-danger">*</span></label>
-                                <select class="form-select" name="center_id" id="exam_center_id" required>
+
+                            <div class="mb-3" id="center_div" style="display:none;">
+                                <label class="form-label">
+                                    Exam Center <span class="text-danger">*</span>
+                                </label>
+
+                                <select class="form-select" name="center_id" id="exam_center_id">
                                     <option value="">-- Select Center --</option>
+
                                     @foreach($centers as $center)
                                         <option value="{{ $center->id }}">
                                             {{ $center->center_name }}
                                         </option>
                                     @endforeach
+
                                 </select>
                             </div>
+
                         </div>
+
                         <div class="modal-footer">
-                            <button class="btn btn-cancel" data-bs-dismiss="modal" type="button"> Close</button>
-                            <button class="btn btn-save" type="submit"><i class="fas fa-save"></i> Save Schedule</button>
+                            <button class="btn btn-cancel" type="button" data-bs-dismiss="modal">
+                                Close
+                            </button>
+
+                            <button class="btn btn-save" type="submit">
+                                <i class="fas fa-save"></i> Save Schedule
+                            </button>
                         </div>
+
                     </div>
                 </form>
             </div>
@@ -439,26 +476,44 @@
         <script>
             $(document).ready(function () {
 
-                // ================= EXAM SCHEDULE =================
+                // Show/Hide Center Dropdown
+                $('#exam_mode').change(function () {
 
+                    if ($(this).val() == 'center') {
+                        $('#center_div').slideDown();
+                        $('#exam_center_id').prop('required', true);
+                    } else {
+                        $('#center_div').slideUp();
+                        $('#exam_center_id').val('');
+                        $('#exam_center_id').prop('required', false);
+                    }
+
+                });
+
+                // Open Modal
                 $(document).on('click', '.exam-schedule-btn', function () {
 
                     $('#exam_candidate_id').val($(this).data('id'));
                     $('#exam_candidate_name').val($(this).data('name'));
                     $('#exam_voucher_id').val($(this).data('voucher'));
 
-                    let centerId = $(this).data('center');
+                    // If editing existing schedule
+                    let examMode = $(this).data('exam-mode') || '';
+                    let centerId = $(this).data('center') || '';
 
-                    if (centerId) {
+                    $('#exam_mode').val(examMode).trigger('change');
+
+                    if (examMode === 'center') {
                         $('#exam_center_id').val(centerId);
                     } else {
                         $('#exam_center_id').val('');
                     }
 
                     $('#examScheduleModal').modal('show');
+
                 });
 
-                // Submit Exam Schedule
+                // Submit Form
                 $('#examScheduleForm').submit(function (e) {
 
                     e.preventDefault();
@@ -482,24 +537,41 @@
                             setTimeout(function () {
                                 location.reload();
                             }, 1000);
+
                         },
 
                         error: function (xhr) {
 
-                            let message = xhr.responseJSON?.message ?? 'Something went wrong';
+                            let message = 'Something went wrong';
+
+                            if (xhr.responseJSON && xhr.responseJSON.message) {
+                                message = xhr.responseJSON.message;
+                            }
 
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
                                 text: message
                             });
+
                         }
 
                     });
 
                 });
 
+                // Reset Modal
+                $('#examScheduleModal').on('hidden.bs.modal', function () {
 
+                    $('#examScheduleForm')[0].reset();
+
+                    $('#center_div').hide();
+
+                    $('#exam_center_id')
+                        .val('')
+                        .prop('required', false);
+
+                });
 
             });
         </script>
