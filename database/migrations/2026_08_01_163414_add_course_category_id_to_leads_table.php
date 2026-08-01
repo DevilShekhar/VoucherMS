@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreignId('course_category_id')
                 ->nullable()
                 ->after('center_id')
-                ->constrained('course_categories')
+                ->constrained('course_category')
                 ->nullOnDelete();
         });
     }
