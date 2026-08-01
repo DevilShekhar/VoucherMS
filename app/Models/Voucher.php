@@ -16,7 +16,7 @@ class Voucher extends Model
         'purchase_price',
         'cost',
         'status',
-        'remarks', 'voucher_code_hash', 'course_id',
+        'remarks', 'voucher_code_hash', 'course_id','created_by','updated_by'
     ];
 
     public function setVoucherCodeAttribute($value)
@@ -64,5 +64,14 @@ class Voucher extends Model
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updater()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

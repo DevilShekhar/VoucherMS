@@ -8,6 +8,7 @@ use App\Models\Course;
 use App\Models\Voucher;
 use App\Models\VoucherVendor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Throwable;
 
@@ -15,7 +16,8 @@ class VoucherController extends Controller
 {
     public function index()
     {
-        $vouchers = Voucher::with(['vendor', 'course'])->latest()->paginate(30);
+        $vouchers = Voucher::with(['vendor', 'course', 'creator', 'updater'])->latest()->paginate(30);
+
         return view('admin.vouchers.index', compact('vouchers'));
     }
 
@@ -54,7 +56,9 @@ class VoucherController extends Controller
                     'voucher_code' => 'This voucher code already exists.',
                 ]);
         }
-        Voucher::create($request->all());
+        $data = $request->all();
+        $data['created_by'] = Auth::id();
+        Voucher::create($data);
 
         return redirect()
             ->route('vouchers.index')
@@ -75,8 +79,16 @@ class VoucherController extends Controller
             'voucher_code' => 'required',
             'vendor_id' => 'required',
             'course_id' => 'required|exists:courses,id',
+            'purchase_date' => 'required',
+            'expiry_date' => 'required',
+            'purchase_price' => 'required',
+            'cost' => 'required',
         ]);
-        $voucher->update($request->all());
+
+        $data = $request->all();
+        $data['updated_by'] = Auth::id();
+
+        $voucher->update($data);
 
         return redirect()
             ->route('vouchers.index')
