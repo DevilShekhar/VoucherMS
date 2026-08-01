@@ -62,6 +62,7 @@
                                 <tr>
 
                                     <th width="60">#</th>
+                                    <th>Course Category</th>
                                     <th>Course Name</th>
                                     <th>Voucher Code</th>
                                     <th>Vendor</th>
@@ -87,6 +88,7 @@
                                     <tr>
 
                                         <td>{{ $vouchers->firstItem() + $key }}</td>
+                                        <td>{{ $voucher->courseCategory->name ?? '-' }}</td>
                                         <td>{{ $voucher->course->course_name ?? '-' }}</td>
 
                                         @php
@@ -144,7 +146,7 @@
                                             </span>
                                         </td>
                                         <td>{{ $voucher->creator->name ?? '-' }}</td>
-<td>{{ $voucher->updater->name ?? '-' }}</td>
+                                        <td>{{ $voucher->updater->name ?? '-' }}</td>
                                         @can('vouchers.edit')
                                             <td class="text-center">
 

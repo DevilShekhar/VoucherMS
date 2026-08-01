@@ -57,23 +57,38 @@
 
                         <div class="row">
 
-                            <div class="mb-3">
-                                <label class="form-label">Course <span class="text-danger">*</span></label>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Course Category <span class="text-danger">*</span></label>
 
-                                <select name="course_id" class="form-select @error('course_id') is-invalid @enderror">
-                                    <option value="">Select Course</option>
-
-                                    @foreach($courses as $course)
-                                        <option value="{{ $course->id }}" {{ old('course_id', $voucher->course_id ?? '') == $course->id ? 'selected' : '' }}>
-                                            {{ $course->course_name }}
+                                <select name="course_category_id" id="course_category_id" class="form-select">
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ old('course_category_id', $voucher->course_category_id) == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
                                         </option>
                                     @endforeach
                                 </select>
-
-                                @error('course_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
                             </div>
+                            <div class="mb-3">
+    <label class="form-label">Course <span class="text-danger">*</span></label>
+
+    <select name="course_id" id="course_id"
+        class="form-select @error('course_id') is-invalid @enderror">
+
+        <option value="">Select Course</option>
+
+        @foreach($courses as $course)
+            <option value="{{ $course->id }}"
+                {{ old('course_id', $voucher->course_id) == $course->id ? 'selected' : '' }}>
+                {{ $course->course_name }}
+            </option>
+        @endforeach
+
+    </select>
+
+    @error('course_id')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
                             <!-- Voucher Code -->
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">
@@ -229,7 +244,57 @@
             </form>
 
         </section>
+<script>
+$(document).ready(function () {
 
+    function loadCourses(categoryId, selectedCourse = '') {
+
+        if (categoryId == '') {
+            $('#course_id').html('<option value="">Select Course</option>');
+            return;
+        }
+
+        $.ajax({
+            url: "{{ url('/courses/by-category') }}/" + categoryId,
+            type: "GET",
+            dataType: "json",
+            success: function (response) {
+
+                let options = '<option value="">Select Course</option>';
+
+                $.each(response, function (index, course) {
+
+                    options += `<option value="${course.id}"
+                        ${selectedCourse == course.id ? 'selected' : ''}>
+                        ${course.course_name}
+                    </option>`;
+
+                });
+
+                $('#course_id').html(options);
+            }
+        });
+    }
+
+    // Category change
+    $('#course_category_id').on('change', function () {
+
+        let categoryId = $(this).val();
+
+        loadCourses(categoryId);
+
+    });
+
+    // Load existing courses on Edit page
+    let selectedCategory = "{{ old('course_category_id', $voucher->course_category_id) }}";
+    let selectedCourse   = "{{ old('course_id', $voucher->course_id) }}";
+
+    if (selectedCategory) {
+        loadCourses(selectedCategory, selectedCourse);
+    }
+
+});
+</script>
     @endsection
 @else
     @php

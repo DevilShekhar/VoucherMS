@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Imports\VoucherImport;
 use App\Models\Course;
+use App\Models\CourseCategory;
 use App\Models\Voucher;
 use App\Models\VoucherVendor;
 use Illuminate\Http\Request;
@@ -27,13 +28,11 @@ class VoucherController extends Controller
 
         return view('admin.vouchers.index', compact('vouchers'));
     }
-
     public function create()
     {
         $vendors = VoucherVendor::orderBy('vendor_name')->get();
-        $courses = Course::query()->where('status', 1)->orderBy('course_name')->get();
-
-        return view('admin.vouchers.create', compact('vendors', 'courses'));
+        $categories = CourseCategory::get();
+        return view('admin.vouchers.create', compact('vendors', 'categories'));
     }
 
     public function store(Request $request)
@@ -41,6 +40,7 @@ class VoucherController extends Controller
         $request->validate([
             'voucher_code' => 'required',
             'vendor_id' => 'required',
+            'course_category_id' => 'required|exists:course_category,id',
             'course_id' => 'required|exists:courses,id',
             'purchase_date' => 'required',
             'expiry_date' => 'required',
@@ -66,18 +66,29 @@ class VoucherController extends Controller
     }
 
     public function edit(Voucher $voucher)
-    {
-        $vendors = VoucherVendor::orderBy('vendor_name')->get();
-        $courses = Course::query()->where('status', 1)->orderBy('course_name')->get();
+{
+    $vendors = VoucherVendor::orderBy('vendor_name')->get();
+    $categories = CourseCategory::orderBy('name')->get();
 
-        return view('admin.vouchers.edit', compact('voucher', 'vendors', 'courses'));
-    }
+    $courses = Course::where('course_category_id', $voucher->course_category_id)
+   
+        ->orderBy('course_name')
+        ->get();
+
+    return view('admin.vouchers.edit', compact(
+        'voucher',
+        'vendors',
+        'categories',
+        'courses'
+    ));
+}
 
     public function update(Request $request, Voucher $voucher)
     {
         $request->validate([
             'voucher_code' => 'required',
             'vendor_id' => 'required',
+            'course_category_id' => 'required|exists:course_category,id',
             'course_id' => 'required|exists:courses,id',
             'purchase_date' => 'required',
             'expiry_date' => 'required',
@@ -215,5 +226,15 @@ class VoucherController extends Controller
                 ->route('vouchers.index')
                 ->with('error', 'Failed to import Excel file. Please make sure you are using the correct template.');
         }
+    }
+
+    public function getCourses($category)
+    {
+        $courses = Course::where('course_category_id', $category)
+            ->where('status', 1)
+            ->orderBy('course_name')
+            ->get(['id', 'course_name']);
+
+        return response()->json($courses);
     }
 }
