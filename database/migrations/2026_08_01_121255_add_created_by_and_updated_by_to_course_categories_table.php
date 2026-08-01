@@ -9,26 +9,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('course_category', function (Blueprint $table) {
-            $table->foreignId('created_by')
-                ->nullable()
-                ->constrained('users')
+            $table->foreign('created_by')
+                ->references('id')
+                ->on('users')
                 ->nullOnDelete();
 
-            $table->foreignId('updated_by')
-                ->nullable()
-                ->after('created_by')
-                ->constrained('users')
+            $table->foreign('updated_by')
+                ->references('id')
+                ->on('users')
                 ->nullOnDelete();
         });
     }
-
     public function down(): void
     {
         Schema::table('course_category', function (Blueprint $table) {
             $table->dropForeign(['created_by']);
             $table->dropForeign(['updated_by']);
-
-            $table->dropColumn(['created_by', 'updated_by']);
         });
     }
 };
