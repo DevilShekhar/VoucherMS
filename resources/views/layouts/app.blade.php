@@ -119,6 +119,13 @@
                         <span>Courses</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('course-category.index') }}"
+                        class="sb-link {{ request()->routeIs('course-category.*') ? 'active' : '' }}">
+                        <i class="fas fa-book"></i>
+                        <span>Course Category</span>
+                    </a>
+                </li>
             @endcan
 
             @can('leads.index')
