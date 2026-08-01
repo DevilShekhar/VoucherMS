@@ -80,7 +80,7 @@
                                             $paymentReceived = $candidate->payments->count() > 0;
                                             $voucherRequest = $candidate->voucherRequest;
                                             $examScheduled = $candidate->examSchedule;
-                                            $canRequestVoucher = !empty($candidate->course_id) && !empty($candidate->center_id);
+                                            $canRequestVoucher = !empty($candidate->course_id);
                                         @endphp
                                         <td class="text-nowrap text-end">
                                             <div class="dropdown">
@@ -132,7 +132,6 @@
                                                     @elseif(!$voucherRequest)
                                                         {{-- Request Voucher --}}
                                                         <li>
-                                                        <li>
                                                             @if($canRequestVoucher)
                                                                 <button type="button" class="dropdown-item request-voucher-btn"
                                                                     data-candidate-id="{{ $candidate->id }}"
@@ -152,7 +151,6 @@
                                                                     </button>
                                                                 </span>
                                                             @endif
-                                                        </li>
                                                         </li>
 
                                                     @elseif($voucherRequest->status == 'Pending')
@@ -469,8 +467,18 @@
                                 <textarea class="form-control" name="remarks" rows="3"
                                     placeholder="Enter remarks (optional)"></textarea>
                             </div>
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    GST Type <span class="text-danger">*</span>
+                                </label>
 
+                                <select name="gst_type" class="form-select" required>
+                                    <option value="GST">GST</option>
+                                    <option value="Non GST">Non GST</option>
+                                </select>
+                            </div>
                         </div>
+
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">

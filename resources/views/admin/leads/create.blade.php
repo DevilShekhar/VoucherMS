@@ -137,6 +137,40 @@
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">
+                                    Course Category
+                                </label>
+
+                                <select name="course_category_id" id="course_category_id" class="form-select">
+                                    <option value="">Select Category</option>
+
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}">
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">
+                                    Course
+                                </label>
+
+                                <select name="course_id" id="course_id" class="form-select">
+                                    <option value="">Select Course</option>
+
+                                    @foreach($courses as $course)
+                                        <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
+                                            {{ $course->course_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                @error('course_id')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
                             <div class="col-md-4 mb-3" id="other_course_div" style="display: none;">
                                 <label class="form-label">New Course Name <span class="text-danger">*</span></label>
                                 <input type="text" name="other_course_name" id="other_course_name" class="form-control"
@@ -250,20 +284,20 @@
                                     let assignedName = lead.assigned_user ? lead.assigned_user.name : 'Not Assigned';
 
                                     let item = `
-                                                <a href="javascript:void(0)" class="list-group-item list-group-item-action mobile-item"
-                                                data-mobile="${lead.mobile}"
-                                                data-name="${lead.candidate_name || ''}"
-                                                data-email="${lead.email || ''}"
-                                                data-company="${lead.company || ''}"
-                                                data-city="${lead.city || ''}"
-                                                data-remarks="${lead.remarks || ''}"
-                                                data-assigned="${lead.assigned_to || ''}">
-                                                    <div class="d-flex justify-content-between">
-                                                        <strong>${lead.mobile}</strong>
-                                                        <small class="text-primary">${assignedName}</small>
-                                                    </div>
-                                                    <small class="text-muted d-block">${lead.candidate_name || 'No Name'}</small>
-                                                </a>`;
+                                                                        <a href="javascript:void(0)" class="list-group-item list-group-item-action mobile-item"
+                                                                        data-mobile="${lead.mobile}"
+                                                                        data-name="${lead.candidate_name || ''}"
+                                                                        data-email="${lead.email || ''}"
+                                                                        data-company="${lead.company || ''}"
+                                                                        data-city="${lead.city || ''}"
+                                                                        data-remarks="${lead.remarks || ''}"
+                                                                        data-assigned="${lead.assigned_to || ''}">
+                                                                            <div class="d-flex justify-content-between">
+                                                                                <strong>${lead.mobile}</strong>
+                                                                                <small class="text-primary">${assignedName}</small>
+                                                                            </div>
+                                                                            <small class="text-muted d-block">${lead.candidate_name || 'No Name'}</small>
+                                                                        </a>`;
                                     $dropdown.append(item);
                                 });
 
@@ -304,6 +338,42 @@
             if (document.getElementById('course_id').value === 'other') {
                 document.getElementById('other_course_div').style.display = 'block';
             }
+        </script>
+        <script>
+            $(document).ready(function () {
+
+                $('#course_category_id').change(function () {
+
+                    let categoryId = $(this).val();
+
+                    $('#course_id').html('<option value="">Loading...</option>');
+
+                    if (categoryId == '') {
+                        $('#course_id').html('<option value="">Select Course</option>');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: '/courses/by-category/' + categoryId,
+                        type: 'GET',
+                        success: function (response) {
+
+                            let options = '<option value="">Select Course</option>';
+
+                            $.each(response, function (index, course) {
+                                options += `<option value="${course.id}">
+                                                    ${course.course_name}
+                                                </option>`;
+                            });
+
+                            $('#course_id').html(options);
+                        }
+                    });
+
+                });
+
+            });
+
         </script>
 
     @endsection

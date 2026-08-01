@@ -309,6 +309,7 @@
                                         @endif
                                     </td>
                                     <td>{{ $lead->course->course_name ?? '-' }}</td>
+
                                     <td>{{ $lead->center->center_name ?? '-' }}</td>
                                     @if (in_array(auth()->user()->role_id, [1, 2,3]))
                                     <td>

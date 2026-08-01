@@ -1,0 +1,24 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('voucher_requests', function (Blueprint $table) {
+            $table->enum('gst_type', ['GST', 'Non GST'])
+                  ->nullable()
+                  ->after('remarks');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('voucher_requests', function (Blueprint $table) {
+            $table->dropColumn('gst_type');
+        });
+    }
+};
