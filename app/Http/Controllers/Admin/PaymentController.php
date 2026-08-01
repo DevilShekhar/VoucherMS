@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Candidate;
 use App\Models\Payment;
+use App\Models\Invoice;
 use App\Models\PaymentTransaction;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
@@ -117,10 +119,11 @@ class PaymentController extends Controller
             'candidate.center',
             'transactions',
             'createdBy',
+            'invoice',
         ]);
 
         // Complete payment history of this candidate
-        $paymentHistory = Payment::with('transactions')
+        $paymentHistory = Payment::with('transactions','invoice')
             ->where('candidate_id', $payment->candidate_id)
             ->latest()
             ->get();
@@ -129,5 +132,47 @@ class PaymentController extends Controller
             'payment',
             'paymentHistory'
         ));
+    }
+    public function generateInvoice(Payment $payment)
+    {
+        if ($payment->invoice) {
+            return back()->with('error', 'Invoice already generated.');
+        }
+
+        $lastInvoice = Invoice::latest()->first();
+
+        $next = $lastInvoice
+            ? ((int) substr($lastInvoice->invoice_no, -4)) + 1
+            : 1;
+
+        $invoiceNo = 'INV-' . date('Ymd') . '-' . str_pad($next, 4, '0', STR_PAD_LEFT);
+
+        Invoice::create([
+            'candidate_id' => $payment->candidate_id,
+            'payment_id'   => $payment->id,
+            'invoice_no'   => $invoiceNo,
+            'invoice_date' => now()->toDateString(),
+            'gst_type'     => 'CGST_SGST',
+            'total_amount' => $payment->net_amount,
+            'status'       => 'Generated',
+            'created_by'   => Auth::id(),
+        ]);
+
+        return redirect()->back()->with('success', 'Invoice generated successfully.');
+    }
+    public function downloadInvoice(Invoice $invoice)
+    {
+        $invoice->load([
+            'candidate.course',
+            'candidate.center',
+            'payment.transactions',
+        ]);
+
+        $pdf = Pdf::loadView(
+            'admin.invoice.invoice',
+            compact('invoice')
+        );
+
+        return $pdf->download($invoice->invoice_no.'.pdf');
     }
 }

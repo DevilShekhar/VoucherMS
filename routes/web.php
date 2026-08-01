@@ -165,6 +165,8 @@ Route::middleware(['auth', 'otp'])->group(function () {
     Route::get('/dashboard/export/leads/filter', [DashboardController::class, 'exportFilteredLeads'])->name('dashboard.export.leads.filter');
     Route::get('/dashboard/export/vouchers/filter', [DashboardController::class, 'exportFilteredVouchers'])->name('dashboard.export.vouchers.filter');
     Route::resource('course-category', CourseCategoryController::class);
+    Route::post('admin/payments/{payment}/generate-invoice', [PaymentController::class, 'generateInvoice'])->name('payments.generateInvoice');
+    Route::get('admin/invoices/{invoice}/download', [PaymentController::class, 'downloadInvoice'])->name('invoices.download');
 });
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth')->name('logout');
 require __DIR__.'/auth.php';
