@@ -16,16 +16,8 @@ class Voucher extends Model
         'purchase_price',
         'cost',
         'status',
-        'remarks','voucher_code_hash'
+        'remarks', 'voucher_code_hash', 'course_id',
     ];
-
-    /**
-     * Encrypt before saving.
-     */
-    // public function setVoucherCodeAttribute($value)
-    // {
-    //     $this->attributes['voucher_code'] = Crypt::encryptString($value);
-    // }
 
     public function setVoucherCodeAttribute($value)
     {
@@ -63,8 +55,14 @@ class Voucher extends Model
     {
         return $this->hasMany(VoucherRequest::class);
     }
+
     public function candidate()
     {
         return $this->hasMany(Candidate::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
     }
 }

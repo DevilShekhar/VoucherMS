@@ -62,6 +62,7 @@
                                 <tr>
 
                                     <th width="60">#</th>
+                                    <th>Course Name</th>
                                     <th>Voucher Code</th>
                                     <th>Vendor</th>
                                     <th>Purchase Date</th>
@@ -84,6 +85,7 @@
                                     <tr>
 
                                         <td>{{ $vouchers->firstItem() + $key }}</td>
+                                        <td>{{ $voucher->course->course_name ?? '-' }}</td>
 
                                         @php
                                             $canViewVoucher = in_array(auth()->user()->role_id, [1, 2, 3]);
