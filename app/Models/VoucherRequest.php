@@ -21,13 +21,15 @@ class VoucherRequest extends Model
         'remarks',
         'requested_at',
         'approved_at',
-        'selling_price'
+        'selling_price',
 
     ];
 
     protected $casts = [
         'requested_at' => 'datetime',
         'approved_at' => 'datetime',
+        'expiry_date' => 'date',
+        'purchase_date' => 'date',
     ];
 
     public function candidate()
