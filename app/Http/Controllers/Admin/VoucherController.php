@@ -28,10 +28,12 @@ class VoucherController extends Controller
 
         return view('admin.vouchers.index', compact('vouchers'));
     }
+
     public function create()
     {
         $vendors = VoucherVendor::orderBy('vendor_name')->get();
         $categories = CourseCategory::get();
+
         return view('admin.vouchers.create', compact('vendors', 'categories'));
     }
 
@@ -47,7 +49,7 @@ class VoucherController extends Controller
             'purchase_price' => 'required',
             'cost' => 'required',
         ]);
-
+    
         $hash = hash('sha256', strtoupper(trim($request->voucher_code)));
         if (Voucher::query()->where('voucher_code_hash', $hash)->exists()) {
             return back()
@@ -66,22 +68,22 @@ class VoucherController extends Controller
     }
 
     public function edit(Voucher $voucher)
-{
-    $vendors = VoucherVendor::orderBy('vendor_name')->get();
-    $categories = CourseCategory::orderBy('name')->get();
+    {
+        $vendors = VoucherVendor::orderBy('vendor_name')->get();
+        $categories = CourseCategory::orderBy('name')->get();
 
-    $courses = Course::where('course_category_id', $voucher->course_category_id)
-   
-        ->orderBy('course_name')
-        ->get();
+        $courses = Course::where('course_category_id', $voucher->course_category_id)
 
-    return view('admin.vouchers.edit', compact(
-        'voucher',
-        'vendors',
-        'categories',
-        'courses'
-    ));
-}
+            ->orderBy('course_name')
+            ->get();
+
+        return view('admin.vouchers.edit', compact(
+            'voucher',
+            'vendors',
+            'categories',
+            'courses'
+        ));
+    }
 
     public function update(Request $request, Voucher $voucher)
     {

@@ -76,5 +76,5 @@ class Candidate extends Model
     public function examSchedule()
     {
         return $this->hasOne(ExamSchedule::class, 'candidate_id', 'id');
-    }   
+    }
 }

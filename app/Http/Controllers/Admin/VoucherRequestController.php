@@ -33,6 +33,7 @@ class VoucherRequestController extends Controller
 
         return view('admin.voucher_requests.index', compact('requests'));
     }
+
     public function status($status)
     {
         $requests = VoucherRequest::where('status', $status)
@@ -72,15 +73,6 @@ class VoucherRequestController extends Controller
             return back()->with('error', 'Voucher request already sent.');
         }
 
-        // Get first available voucher
-        $voucher = Voucher::query()->where('status', 'Available')
-            ->orderBy('id')
-            ->first();
-
-        if (! $voucher) {
-            return back()->with('error', 'No voucher is currently available.');
-        }
-
         // Generate Request Number
         $last = VoucherRequest::latest('id')->first();
 
@@ -97,7 +89,7 @@ class VoucherRequestController extends Controller
         $voucherRequest = VoucherRequest::create([
             'request_no' => $requestNo,
             'candidate_id' => $candidate->id,
-            'voucher_id' => $voucher->id, // Store Voucher ID
+            'voucher_id' => null,
             'requested_by' => Auth::id(),
             'center_id' => $candidate->center_id,
 
@@ -130,11 +122,6 @@ class VoucherRequestController extends Controller
             ]);
         }
 
-        // Reserve the voucher immediately
-        $voucher->update([
-            'status' => 'Allocated',
-        ]);
-
         return back()->with('success', 'Voucher request sent successfully. Voucher has been reserved.');
     }
 
@@ -150,7 +137,15 @@ class VoucherRequestController extends Controller
             'voucher',
         ]);
 
-        return view('admin.voucher_requests.show', compact('voucherRequest'));
+        $availableVouchers = Voucher::query()->where('course_id', $voucherRequest->candidate->course_id)
+            ->where('status', 'Available')
+            ->orderBy('expiry_date')
+            ->get();
+
+        return view('admin.voucher_requests.show', compact(
+            'voucherRequest',
+            'availableVouchers'
+        ));
     }
 
     /**
