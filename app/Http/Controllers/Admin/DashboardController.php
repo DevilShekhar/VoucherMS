@@ -16,6 +16,7 @@ use App\Models\Location;
 use App\Models\Payment;
 use App\Models\User;
 use App\Models\Voucher;
+use App\Models\Center;
 use App\Models\VoucherVendor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -149,6 +150,7 @@ class DashboardController extends Controller
             ->paginate(30);
         $executives = User::where('role_id',4)->orderBy('name')->get();
         $vendors = VoucherVendor::orderBy('vendor_name')->get();
+        $centers = Center::orderBy('center_name')->get();
 
         return view('dashboard', compact(
             'todayLeads',
@@ -167,7 +169,7 @@ class DashboardController extends Controller
             'availableCount',
             'allocatedCount',
             'usedCount',
-            'expiredCount', 'cancelledCount','executives','vendors'
+            'expiredCount', 'cancelledCount','executives','vendors','centers'
         ));
     }
 
@@ -279,6 +281,32 @@ class DashboardController extends Controller
         return \Maatwebsite\Excel\Facades\Excel::download(
             new FilteredVouchersExport($request),
             'Filtered_Vouchers_' . now()->format('d-m-Y_H-i-s') . '.xlsx'
+        );
+    }
+    public function examScheduleFilter(Request $request)
+    {
+        $query = ExamSchedule::with([
+            'candidate',
+            'center'
+        ]);
+
+        if ($request->filled('from_date')) {
+            $query->whereDate('exam_date', '>=', $request->from_date);
+        }
+
+        if ($request->filled('to_date')) {
+            $query->whereDate('exam_date', '<=', $request->to_date);
+        }
+
+        if ($request->filled('exam_mode')) {
+            $query->where('exam_mode', $request->exam_mode);
+        }
+
+        if ($request->filled('center_id')) {
+            $query->where('center_id', $request->center_id);
+        }
+        return response()->json(
+            $query->latest()->get()
         );
     }
 }

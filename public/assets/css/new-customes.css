@@ -5517,3 +5517,12 @@ small.text-muted{
     transform:translateY(-2px);
     box-shadow:0 10px 20px rgba(25,135,84,.25);
 }
+.report-filter-card .card-header-reports{
+    background:linear-gradient(135deg, #2159e2, #4d78d2);
+}
+.report-filter-card .card-header-voucher{
+ background:linear-gradient(135deg, #f07f0b, #d97725);
+}
+.report-filter-card .card-header-voucher-report{
+ background:linear-gradient(135deg, #8145f0, #9450c5);
+}

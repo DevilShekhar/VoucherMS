@@ -72,9 +72,10 @@
             </div>
         </div>
     </section>
+    
     <section class="mb-4">
         <div class="card border-0 shadow-lg rounded-4 report-filter-card">
-            <div class="card-header border-0 py-3 px-4">
+            <div class="card-header-reports border-0 py-3 px-4">
                 <div class="d-flex justify-content-between align-items-center flex-wrap">
                     <div class="d-flex align-items-center">
                         <div class="filter-icon">
@@ -163,7 +164,7 @@
                         </div>
                         <div class="col-lg-4 d-flex align-items-end">
                             <div class="d-grid w-100">
-                                <button type="submit" class="btn btn-success btn-lg export-btn">
+                                <button type="submit" class="btn btn-success btn-md export-btn">
                                     <i class="fas fa-file-excel me-2"></i>
                                     Export Excel
                                 </button>
@@ -177,7 +178,7 @@
     <section class="mb-4">
     <div class="card border-0 shadow-lg rounded-4 report-filter-card">
 
-        <div class="card-header border-0 py-3 px-4">
+        <div class="card-header-voucher-report border-0 py-3 px-4">
             <div class="d-flex justify-content-between align-items-center flex-wrap">
 
                 <div class="d-flex align-items-center">
@@ -191,7 +192,7 @@
                             Voucher Report
                         </h4>
 
-                        <small class="text-white-50">
+                        <small class="text-white">
                             Filter vouchers and export professional Excel reports
                         </small>
                     </div>
@@ -612,6 +613,170 @@
 </section>
 @endcan
 
+<section class="mb-4">
+    <div class="card border-0 shadow-lg rounded-4 report-filter-card">
+
+        <div class="card-header-voucher border-0 py-3 px-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+
+                <div class="d-flex align-items-center">
+                    <div class="filter-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+
+                    <div class="ms-3">
+                        <h4 class="mb-0 text-white">
+                            Exam Schedule Report
+                        </h4>
+
+                        <small class="text-white ">
+                            Filter exam schedules and view records instantly
+                        </small>
+                    </div>
+                </div>
+
+                <span class="badge bg-light text-dark px-3 py-2 rounded-pill">
+                    <i class="fas fa-search text-primary me-1"></i>
+                    Live Filter
+                </span>
+
+            </div>
+        </div>
+
+        <div class="card-body p-4">
+
+            <div class="row g-3">
+
+                <!-- From Date -->
+                <div class="col-lg-3 col-md-6">
+                    <label class="form-label fw-semibold">
+                        <i class="fas fa-calendar-alt text-primary me-1"></i>
+                        From Date
+                    </label>
+
+                    <input type="date"
+                           id="from_date"
+                           class="form-control filter-input">
+                </div>
+
+                <!-- To Date -->
+                <div class="col-lg-3 col-md-6">
+                    <label class="form-label fw-semibold">
+                        <i class="fas fa-calendar-check text-success me-1"></i>
+                        To Date
+                    </label>
+
+                    <input type="date"
+                           id="to_date"
+                           class="form-control filter-input">
+                </div>
+
+                <!-- Exam Mode -->
+                <div class="col-lg-2 col-md-6">
+                    <label class="form-label fw-semibold">
+                        <i class="fas fa-laptop-house text-info me-1"></i>
+                        Exam Mode
+                    </label>
+
+                    <select id="exam_mode"
+                            class="form-select filter-input">
+
+                        <option value="">All Modes</option>
+                        <option value="center">Center</option>
+                        <option value="online">Online</option>
+
+                    </select>
+                </div>
+
+                <!-- Center -->
+                <div class="col-lg-2 col-md-6">
+                    <label class="form-label fw-semibold">
+                        <i class="fas fa-building text-warning me-1"></i>
+                        Center
+                    </label>
+
+                    <select id="center_id"
+                            class="form-select filter-input">
+
+                        <option value="">All Centers</option>
+
+                        @foreach($centers as $center)
+                            <option value="{{ $center->id }}">
+                                {{ $center->center_name }}
+                            </option>
+                        @endforeach
+
+                    </select>
+                </div>
+
+                <!-- Filter Button -->
+                <div class="col-lg-2 d-flex align-items-end">
+
+                    <div class="d-grid w-100">
+
+                        <button type="button"
+                                id="filterBtn"
+                                class="btn btn-success btn-md export-btn">
+
+                            <i class="fas fa-search me-2"></i>
+                            Filter
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <hr class="my-4">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-light">
+
+                        <tr>
+                            <th width="5%">#</th>
+                            <th>Candidate</th>
+                            <th>Exam Mode</th>
+                            <th>Center</th>
+                            <th>Exam Date</th>
+                            <th>Exam Time</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="scheduleTable">
+
+                        <tr>
+
+                            <td colspan="7" class="text-center py-5">
+
+                                <i class="fas fa-calendar-alt fa-3x text-muted mb-3"></i>
+
+                                <br>
+
+                                <strong class="text-muted">
+                                    Select filters and click Filter
+                                </strong>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
 @can('lead-card')
 <section class="section premium-dashboard pt-0">
     <div class="row">
@@ -900,5 +1065,65 @@
                 });
             }
         });
+    </script>
+    <script>
+        function loadExamSchedules() {
+
+            $.ajax({
+                url: "{{ route('dashboard.exam.schedule.filter') }}",
+                type: "GET",
+                data: {
+                    from_date: $('#from_date').val(),
+                    to_date: $('#to_date').val(),
+                    exam_mode: $('#exam_mode').val(),
+                    center_id: $('#center_id').val()
+                },
+                success: function(response) {
+
+                    let html = "";
+
+                    if (response.length == 0) {
+                        html = `<tr>
+                                    <td colspan="7" class="text-center">
+                                        No Records Found
+                                    </td>
+                                </tr>`;
+                    } else {
+
+                        $.each(response, function(index, row) {
+
+                            html += `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${row.candidate ? row.candidate.first_name + ' ' + (row.candidate.last_name ?? '') : '-'}</td>
+                                <td>${row.exam_mode}</td>
+                                <td>${row.center ? row.center.center_name : '-'}</td>
+                                <td>${row.exam_date}</td>
+                                <td>${row.exam_time}</td>
+                                <td>${row.exam_status}</td>
+                            </tr>`;
+                        });
+                    }
+
+                    $('#scheduleTable').html(html);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+
+            loadExamSchedules();
+
+            $('#filterBtn').click(function (e) {
+                e.preventDefault();
+                loadExamSchedules();
+            });
+
+            $('#from_date,#to_date,#exam_mode,#center_id').change(function () {
+                loadExamSchedules();
+            });
+
+        });
+    
     </script>
 @endsection
