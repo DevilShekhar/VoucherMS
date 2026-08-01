@@ -2,14 +2,13 @@
 
 namespace App\Exports;
 
-use App\Models\Voucher;
+use App\Models\Lead;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Crypt;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class FilteredVouchersExport implements FromCollection, WithHeadings, WithMapping
+class FilteredLeadsExport implements FromCollection, WithHeadings, WithMapping
 {
     protected $request;
 
@@ -20,26 +19,39 @@ class FilteredVouchersExport implements FromCollection, WithHeadings, WithMappin
 
     public function collection()
     {
-        $query = Voucher::with('vendor');
+        $query = Lead::with([
+            'location',
+            'center',
+            'course',
+            'assignedUser',
+            'latestFollowup',
+        ]);
+
+        // Sales Executive
+        if ($this->request->filled('executive_id')) {
+            $query->where('assigned_to', $this->request->executive_id);
+        }
+
+        // Location
+        if ($this->request->filled('location_id')) {
+            $query->where('location_id', $this->request->location_id);
+        }
 
         // From Date
         if ($this->request->filled('from_date')) {
-            $query->whereDate('purchase_date', '>=', $this->request->from_date);
+            $query->whereDate('created_at', '>=', $this->request->from_date);
         }
 
         // To Date
         if ($this->request->filled('to_date')) {
-            $query->whereDate('purchase_date', '<=', $this->request->to_date);
-        }
-
-        // Vendor
-        if ($this->request->filled('vendor_id')) {
-            $query->where('vendor_id', $this->request->vendor_id);
+            $query->whereDate('created_at', '<=', $this->request->to_date);
         }
 
         // Status
         if ($this->request->filled('status')) {
-            $query->where('status', $this->request->status);
+            $query->whereHas('latestFollowup', function ($q) {
+                $q->where('status', $this->request->status);
+            });
         }
 
         return $query->latest()->get();
@@ -48,50 +60,43 @@ class FilteredVouchersExport implements FromCollection, WithHeadings, WithMappin
     public function headings(): array
     {
         return [
-            'Voucher Code',
-            'Vendor',
-            'Purchase Date',
-            'Expiry Date',
-            'Purchase Price',
-            'Cost',
+            'Lead No',
+            'Candidate Name',
+            'Email',
+            'Mobile',
+            'Location',
+            'Center',
+            'Course',
+            'Sales Executive',
             'Status',
-            'Remarks',
             'Created Date',
         ];
     }
 
-    public function map($voucher): array
-{
-    return [
-        $voucher->voucher_code,
+    public function map($lead): array
+    {
+        return [
+            $lead->lead_no ?? '-',
 
-        $voucher->vendor
-            ? $voucher->vendor->vendor_name
-            : '-',
+            $lead->candidate_name ?? '-',
 
-        $voucher->certification
-            ? $voucher->certification->certification_name
-            : '-',
+            $lead->email ?? '-',
 
-        $voucher->purchase_date
-            ? \Carbon\Carbon::parse($voucher->purchase_date)->format('d M Y')
-            : '-',
+            $lead->mobile ?? '-',
 
-        $voucher->expiry_date
-            ? \Carbon\Carbon::parse($voucher->expiry_date)->format('d M Y')
-            : '-',
+            optional($lead->location)->name ?? '-',
 
-        $voucher->purchase_price,
+            optional($lead->center)->center_name ?? '-',
 
-        $voucher->cost,
+            optional($lead->course)->course_name ?? '-',
 
-        $voucher->status,
+            optional($lead->assignedUser)->name ?? '-',
 
-        $voucher->remarks ?? '-',
+            optional($lead->latestFollowup)->status ?? ($lead->status ?? '-'),
 
-        $voucher->created_at
-            ? $voucher->created_at->format('d M Y')
-            : '-',
-    ];
-}
+            $lead->created_at
+                ? Carbon::parse($lead->created_at)->format('d M Y')
+                : '-',
+        ];
+    }
 }
