@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Imports\VoucherImport;
+use App\Models\Course;
 use App\Models\Voucher;
 use App\Models\VoucherVendor;
 use Illuminate\Http\Request;
@@ -14,8 +15,7 @@ class VoucherController extends Controller
 {
     public function index()
     {
-        $vouchers = Voucher::latest()->paginate(30);
-
+        $vouchers = Voucher::with(['vendor', 'course'])->latest()->paginate(30);
         return view('admin.vouchers.index', compact('vouchers'));
     }
 
@@ -29,8 +29,9 @@ class VoucherController extends Controller
     public function create()
     {
         $vendors = VoucherVendor::orderBy('vendor_name')->get();
+        $courses = Course::query()->where('status', 1)->orderBy('course_name')->get();
 
-        return view('admin.vouchers.create', compact('vendors'));
+        return view('admin.vouchers.create', compact('vendors', 'courses'));
     }
 
     public function store(Request $request)
@@ -38,6 +39,7 @@ class VoucherController extends Controller
         $request->validate([
             'voucher_code' => 'required',
             'vendor_id' => 'required',
+            'course_id' => 'required|exists:courses,id',
             'purchase_date' => 'required',
             'expiry_date' => 'required',
             'purchase_price' => 'required',
@@ -62,8 +64,9 @@ class VoucherController extends Controller
     public function edit(Voucher $voucher)
     {
         $vendors = VoucherVendor::orderBy('vendor_name')->get();
+        $courses = Course::query()->where('status', 1)->orderBy('course_name')->get();
 
-        return view('admin.vouchers.edit', compact('voucher', 'vendors'));
+        return view('admin.vouchers.edit', compact('voucher', 'vendors', 'courses'));
     }
 
     public function update(Request $request, Voucher $voucher)
@@ -71,7 +74,7 @@ class VoucherController extends Controller
         $request->validate([
             'voucher_code' => 'required',
             'vendor_id' => 'required',
-
+            'course_id' => 'required|exists:courses,id',
         ]);
         $voucher->update($request->all());
 

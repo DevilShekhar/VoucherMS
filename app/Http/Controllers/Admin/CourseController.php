@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\CourseCategory;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -13,7 +14,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::query()->latest()->get();
+        $courses = Course::with('category')->latest()->get();
 
         return view('admin.courses.index', compact('courses'));
     }
@@ -23,7 +24,9 @@ class CourseController extends Controller
      */
     public function create()
     {
-        return view('admin.courses.create');
+        $categories = CourseCategory::query()->orderBy('name')->get();
+
+        return view('admin.courses.create', compact('categories'));
     }
 
     /**
@@ -37,6 +40,7 @@ class CourseController extends Controller
 
         $validated = $request->validate([
             'course_code' => 'required|string|max:50|unique:courses,course_code',
+            'course_category_id' => 'required|exists:course_category,id',
             'course_name' => 'required|string|max:255|unique:courses,course_name',
             'description' => 'nullable|string',
             'status' => 'required|boolean',
@@ -51,12 +55,14 @@ class CourseController extends Controller
 
     public function edit(Course $course)
     {
-        return view('admin.courses.edit', compact('course'));
+        $categories = CourseCategory::query()->where('status', 1)->orderBy('name')->get();
+        return view('admin.courses.edit', compact('course', 'categories'));
     }
 
     public function update(Request $request, Course $course)
     {
         $validated = $request->validate([
+            'course_category_id' => 'required|exists:course_category,id',
             'course_code' => 'required|',
             'course_name' => 'required',
             'description' => 'nullable|string',

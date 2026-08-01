@@ -52,6 +52,23 @@
 
                         <div class="row">
 
+                            <div class="mb-3">
+                                <label class="form-label">Course <span class="text-danger">*</span></label>
+
+                                <select name="course_id" class="form-select @error('course_id') is-invalid @enderror">
+                                    <option value="">Select Course</option>
+
+                                    @foreach($courses as $course)
+                                        <option value="{{ $course->id }}" {{ old('course_id', $voucher->course_id ?? '') == $course->id ? 'selected' : '' }}>
+                                            {{ $course->course_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                @error('course_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                             <!-- Voucher Code -->
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">
