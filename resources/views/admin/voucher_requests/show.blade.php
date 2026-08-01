@@ -263,44 +263,68 @@
 
                             @elseif($availableVouchers->count())
 
-                                <div class="alert alert-success">
-                                    <i class="fas fa-check-circle me-2"></i>
-                                    <strong>{{ $availableVouchers->count() }}</strong>
-                                    voucher(s) are now available for this course.
-                                </div>
+                            <form action="{{ route('voucher-requests.assign-voucher', $voucherRequest->id) }}" method="POST">
+                                @csrf
 
-                                <table class="table table-bordered mt-3">
-                                    <thead>
+                                <table class="table table-bordered table-hover align-middle">
+                                    <thead class="table-light">
                                         <tr>
+                                            <th width="50"></th>
                                             <th>Voucher Code</th>
+                                            <th>Purchase Price</th>
                                             <th>Expiry Date</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
+
                                     <tbody>
                                         @foreach($availableVouchers as $voucher)
                                             <tr>
-                                                <td>{{ $voucher->voucher_code }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($voucher->expiry_date)->format('d M Y') }}</td>
+                                                <td>
+                                                    <input type="radio"
+                                                        name="voucher_id"
+                                                        value="{{ $voucher->id }}"
+                                                        {{ $loop->first ? 'checked' : '' }}>
+                                                </td>
+
+                                                <td>
+                                                    <strong>{{ $voucher->voucher_code }}</strong>
+                                                </td>
+
+                                                <td>
+                                                    ₹{{ number_format($voucher->purchase_price,2) }}
+                                                </td>
+
+                                                <td>
+                                                    {{ \Carbon\Carbon::parse($voucher->expiry_date)->format('d M Y') }}
+                                                </td>
+
+                                                <td>
+                                                    <span class="badge bg-success">
+                                                        Available
+                                                    </span>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
 
-                            @else
-
-                                <div class="alert alert-warning mb-0">
-                                    <i class="fas fa-exclamation-circle me-2"></i>
-                                    No voucher is available for
-                                    <strong>{{ $voucherRequest->candidate->course->course_name }}</strong>.
+                                <div class="text-end mt-3">
+                                    <button class="btn btn-primary text-white">
+                                        <i class="fas fa-check-circle"></i>
+                                        Assign Selected Voucher
+                                    </button>
                                 </div>
 
-                            @endif
+                            </form>
+
+                        @endif
 
                         </div>
                     </div>
                 </div>
             </div>
-            @if($voucherRequest->status == 'Pending')
+            @if($voucherRequest->status == 'Pending' && $voucherRequest->voucher_id)
                 <div class="row g-4">
                     <!-- Approval Form -->
                     <div class="col-lg-8">
@@ -308,7 +332,7 @@
                             <div class="premium-request-header">
                                 <div class="header-left">
                                     <div class="header-icon success">
-                                        <i class="fas fa-check-circle"></i>
+                                        <i class="fas fa-check-circle text-white"></i>
                                     </div>
                                     <div>
                                         <h4>Approval</h4>
