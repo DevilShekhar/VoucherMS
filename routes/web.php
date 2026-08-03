@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExamScheduleController;
 use App\Http\Controllers\Admin\LeadController;
 use App\Http\Controllers\Admin\LeadNotificationController;
+use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
@@ -16,12 +17,10 @@ use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\VoucherRequestController;
 use App\Http\Controllers\Admin\VoucherRequestNotificationController;
 use App\Http\Controllers\Admin\VoucherVendorController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\OtpController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\LocationController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-
 
 Route::get('/login', function () {
     return view('welcome');
@@ -33,8 +32,7 @@ Route::get('/verify-otp', [OtpController::class, 'show'])->name('otp.form');
 Route::post('/verify-otp', [OtpController::class, 'verify'])->name('otp.verify');
 Route::post('/resend-otp', [OtpController::class, 'resend'])->name('otp.resend');
 
-
-Route::get('/dashboard', [DashboardController::class, 'index'])
+Route::match(['get', 'post'], '/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'otp'])
     ->name('dashboard');
 Route::middleware('auth')->group(function () {
@@ -161,7 +159,7 @@ Route::middleware(['auth', 'otp'])->group(function () {
         ->name('reports.index');
     Route::get('/dashboard/export/vouchers', [DashboardController::class, 'exportVouchers'])
         ->name('dashboard.export.vouchers');
-    Route::patch('/vouchers/{voucher}/mark-used',[ExamScheduleController::class, 'markUsed'])->name('vouchers.mark-used');
+    Route::patch('/vouchers/{voucher}/mark-used', [ExamScheduleController::class, 'markUsed'])->name('vouchers.mark-used');
     Route::get('check-mobile', [LeadController::class, 'checkMobile'])->name('check-mobile');
     Route::get('/dashboard/export/leads/filter', [DashboardController::class, 'exportFilteredLeads'])->name('dashboard.export.leads.filter');
     Route::get('/dashboard/export/vouchers/filter', [DashboardController::class, 'exportFilteredVouchers'])->name('dashboard.export.vouchers.filter');

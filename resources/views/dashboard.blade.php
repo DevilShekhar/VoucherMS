@@ -708,6 +708,40 @@
 
                     </select>
                 </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">
+                        Course Category
+                    </label>
+
+                    <select name="course_category_id" id="course_category_id" class="form-select filter-input">
+                        <option value="">Select Category</option>
+
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}">
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">
+                        Course
+                    </label>
+
+                    <select name="course_id" id="course_id" class="form-select filter-input">
+                        <option value="">Select Course</option>
+
+                        @foreach($courses as $course)
+                            <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
+                                {{ $course->course_name }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    @error('course_id')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
 
                 <!-- Filter Button -->
                 <div class="col-lg-2 d-flex align-items-end">
@@ -779,56 +813,80 @@
 
     </div>
 </section>
+
 @can('lead-card')
 <section class="section premium-dashboard pt-0">
     <div class="row">
         <div class="col-lg-12">
             <div class="card premium-block">
                 <div class="profile-section-title d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center">
-                <div class="title-icon">
-                     <i class="fas fa-calendar-day text-white me-2"></i>
+                    <div class="d-flex align-items-center">
+                        <div class="title-icon">
+                            <i class="fas fa-calendar-day text-white me-2"></i>
+                        </div>
+                        <div class="ms-3">
+                            <h4 class="mb-1"> Today's Lead Updates</h4>
+                            <p class="text-white mb-0">All follow-ups scheduled for today • Updated in real-time</p>
+                        </div>
+                    </div>
+                    <div class="voucher-count">
+                        <span class="badge bg-white text-dark px-3 py-2">TODAY</span>
+                    </div>
                 </div>
-                <div class="ms-3">
-                    <h4 class="mb-1"> Today's Lead Updates</h4>
-                    <p class="text-white mb-0">  All follow-ups scheduled for today • Updated in real-time</p>
-                </div>
-            </div>
-            <div class="voucher-count">
-                 <span class="badge bg-white text-dark px-3 py-2">TODAY</span>
-            </div>
-        </div>
-        <div class="card-body p-0">
-            <div class="card-header bg-white">
-                        <form method="GET" action="{{ route('dashboard') }}">
+
+                <div class="card-body p-0">
+                    <div class="card-header bg-white">
+                        <form method="POST" action="{{ route('dashboard') }}">
+                            @csrf
                             <div class="row align-items-end">
+
                                 @can('locations.index')
-                                <div class="col-md-4">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label">Location</label>
-                                    <select name="location_id"
-                                            class="form-select"
-                                            onchange="this.form.submit()">
-
+                                    <select name="location_id" class="form-select">
                                         <option value="">All Locations</option>
-
                                         @foreach($locations as $location)
-
                                             <option value="{{ $location->id }}"
-                                                {{ request('location_id') == $location->id ? 'selected' : '' }}>
-
+                                                {{ old('location_id', request('location_id')) == $location->id ? 'selected' : '' }}>
                                                 {{ $location->name }}
-
                                             </option>
-
                                         @endforeach
-
                                     </select>
                                 </div>
                                 @endcan
+
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label">From Date</label>
+                                    <input type="date"
+                                           name="from_date"
+                                           class="form-control"
+                                           value="{{ old('from_date', request('from_date')) }}">
+                                </div>
+
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label">To Date</label>
+                                    <input type="date"
+                                           name="to_date"
+                                           class="form-control"
+                                           value="{{ old('to_date', request('to_date')) }}">
+                                </div>
+
+                                <div class="col-md-3 mb-3 d-flex gap-2">
+                                    <button type="submit" class="btn btn-success w-100">
+                                        <i class="fas fa-filter me-1"></i>
+                                        Filter
+                                    </button>
+
+                                    <a href="{{ route('dashboard') }}" class="btn btn-secondary w-100">
+                                        <i class="fas fa-undo me-1"></i>
+                                        Reset
+                                    </a>
+                                </div>
+
                             </div>
                         </form>
-
                     </div>
+
                     <div class="table-responsive" style="max-height: 320px; overflow-y: auto;">
                         <table class="table table-hover mb-0" id="datatable">
                             <thead class="table-light bg-white">
@@ -846,7 +904,6 @@
                             </thead>
                             <tbody>
                                 @forelse($todayLeads->groupBy('lead_id') as $leadId => $followups)
-
                                     @php
                                         $item = $followups->sortByDesc('followup_date')->first();
                                     @endphp
@@ -856,7 +913,6 @@
 
                                         <td>
                                             <strong>{{ $item->lead->lead_no }}</strong>
-
                                             @if($followups->count() > 1)
                                                 <br>
                                                 <small class="badge bg-primary">
@@ -889,7 +945,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="8" class="text-center py-5">
+                                        <td colspan="9" class="text-center py-5">
                                             <i class="fas fa-inbox fa-3x text-muted mb-3 d-block"></i>
                                             <h6 class="text-muted">No Leads for Today</h6>
                                             <small class="text-muted">All today's follow-ups will appear here.</small>
@@ -901,13 +957,10 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </section>
 @endcan
-
-
     <style>
         /* Mobile Responsive Styles */
         @media (max-width: 1024px) {
@@ -1072,7 +1125,6 @@
     </script>
     <script>
         function loadExamSchedules() {
-
             $.ajax({
                 url: "{{ route('dashboard.exam.schedule.filter') }}",
                 type: "GET",
@@ -1080,45 +1132,40 @@
                     from_date: $('#from_date').val(),
                     to_date: $('#to_date').val(),
                     exam_mode: $('#exam_mode').val(),
-                    center_id: $('#center_id').val()
+                    center_id: $('#center_id').val(),
+                    course_category_id: $('#course_category_id').val(),
+                    course_id: $('#course_id').val()
                 },
                 success: function(response) {
 
                     let html = "";
 
-                    if (response.length == 0) {
-                        html = `<tr>
-                                    <td colspan="7" class="text-center">
-                                        No Records Found
-                                    </td>
-                                </tr>`;
-                    } else {
+                    if(response.length == 0){
+                        html = `
+                            <tr>
+                                <td colspan="9" class="text-center">
+                                    No Records Found
+                                </td>
+                            </tr>`;
+                    }else{
 
-                        $.each(response, function(index, row) {
+                        $.each(response,function(index,row){
 
                             html += `
                             <tr>
-                                <td>${index + 1}</td>
+                                <td>${index+1}</td>
 
                                 <td>
-                                    ${row.candidate
-                                        ? row.candidate.first_name + ' ' + (row.candidate.last_name ?? '')
-                                        : '-'}
+                                    ${row.candidate ? row.candidate.first_name + ' ' + (row.candidate.last_name ?? '') : '-'}
                                 </td>
 
-                                <td>
-                                    ${row.candidate?.course?.category?.name ?? '-'}
-                                </td>
+                                <td>${row.candidate?.course?.category?.name ?? '-'}</td>
 
-                                <td>
-                                    ${row.candidate?.course?.course_name ?? '-'}
-                                </td>
+                                <td>${row.candidate?.course?.course_name ?? '-'}</td>
 
                                 <td>${row.exam_mode}</td>
 
-                                <td>
-                                    ${row.center ? row.center.center_name : '-'}
-                                </td>
+                                <td>${row.center ? row.center.center_name : '-'}</td>
 
                                 <td>${row.exam_date}</td>
 
@@ -1146,8 +1193,51 @@
             $('#from_date,#to_date,#exam_mode,#center_id').change(function () {
                 loadExamSchedules();
             });
+            $('#course_category_id').on('change', function () {
+                loadExamSchedules();
+            });
+
+            $('#course_id').on('change', function () {
+                loadExamSchedules();
+            });
 
         });
 
     </script>
+    <script>
+            $(document).ready(function () {
+
+                $('#course_category_id').change(function () {
+
+                    let categoryId = $(this).val();
+
+                    $('#course_id').html('<option value="">Loading...</option>');
+
+                    if (categoryId == '') {
+                        $('#course_id').html('<option value="">Select Course</option>');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: '/courses/by-category/' + categoryId,
+                        type: 'GET',
+                        success: function (response) {
+
+                            let options = '<option value="">Select Course</option>';
+
+                            $.each(response, function (index, course) {
+                                options += `<option value="${course.id}">
+                                                    ${course.course_name}
+                                                </option>`;
+                            });
+
+                            $('#course_id').html(options);
+                        }
+                    });
+
+                });
+
+            });
+
+        </script>
 @endsection

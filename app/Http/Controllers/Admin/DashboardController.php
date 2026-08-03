@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Candidate;
 use App\Models\Center;
 use App\Models\Course;
+use App\Models\CourseCategory;
 use App\Models\ExamSchedule;
 use App\Models\Lead;
 use App\Models\LeadFollowUp;
@@ -43,7 +44,19 @@ class DashboardController extends Controller
                 'lead.course',
                 'lead.location',
             ])
-            ->whereDate('followup_date', today())
+            ->when($request->from_date && $request->to_date, function ($query) use ($request) {
+                $query->whereDate('followup_date', '>=', $request->from_date)
+                    ->whereDate('followup_date', '<=', $request->to_date);
+            })
+            ->when($request->from_date && ! $request->to_date, function ($query) use ($request) {
+                $query->whereDate('followup_date', '>=', $request->from_date);
+            })
+            ->when(! $request->from_date && $request->to_date, function ($query) use ($request) {
+                $query->whereDate('followup_date', '<=', $request->to_date);
+            })
+            ->when(! $request->from_date && ! $request->to_date, function ($query) {
+                $query->whereDate('followup_date', today());
+            })
             ->when($request->location_id, function ($query) use ($request) {
                 $query->whereHas('lead', function ($q) use ($request) {
                     $q->where('location_id', $request->location_id);
@@ -151,6 +164,8 @@ class DashboardController extends Controller
         $executives = User::where('role_id', 4)->orderBy('name')->get();
         $vendors = VoucherVendor::orderBy('vendor_name')->get();
         $centers = Center::orderBy('center_name')->get();
+        $categories = CourseCategory::orderBy('name')->get();
+        $courses = Course::query()->where('status', 1)->get();
 
         return view('dashboard', compact(
             'todayLeads',
@@ -169,7 +184,7 @@ class DashboardController extends Controller
             'availableCount',
             'allocatedCount',
             'usedCount',
-            'expiredCount', 'cancelledCount', 'executives', 'vendors', 'centers'
+            'expiredCount', 'cancelledCount', 'executives', 'vendors', 'centers', 'categories', 'courses'
         ));
     }
 
@@ -287,28 +302,43 @@ class DashboardController extends Controller
     }
 
     public function examScheduleFilter(Request $request)
-{
-    $query = ExamSchedule::with([
-        'candidate.course.category',
-        'center',
-    ]);
+    {
+        // dd($request->all());
+        $query = ExamSchedule::with([
+            'candidate.course.category',
+            'center',
+        ]);
 
-    if ($request->filled('from_date')) {
-        $query->whereDate('exam_date', '>=', $request->from_date);
+        if ($request->filled('from_date')) {
+            $query->whereDate('exam_date', '>=', $request->from_date);
+        }
+
+        if ($request->filled('to_date')) {
+            $query->whereDate('exam_date', '<=', $request->to_date);
+        }
+
+        if ($request->filled('exam_mode')) {
+            $query->where('exam_mode', $request->exam_mode);
+        }
+
+        if ($request->filled('center_id')) {
+            $query->where('center_id', $request->center_id);
+        }
+
+        // Course Category Filter
+        if ($request->filled('course_category_id')) {
+            $query->whereHas('candidate.course', function ($q) use ($request) {
+                $q->where('course_category_id', $request->course_category_id);
+            });
+        }
+
+        // Course Filter
+        if ($request->filled('course_id')) {
+            $query->whereHas('candidate.course', function ($q) use ($request) {
+                $q->where('id', $request->course_id);
+            });
+        }
+
+        return response()->json($query->latest()->get());
     }
-
-    if ($request->filled('to_date')) {
-        $query->whereDate('exam_date', '<=', $request->to_date);
-    }
-
-    if ($request->filled('exam_mode')) {
-        $query->where('exam_mode', $request->exam_mode);
-    }
-
-    if ($request->filled('center_id')) {
-        $query->where('center_id', $request->center_id);
-    }
-
-    return response()->json($query->latest()->get());
-}
 }
