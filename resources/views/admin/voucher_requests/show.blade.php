@@ -228,210 +228,148 @@
                         </div>
                     </div>
                     <!-- Voucher Panel -->
-                    @if(auth()->user()->hasAnyRole(['Super Admin', 'Admin', 'Manager']) && $voucherRequest->status == 'Pending')
-                    <div class="voucher-panel mt-4">
-                        <div class="voucher-header">
-                            <div class="voucher-title">
-                                <div class="voucher-icon">
-                                    <i class="fas fa-ticket-alt"></i>
+                    @if(auth()->user()->hasAnyRole(['Super Admin', 'Admin', 'Manager']) && in_array($voucherRequest->status, ['Approved', 'Allocated']))
+                        <div class="voucher-panel mt-4">
+                            <div class="voucher-header">
+                                <div class="voucher-title">
+                                    <div class="voucher-icon">
+                                        <i class="fas fa-ticket-alt"></i>
+                                    </div>
+                                    <span>Allocated Voucher</span>
                                 </div>
-                                <span>Allocated Voucher</span>
+                                <div class="voucher-badge">
+                                    <i class="fas fa-award"></i>
+                                </div>
                             </div>
-                            <div class="voucher-badge">
-                                <i class="fas fa-award"></i>
+                            <div class="voucher-body">
+
+                                @if($voucherRequest->voucher)
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <strong>Voucher Code</strong>
+                                            <h6>{{ $voucherRequest->voucher->voucher_code }}</h6>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <strong>Status</strong>
+                                            <h6>{{ $voucherRequest->voucher->status }}</h6>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <strong>Expiry</strong>
+                                            <h6>{{ \Carbon\Carbon::parse($voucherRequest->voucher->expiry_date)->format('d M Y') }}</h6>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
-                        <div class="voucher-body">
-
-                            @if($voucherRequest->voucher)
-
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <strong>Voucher Code</strong>
-                                        <h6>{{ $voucherRequest->voucher->voucher_code }}</h6>
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <strong>Status</strong>
-                                        <h6>{{ $voucherRequest->voucher->status }}</h6>
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <strong>Expiry</strong>
-                                        <h6>{{ \Carbon\Carbon::parse($voucherRequest->voucher->expiry_date)->format('d M Y') }}</h6>
-                                    </div>
-                                </div>
-
-                            @elseif($availableVouchers->count())
-
-                            <form action="{{ route('voucher-requests.assign-voucher', $voucherRequest->id) }}" method="POST">
-                                @csrf
-
-                                <table class="table table-bordered table-hover align-middle">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th width="50"></th>
-                                            <th>Voucher Code</th>
-                                            <th>Purchase Price</th>
-                                            <th>Expiry Date</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        @foreach($availableVouchers as $voucher)
-                                            <tr>
-                                                <td>
-                                                    <input type="radio"
-                                                        name="voucher_id"
-                                                        value="{{ $voucher->id }}"
-                                                        {{ $loop->first ? 'checked' : '' }}>
-                                                </td>
-
-                                                <td>
-                                                    <strong>{{ $voucher->voucher_code }}</strong>
-                                                </td>
-
-                                                <td>
-                                                    ₹{{ number_format($voucher->purchase_price,2) }}
-                                                </td>
-
-                                                <td>
-                                                    {{ \Carbon\Carbon::parse($voucher->expiry_date)->format('d M Y') }}
-                                                </td>
-
-                                                <td>
-                                                    <span class="badge bg-success">
-                                                        Available
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-
-                                <div class="text-end mt-3">
-                                    <button class="btn btn-primary text-white">
-                                        <i class="fas fa-check-circle"></i>
-                                        Assign Selected Voucher
-                                    </button>
-                                </div>
-
-                            </form>
-
-                        @endif
-
-                        </div>
-                    </div>
                     @endif
                 </div>
             </div>
             @if(auth()->user()->hasAnyRole(['Super Admin', 'Admin', 'Manager']))
-            @if($voucherRequest->status == 'Pending' && $voucherRequest->voucher_id)
-                <div class="row g-4">
-                    <!-- Approval Form -->
-                    <div class="col-lg-8">
-                        <div class="premium-request-card approval-card">
-                            <div class="premium-request-header">
-                                <div class="header-left">
-                                    <div class="header-icon success">
-                                        <i class="fas fa-check-circle text-white"></i>
-                                    </div>
-                                    <div>
-                                        <h4>Approval</h4>
-                                        <p class="text-white">Approve or reject this voucher request.</p>
+                @if($voucherRequest->status == 'Pending' && $voucherRequest->voucher_id)
+                    <div class="row g-4">
+                        <!-- Approval Form -->
+                        <div class="col-lg-8">
+                            <div class="premium-request-card approval-card">
+                                <div class="premium-request-header">
+                                    <div class="header-left">
+                                        <div class="header-icon success">
+                                            <i class="fas fa-check-circle text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4>Approval</h4>
+                                            <p class="text-white">Approve or reject this voucher request.</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="premium-request-body">
-                                <form action="{{ route('voucher-requests.approve', $voucherRequest) }}" method="POST">
-                                    @csrf
-                                    <div class="row">
-                                        <!-- Action -->
-                                        <div class="col-md-4 mb-4">
-                                            <label class="form-label">
-                                                Action
-                                            </label>
-                                            <select class="form-select premium-input" name="action" required>
-                                                <option value="">Select Action</option>
-                                                <option value="Approved"> Approve </option>
-                                                <option value="Rejected"> Reject </option>
-                                            </select>
-                                        </div>
-                                        <!-- Selling Price -->
-                                        <div class="col-md-4 mb-4" id="sellingPriceBox">
+                                <div class="premium-request-body">
+                                    <form action="{{ route('voucher-requests.approve', $voucherRequest) }}" method="POST">
+                                        @csrf
+                                        <div class="row">
+                                            <!-- Action -->
+                                            <div class="col-md-4 mb-4">
+                                                <label class="form-label">
+                                                    Action
+                                                </label>
+                                                <select class="form-select premium-input" name="action" required>
+                                                    <option value="">Select Action</option>
+                                                    <option value="Approved"> Approve </option>
+                                                    <option value="Rejected"> Reject </option>
+                                                </select>
+                                            </div>
+                                            <!-- Selling Price -->
+                                            <div class="col-md-4 mb-4" id="sellingPriceBox">
 
-                                            <label class="form-label">
-                                                Selling Price
-                                                <span class="text-danger">*</span>
-                                            </label>
+                                                <label class="form-label">
+                                                    Selling Price
+                                                    <span class="text-danger">*</span>
+                                                </label>
 
-                                            @if($voucherRequest->voucher)
-                                                <div class="alert alert-info py-2 mb-2">
-                                                    <strong>Purchase Price:</strong>
-                                                    ₹{{ number_format($voucherRequest->voucher->purchase_price, 2) }}
+                                                @if($voucherRequest->voucher)
+                                                    <div class="alert alert-info py-2 mb-2">
+                                                        <strong>Purchase Price:</strong>
+                                                        ₹{{ number_format($voucherRequest->voucher->purchase_price, 2) }}
+                                                    </div>
+                                                @endif
+
+                                                <div class="input-group">
+                                                    <span class="input-group-text">₹</span>
+                                                    <input type="number" class="form-control premium-input" name="selling_price"
+                                                        step="0.01" min="0" placeholder="Enter selling price"
+                                                        value="{{ $voucherRequest->voucher?->purchase_price }}">
                                                 </div>
-                                            @endif
-
-                                            <div class="input-group">
-                                                <span class="input-group-text">₹</span>
-                                                <input type="number" class="form-control premium-input" name="selling_price"
-                                                    step="0.01" min="0" placeholder="Enter selling price"
-                                                    value="{{ $voucherRequest->voucher?->purchase_price }}">
+                                            </div>
+                                            <!-- Remarks -->
+                                            <div class="col-md-4 mb-4">
+                                                <label class="form-label"> Remarks </label>
+                                                <textarea class="form-control premium-input" rows="3" name="remarks"
+                                                    placeholder="Enter remarks..."></textarea>
                                             </div>
                                         </div>
-                                        <!-- Remarks -->
-                                        <div class="col-md-4 mb-4">
-                                            <label class="form-label"> Remarks </label>
-                                            <textarea class="form-control premium-input" rows="3" name="remarks"
-                                                placeholder="Enter remarks..."></textarea>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-success premium-submit-btn">
-                                        <i class="fas fa-paper-plane me-2"></i>
-                                        Submit Decision
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Information Card -->
-                    <div class="col-lg-4">
-                        <div class="important-card">
-                            <div class="important-overlay"></div>
-                            <div class="important-content">
-                                <div class="important-icon">
-                                    <i class="fas fa-info-circle"></i>
+                                        <button class="btn btn-success premium-submit-btn">
+                                            <i class="fas fa-paper-plane me-2"></i>
+                                            Submit Decision
+                                        </button>
+                                    </form>
                                 </div>
-                                <h5>
-                                    Important Information
-                                </h5>
-                                <p>
-                                    Please review all voucher details carefully
-                                    before approving or rejecting this request.
-                                </p>
-                                <ul>
-                                    <li>
-                                        Verify candidate details
-                                    </li>
-                                    <li>
-                                        Confirm voucher availability
-                                    </li>
-                                    <li>
-                                        Check selling price
-                                    </li>
-                                    <li>
-                                        Review remarks before submission
-                                    </li>
-                                </ul>
                             </div>
-                            <div class="important-image">
-                                <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <!-- Information Card -->
+                        <div class="col-lg-4">
+                            <div class="important-card">
+                                <div class="important-overlay"></div>
+                                <div class="important-content">
+                                    <div class="important-icon">
+                                        <i class="fas fa-info-circle"></i>
+                                    </div>
+                                    <h5>
+                                        Important Information
+                                    </h5>
+                                    <p>
+                                        Please review all voucher details carefully
+                                        before approving or rejecting this request.
+                                    </p>
+                                    <ul>
+                                        <li>
+                                            Verify candidate details
+                                        </li>
+                                        <li>
+                                            Confirm voucher availability
+                                        </li>
+                                        <li>
+                                            Check selling price
+                                        </li>
+                                        <li>
+                                            Review remarks before submission
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="important-image">
+                                    <i class="fas fa-clipboard-check"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endif
+                @endif
             @endif
         </section>
         <script>
