@@ -269,32 +269,13 @@
                 </div>
 
                 @if(!$payment->invoice)
-
-                    <form action="{{ route('payments.generateInvoice',$payment) }}"
-                        method="POST"
-                        onsubmit="return confirm('Are you sure you want to generate this invoice?')">
-
+                    <form action="{{ route('payments.generateInvoice', $payment) }}" method="POST" class="generate-invoice-form">
                         @csrf
-
-                        <button class="btn btn-light">
-                            <i class="fas fa-file-invoice"></i>
-                            Generate Invoice
-                        </button>
-
+                        <button type="submit" class="btn btn-light"><i class="fas fa-file-invoice"></i>  Generate Invoice</button>
                     </form>
-
                 @else
-
-                    <a href="{{ route('invoices.download',$payment->invoice->id) }}"
-                    class="btn btn-success">
-
-                        <i class="fas fa-download"></i>
-                        Download Invoice
-
-                    </a>
-
+                    <a href="{{ route('invoices.download', $payment->invoice->id) }}" class="btn btn-success"> <i class="fas fa-download"></i> Download Invoice </a>
                 @endif
-
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -380,6 +361,29 @@
             </div>
         </div>
     </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.generate-invoice-form').forEach(function(form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Generate Invoice?',
+                        text: "Are you sure you want to generate this invoice?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, Generate',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+        </script>
 @endsection
 @else
     @php
