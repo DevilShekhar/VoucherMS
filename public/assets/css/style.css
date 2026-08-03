@@ -3828,6 +3828,16 @@ padding:5px 10px;
     position: relative;
     overflow: hidden;
 }
+.premium-payment-request-header {
+    background: linear-gradient(135deg, #0d6efd, #4f46e5);
+    padding: 25px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}
 
 .premium-request-header::before {
     content: "";

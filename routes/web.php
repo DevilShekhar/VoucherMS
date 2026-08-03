@@ -170,6 +170,7 @@ Route::middleware(['auth', 'otp'])->group(function () {
         ->name('courses.by-category');
     Route::post('voucher-requests/{voucherRequest}/assign-voucher', [VoucherRequestController::class, 'assignVoucher'])->name('voucher-requests.assign-voucher');
     Route::get('/dashboard/exam-schedule-filter', [DashboardController::class, 'examScheduleFilter'])->name('dashboard.exam.schedule.filter');
+    Route::post('/payments/{payment}/send-email',[PaymentController::class, 'sendInvoiceEmail'])->name('payments.sendInvoiceEmail');
 
 });
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth')->name('logout');
