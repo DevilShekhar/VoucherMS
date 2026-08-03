@@ -8,8 +8,10 @@ use App\Models\Payment;
 use App\Models\Invoice;
 use App\Models\PaymentTransaction;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Mail\InvoiceMail;
+use Illuminate\Support\Facades\Mail;
 
 class PaymentController extends Controller
 {
@@ -174,5 +176,40 @@ class PaymentController extends Controller
         );
 
         return $pdf->download($invoice->invoice_no.'.pdf');
+    }
+    public function sendInvoiceEmail(Payment $payment)
+    {
+        $payment->load([
+            'candidate.course',
+            'candidate.center',
+            'transactions',
+            'invoice.payment',
+            'invoice.candidate.course',
+            'invoice.candidate.center',
+        ]);
+
+        if (!$payment->invoice) {
+            return back()->with('error', 'Invoice not found.');
+        }
+
+        if (empty($payment->candidate->email)) {
+            return back()->with('error', 'Candidate email not found.');
+        }
+
+        $invoice = $payment->invoice;
+
+        // Use the SAME blade as Download Invoice
+        $pdf = Pdf::loadView(
+            'admin.invoice.invoice',
+            compact('invoice')
+        );
+
+        Mail::to($payment->candidate->email)
+            ->send(new InvoiceMail(
+                $payment,
+                $pdf->output()
+            ));
+
+        return back()->with('success', 'Invoice emailed successfully.');
     }
 }

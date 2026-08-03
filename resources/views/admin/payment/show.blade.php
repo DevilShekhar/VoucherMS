@@ -256,7 +256,7 @@
             </div>
         </div>
         <div class="card premium-block">
-            <div class="premium-request-header d-flex justify-content-between align-items-center">
+            <div class="premium-payment-request-header d-flex justify-content-between align-items-center">
 
                 <div class="d-flex align-items-center">
                     <div class="header-icon me-3">
@@ -274,7 +274,15 @@
                         <button type="submit" class="btn btn-light"><i class="fas fa-file-invoice"></i>  Generate Invoice</button>
                     </form>
                 @else
-                    <a href="{{ route('invoices.download', $payment->invoice->id) }}" class="btn btn-success"> <i class="fas fa-download"></i> Download Invoice </a>
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('invoices.download', $payment->invoice->id) }}"  class="btn btn-success"> <i class="fas fa-download"></i> Download Invoice </a>
+                        @if($payment->candidate && !empty($payment->candidate->email))
+                            <form action="{{ route('payments.sendInvoiceEmail', $payment) }}" method="POST" class="send-email-form">
+                                @csrf
+                                <button type="submit" class="btn btn-warning"> <i class="fas fa-envelope"></i> Send Email </button>
+                            </form>
+                        @endif
+                    </div>
                 @endif
             </div>
             <div class="card-body p-0">
@@ -382,8 +390,30 @@
                     });
                 });
             });
-        });
+        });        
         </script>
+        <script>
+            document.querySelectorAll('.send-email-form').forEach(function(form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Send Invoice Email?',
+                        text: "Are you sure you want to send this invoice to the candidate's email?",
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, Send',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        </script>
+        
 @endsection
 @else
     @php
