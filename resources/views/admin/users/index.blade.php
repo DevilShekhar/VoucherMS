@@ -167,17 +167,6 @@
             </div>
         </div>
     </section>
-    <script>
-    $(document).ready(function () {
-    $('#datatable').DataTable({
-        paging: true,
-        searching: true,
-        ordering: true,
-        info: true,
-        pageLength: 10
-    });
-});
-    </script>
     <!-- SweetAlert Success -->
     @if (session('success'))
         <script>
