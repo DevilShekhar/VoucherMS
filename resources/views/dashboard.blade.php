@@ -72,7 +72,7 @@
             </div>
         </div>
     </section>
-    
+
     <section class="mb-4">
         <div class="card border-0 shadow-lg rounded-4 report-filter-card">
             <div class="card-header-reports border-0 py-3 px-4">
@@ -740,6 +740,8 @@
                         <tr>
                             <th width="5%">#</th>
                             <th>Candidate</th>
+                            <th>Course Category</th>
+                            <th>Course</th>
                             <th>Exam Mode</th>
                             <th>Center</th>
                             <th>Exam Date</th>
@@ -828,13 +830,14 @@
 
                     </div>
                     <div class="table-responsive" style="max-height: 320px; overflow-y: auto;">
-                        <table class="table table-hover mb-0">
+                        <table class="table table-hover mb-0" id="datatable">
                             <thead class="table-light bg-white">
                                 <tr>
                                     <th>Lead No</th>
                                     <th>Candidate Name</th>
                                     <th>Mobile</th>
                                     <th>Executive</th>
+                                    <th>Course Category</th>
                                     <th>Course</th>
                                     <th>Today's Follow-up</th>
                                     <th>Status</th>
@@ -864,6 +867,7 @@
                                         <td>{{ $item->lead->candidate_name }}</td>
                                         <td>{{ $item->lead->mobile }}</td>
                                         <td>{{ $item->lead->assignedUser->name ?? '-' }}</td>
+                                        <td>{{ $item->lead->course?->category?->name ?? '-' }}</td>
                                         <td>{{ $item->lead->course->course_name ?? '-' }}</td>
                                         <td class="text-primary">
                                             <strong>
@@ -1095,11 +1099,31 @@
                             html += `
                             <tr>
                                 <td>${index + 1}</td>
-                                <td>${row.candidate ? row.candidate.first_name + ' ' + (row.candidate.last_name ?? '') : '-'}</td>
+
+                                <td>
+                                    ${row.candidate
+                                        ? row.candidate.first_name + ' ' + (row.candidate.last_name ?? '')
+                                        : '-'}
+                                </td>
+
+                                <td>
+                                    ${row.candidate?.course?.category?.name ?? '-'}
+                                </td>
+
+                                <td>
+                                    ${row.candidate?.course?.course_name ?? '-'}
+                                </td>
+
                                 <td>${row.exam_mode}</td>
-                                <td>${row.center ? row.center.center_name : '-'}</td>
+
+                                <td>
+                                    ${row.center ? row.center.center_name : '-'}
+                                </td>
+
                                 <td>${row.exam_date}</td>
+
                                 <td>${row.exam_time}</td>
+
                                 <td>${row.exam_status}</td>
                             </tr>`;
                         });
@@ -1124,6 +1148,6 @@
             });
 
         });
-    
+
     </script>
 @endsection

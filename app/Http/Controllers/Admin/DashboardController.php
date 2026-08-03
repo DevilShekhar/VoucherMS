@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exports\LeadsExport;
 use App\Exports\FilteredLeadsExport;
 use App\Exports\FilteredVouchersExport;
+use App\Exports\LeadsExport;
 use App\Exports\VouchersExport;
 use App\Http\Controllers\Controller;
 use App\Models\Candidate;
+use App\Models\Center;
 use App\Models\Course;
 use App\Models\ExamSchedule;
 use App\Models\Lead;
@@ -16,7 +17,6 @@ use App\Models\Location;
 use App\Models\Payment;
 use App\Models\User;
 use App\Models\Voucher;
-use App\Models\Center;
 use App\Models\VoucherVendor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -148,7 +148,7 @@ class DashboardController extends Controller
         $vouchers = Voucher::with('vendor')
             ->latest()
             ->paginate(30);
-        $executives = User::where('role_id',4)->orderBy('name')->get();
+        $executives = User::where('role_id', 4)->orderBy('name')->get();
         $vendors = VoucherVendor::orderBy('vendor_name')->get();
         $centers = Center::orderBy('center_name')->get();
 
@@ -169,7 +169,7 @@ class DashboardController extends Controller
             'availableCount',
             'allocatedCount',
             'usedCount',
-            'expiredCount', 'cancelledCount','executives','vendors','centers'
+            'expiredCount', 'cancelledCount', 'executives', 'vendors', 'centers'
         ));
     }
 
@@ -267,46 +267,48 @@ class DashboardController extends Controller
         return response()->json([
             'exists' => $exists,
         ]);
-    }    
+    }
+
     public function exportFilteredLeads(Request $request)
     {
 
         return Excel::download(
             new FilteredLeadsExport($request),
-            'Filtered_Leads_' . now()->format('d-m-Y_H-i-s') . '.xlsx'
+            'Filtered_Leads_'.now()->format('d-m-Y_H-i-s').'.xlsx'
         );
     }
+
     public function exportFilteredVouchers(Request $request)
     {
-        return \Maatwebsite\Excel\Facades\Excel::download(
+        return Excel::download(
             new FilteredVouchersExport($request),
-            'Filtered_Vouchers_' . now()->format('d-m-Y_H-i-s') . '.xlsx'
+            'Filtered_Vouchers_'.now()->format('d-m-Y_H-i-s').'.xlsx'
         );
     }
+
     public function examScheduleFilter(Request $request)
-    {
-        $query = ExamSchedule::with([
-            'candidate',
-            'center'
-        ]);
+{
+    $query = ExamSchedule::with([
+        'candidate.course.category',
+        'center',
+    ]);
 
-        if ($request->filled('from_date')) {
-            $query->whereDate('exam_date', '>=', $request->from_date);
-        }
-
-        if ($request->filled('to_date')) {
-            $query->whereDate('exam_date', '<=', $request->to_date);
-        }
-
-        if ($request->filled('exam_mode')) {
-            $query->where('exam_mode', $request->exam_mode);
-        }
-
-        if ($request->filled('center_id')) {
-            $query->where('center_id', $request->center_id);
-        }
-        return response()->json(
-            $query->latest()->get()
-        );
+    if ($request->filled('from_date')) {
+        $query->whereDate('exam_date', '>=', $request->from_date);
     }
+
+    if ($request->filled('to_date')) {
+        $query->whereDate('exam_date', '<=', $request->to_date);
+    }
+
+    if ($request->filled('exam_mode')) {
+        $query->where('exam_mode', $request->exam_mode);
+    }
+
+    if ($request->filled('center_id')) {
+        $query->where('center_id', $request->center_id);
+    }
+
+    return response()->json($query->latest()->get());
+}
 }
