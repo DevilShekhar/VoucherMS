@@ -333,27 +333,13 @@
 
                                     <a href="{{ route('invoices.download',$history->invoice->id) }}"
                                     class="btn btn-success btn-sm">
-
                                         <i class="fas fa-download"></i>
-
                                     </a>
-
-                                    @else
-
-                                    <form action="{{ route('payments.generateInvoice',$history) }}"
-                                        method="POST"
-                                        onsubmit="return confirm('Generate Invoice?')">
-
-                                        @csrf
-
-                                        <button class="btn btn-primary btn-sm">
-                                            <i class="fas fa-file-invoice text-white"></i>
-                                        </button>
-
-                                    </form>
-
+                                    @else                        
+                                        <span class="badge bg-danger">
+                                            <i class="fas fa-times-circle"></i> Invoice Not Generated
+                                        </span>                               
                                     @endif
-
                                 </td>
                                 </tr>
                             @empty
