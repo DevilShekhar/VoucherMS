@@ -1,3 +1,4 @@
+@can('course-category.index')
 @extends('layouts.app')
 
 @section('content')
@@ -41,7 +42,7 @@
         <div class="card premium-block">
             <div class="card-body table-responsive">
 
-                <table class="table table-bordered table-hover align-middle">
+                <table class="table table-bordered table-hover align-middle" id="datatable">
                     <thead class="table-light">
                         <tr>
                             <th width="70">#</th>
@@ -65,7 +66,7 @@
                                 <td>{{ $category->updater->name ?? '-' }}</td>
                                 <td>
                                     <a href="{{ route('course-category.edit', $category->id) }}"
-                                        class="btn btn-sm btn-primary text-white">
+                                        class="btn btn-sm btn-warning">
                                         <i class="fas fa-edit"></i>
                                     </a>
 
@@ -97,3 +98,8 @@
     </section>
 
 @endsection
+@else
+    @php
+        abort(403);
+    @endphp
+@endcan

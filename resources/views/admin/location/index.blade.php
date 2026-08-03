@@ -31,7 +31,7 @@
     <section class="section premium-dashboard pt-0">
         <div class="card premium-block">
             <div class="card-body">
-                <table class="table table-striped table-hover">
+                <table class="table table-striped table-hover" id="datatable">
                     <thead>
                         <tr>
                             <th>#</th>

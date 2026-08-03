@@ -215,7 +215,7 @@
 
                     <!-- Priority Card -->
 
-                    <div class="filter-card mt-4">
+                    <div class="filter-card mt-4 mb-4">
 
                         <div class="filter-header">
 
