@@ -41,4 +41,9 @@ class ExamSchedule extends Model
     {
         return $this->belongsTo(Voucher::class);
     }
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
+
 }
