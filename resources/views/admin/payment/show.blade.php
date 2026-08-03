@@ -25,9 +25,9 @@
             <div class="shape circle-3"></div>
             <div class="dots"></div>
         </div>
-    </section>  
+    </section>
 
-    <section class="section premium-dashboard pt-0">       
+    <section class="section premium-dashboard pt-0">
         <div class="card premium-block shadow-sm border-0 mb-4">
             <div class="premium-request-header">
                 <div class="d-flex align-items-center">
@@ -124,7 +124,7 @@
                         <h5 class="mb-0">Payment Summary</h5>
                     </div>
                 </div>
-            </div>             
+            </div>
             <div class="card-body">
                 <div class="row g-4">
                     <div class="col-lg-3 col-md-6">
@@ -308,8 +308,8 @@
                                 <th>Paid</th>
                                 <th>Pending</th>
                                 <th>Status</th>
-                                <th>Mode</th>  
-                                <th>Invoice</th>                       
+                                <th>Mode</th>
+                                <th>Invoice</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -338,7 +338,7 @@
                                     </td>
                                     <td>
                                         {{ $history->transactions->first()->payment_mode ?? '-' }}
-                                    </td>         
+                                    </td>
                                     <td>
                                     @if($history->invoice)
 
@@ -358,14 +358,14 @@
                                         @csrf
 
                                         <button class="btn btn-primary btn-sm">
-                                            <i class="fas fa-file-invoice"></i>
+                                            <i class="fas fa-file-invoice text-white"></i>
                                         </button>
 
                                     </form>
 
                                     @endif
 
-                                </td>                               
+                                </td>
                                 </tr>
                             @empty
                                 <tr>

@@ -158,7 +158,7 @@ class PaymentController extends Controller
             'created_by'   => Auth::id(),
         ]);
 
-        return redirect()->back()->with('success', 'Invoice generated successfully.');
+        return redirect()->back()->with('success', 'Download Receipt Button visible now.');
     }
     public function downloadInvoice(Invoice $invoice)
     {
