@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Candidate;
+use App\Models\Course;
 use App\Models\User;
 use App\Models\Voucher;
 use App\Models\VoucherAllocation;
@@ -147,15 +148,27 @@ class VoucherRequestController extends Controller
             'voucher',
         ]);
 
-        $availableVouchers = Voucher::query()->where('course_id', $voucherRequest->candidate->course_id)
-            ->where('status', 'Available')
-            ->orderBy('expiry_date')
-            ->get();
+        if (! $voucherRequest->voucher_id) {
 
-        return view('admin.voucher_requests.show', compact(
-            'voucherRequest',
-            'availableVouchers'
-        ));
+            $categoryId = $voucherRequest->candidate->course->course_category_id;
+
+            $courseIds = Course::query()->where('course_category_id', $categoryId)
+                ->pluck('id');
+
+            $voucher = Voucher::whereIn('course_id', $courseIds)
+                ->where('status', 'Available')
+                ->orderBy('expiry_date')
+                ->orderBy('id')
+                ->first();
+
+            if ($voucher) {
+                $voucherRequest->update([
+                    'voucher_id' => $voucher->id,
+                ]);
+                $voucherRequest->load('voucher');
+            }
+        }
+        return view('admin.voucher_requests.show', compact('voucherRequest'));
     }
 
     /**
@@ -207,6 +220,29 @@ class VoucherRequestController extends Controller
         }
 
         $voucherRequest->update($data);
+        if ($request->action == 'Approved' && $voucherRequest->voucher_id) {
+            if (! VoucherAllocation::query()->where('request_id', $voucherRequest->id)->exists()) {
+
+                VoucherAllocation::create([
+                    'voucher_id' => $voucherRequest->voucher_id,
+                    'request_id' => $voucherRequest->id,
+                    'candidate_id' => $voucherRequest->candidate_id,
+                    'allocated_to' => Auth::id(),
+                    'allocated_date' => now()->toDateString(),
+                    'status' => 'Allocated',
+                ]);
+
+                $voucherRequest->update([
+                    'status' => 'Allocated',
+                    'approved_at' => now(),
+                ]);
+
+                Voucher::query()->where('id', $voucherRequest->voucher_id)
+                    ->update([
+                        'status' => 'Allocated',
+                    ]);
+            }
+        }
 
         return redirect()
             ->route('voucher-requests.show', $voucherRequest)
@@ -253,18 +289,34 @@ class VoucherRequestController extends Controller
 
     public function assignVoucher(Request $request, VoucherRequest $voucherRequest)
     {
-        $request->validate([
-            'voucher_id' => 'required|exists:vouchers,id',
-        ]);
+        DB::transaction(function () use ($voucherRequest) {
+            $categoryId = $voucherRequest->candidate->course->course_category_id;
+            $courseIds = Course::where('course_category_id', $categoryId)
+                ->pluck('id');
 
-        $voucher = Voucher::query()->where('id', $request->voucher_id)
-            ->where('status', 'Available')
-            ->firstOrFail();
+            // Get first available voucher
+            $voucher = Voucher::whereIn('course_id', $courseIds)
+                ->where('status', 'Available')
+                ->orderBy('expiry_date')
+                ->orderBy('id')
+                ->lockForUpdate()
+                ->first();
 
-        $voucherRequest->update([
-            'voucher_id' => $voucher->id,
-        ]);
+            if (! $voucher) {
+                throw new \Exception('No voucher available.');
+            }
 
-        return back()->with('success', 'Voucher selected successfully.');
+            // Assign voucher to request
+            $voucherRequest->update([
+                'voucher_id' => $voucher->id,
+            ]);
+
+            // Mark voucher as allocated
+            $voucher->update([
+                'status' => 'Allocated',
+            ]);
+        });
+
+        return back()->with('success', 'Voucher assigned automatically.');
     }
 }

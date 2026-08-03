@@ -7,6 +7,7 @@ use App\Models\Candidate;
 use App\Models\CandidateDocument;
 use App\Models\Center;
 use App\Models\Course;
+use App\Models\CourseCategory;
 use App\Models\Lead;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,33 +16,33 @@ use Illuminate\Support\Str;
 class CandidateController extends Controller
 {
     public function index()
-{
-    $query = Candidate::with([
-        'center',
-        'course',
-        'executive',
-        'payments',
-        'voucherRequest',
-        'examSchedule',
-    ])->where('status', 'Active');
+    {
+        $query = Candidate::with([
+            'center',
+            'course',
+            'executive',
+            'payments',
+            'voucherRequest',
+            'examSchedule',
+        ])->where('status', 'Active');
 
-    // Sales Executive
-    if (optional(Auth::user()->role)->name === 'Sales Executive') {
-        $query->where('executive_id', Auth::id());
+        // Sales Executive
+        if (optional(Auth::user()->role)->name === 'Sales Executive') {
+            $query->where('executive_id', Auth::id());
+        }
+
+        // Center Admin
+        if (optional(Auth::user()->role)->name === 'Center Admin') {
+            $query->whereHas('center', function ($q) {
+                $q->where('center_exe_id', Auth::id());
+            });
+        }
+
+        $candidates = $query->get();
+        $centers = Center::orderBy('center_name')->get();
+
+        return view('admin.candidates.index', compact('candidates', 'centers'));
     }
-
-    // Center Admin
-    if (optional(Auth::user()->role)->name === 'Center Admin') {
-        $query->whereHas('center', function ($q) {
-            $q->where('center_exe_id', Auth::id());
-        });
-    }
-
-    $candidates = $query->get();
-    $centers = Center::orderBy('center_name')->get();
-
-    return view('admin.candidates.index', compact('candidates', 'centers'));
-}
 
     public function create()
     {
@@ -52,9 +53,10 @@ class CandidateController extends Controller
             ->get();
 
         $centers = Center::query()->where('status', 1)->get();
+        $categories = CourseCategory::orderBy('name')->get();
         $courses = Course::query()->where('status', 1)->get();
 
-        return view('admin.candidates.create', compact('leads', 'centers', 'courses'));
+        return view('admin.candidates.create', compact('leads', 'centers', 'courses','categories'));
     }
 
     public function store(Request $request)
@@ -112,9 +114,9 @@ class CandidateController extends Controller
         })->get();
 
         $centers = Center::query()->where('status', 1)->get();
+        $categories = CourseCategory::orderBy('name')->get();
         $courses = Course::query()->where('status', 1)->get();
-
-        return view('admin.candidates.edit', compact('candidate', 'leads', 'centers', 'courses'));
+        return view('admin.candidates.edit', compact('candidate', 'leads', 'centers', 'courses','categories'));
     }
 
     public function update(Request $request, Candidate $candidate)
@@ -122,6 +124,7 @@ class CandidateController extends Controller
         $request->validate([
             'lead_id' => 'nullable|exists:leads,id',
             'center_id' => 'nullable|exists:centers,id',
+            'course_category_id' => 'nullable|exists:course_category,id',
             'course_id' => 'nullable|exists:courses,id',
             'first_name' => 'required|string|max:255',
             'last_name' => 'nullable|string|max:255',
