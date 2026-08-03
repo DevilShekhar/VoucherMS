@@ -26,7 +26,7 @@ class LeadController extends Controller
         $query = Lead::with([
             'assignedUser',
             'center',
-            'course',
+               'course.category',
             'createdBy',
             'latestFollowup',
         ]);
@@ -216,12 +216,13 @@ class LeadController extends Controller
 
     public function edit(Lead $lead)
     {
+        $locations = Location::query()->get();
         $users = User::query()->where('role_id', 4)->get();
         $centers = Center::query()->where('status', 1)->get();
         $categories = CourseCategory::orderBy('name')->get();
         $courses = Course::query()->where('status', 1)->get();
 
-        return view('admin.leads.edit', compact('lead', 'users', 'centers', 'courses','categories'));
+        return view('admin.leads.edit', compact('lead', 'users', 'centers', 'courses', 'categories','locations'));
     }
 
     public function show(Lead $lead)
@@ -282,7 +283,6 @@ class LeadController extends Controller
             'remarks' => $request->remarks,
         ];
 
-        // Only Super Admin, Admin & Manager can change assignment
         if (Auth::user()->role_id != 4) {
             $data['assigned_to'] = $request->assigned_to;
         }

@@ -60,7 +60,7 @@
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
-                            @if(Auth::user()->hasAnyRole(['Manager', 'Owner', 'Super Admin']))
+                            @if(Auth::user()->hasAnyRole(['Manager', 'Owner', 'Super Admin','Admin']))
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label">
                                         Distribution Location <small class="text-muted">(Where vouchers will be distributed)</small>

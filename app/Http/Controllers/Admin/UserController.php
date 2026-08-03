@@ -45,12 +45,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+        $role = Role::query()->find($request->role_id);
+
+        $locationRule = 'required|exists:locations,id';
+
+        if ($role && in_array($role->name, ['Admin', 'Super Admin', 'Manager'])) {
+            $locationRule = 'nullable|exists:locations,id';
+        }
+
         $validated = $request->validate([
             'role_id' => 'required|exists:roles,id',
             'employee_code' => 'required|string|max:50|unique:users,employee_code',
             'name' => 'required|string|max:255',
-            'location_id' => 'required|string|max:255',
+            'location_id' => $locationRule,
             'email' => 'required|email|unique:users,email',
             'mobile' => 'required|string|max:20|unique:users,mobile|regex:/^[0-9+\-\s]+$/',
             'password' => 'required|min:6|confirmed',
@@ -68,9 +75,7 @@ class UserController extends Controller
         $validated['status'] = 1;
 
         if ($request->hasFile('profile_photo')) {
-
-            $validated['profile_photo'] = $request
-                ->file('profile_photo')
+            $validated['profile_photo'] = $request->file('profile_photo')
                 ->store('profile-photos', 'public');
         }
 
@@ -78,8 +83,7 @@ class UserController extends Controller
 
         $newUser = User::create($validated);
 
-        $role = Role::findOrFail($validated['role_id']);
-        $newUser->assignRole($role);
+        $newUser->assignRole(Role::findOrFail($validated['role_id']));
 
         return redirect()
             ->route('users.index')

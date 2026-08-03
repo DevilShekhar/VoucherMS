@@ -21,7 +21,7 @@ class VoucherRequest extends Model
         'remarks',
         'requested_at',
         'approved_at',
-        'selling_price','gst_type'
+        'selling_price', 'gst_type','created_by','updated_by','approved_by'
     ];
 
     protected $casts = [
@@ -50,4 +50,19 @@ class VoucherRequest extends Model
     {
         return $this->belongsTo(Voucher::class);
     }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updater()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
+    public function approvedBy()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
+
 }

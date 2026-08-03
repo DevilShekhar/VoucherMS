@@ -89,18 +89,6 @@
                                     @endforeach
                                 </select>
                             </div>
-                            {{-- <div class="col-md-6 mb-3">
-                                <label class="form-label">Course <span class="text-danger">*</span></label>
-                                <select name="course_id" class="form-select">
-                                    <option value="">Select Course</option>
-                                    @foreach($courses as $course)
-                                    <option value="{{ $course->id }}" {{ $candidate->course_id == $course->id ? 'selected' : ''
-                                        }}>
-                                        {{ $course->course_name }}
-                                    </option>
-                                    @endforeach
-                                </select>
-                            </div> --}}
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">
                                     Course Category
@@ -110,12 +98,18 @@
                                     <option value="">Select Category</option>
 
                                     @foreach($categories as $category)
-                                        <option value="{{ $category->id }}">
+                                        <option value="{{ $category->id }}"
+                                            {{ old('course_category_id', optional($candidate->course)->course_category_id) == $category->id ? 'selected' : '' }}>
                                             {{ $category->name }}
                                         </option>
                                     @endforeach
                                 </select>
+
+                                @error('course_category_id')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
+
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">
                                     Course
@@ -125,7 +119,8 @@
                                     <option value="">Select Course</option>
 
                                     @foreach($courses as $course)
-                                        <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
+                                        <option value="{{ $course->id }}"
+                                            {{ old('course_id', $candidate->course_id) == $course->id ? 'selected' : '' }}>
                                             {{ $course->course_name }}
                                         </option>
                                     @endforeach
@@ -172,7 +167,7 @@
                         </div>
 
                         <div class="form-footer">
-                            <a href="{{ route('candidates.show', $candidate) }}" class="btn btn-cancel">Cancel</a>
+                            <a href="{{ route('candidates.index', $candidate) }}" class="btn btn-cancel">Cancel</a>
                             <button type="submit" class="btn btn-save">Update Candidate</button>
 
                         </div>

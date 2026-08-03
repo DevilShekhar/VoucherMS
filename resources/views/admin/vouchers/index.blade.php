@@ -70,7 +70,7 @@
                                     <th>Expiry Date</th>
                                     <th>Purchase Price</th>
                                     <th>Cost</th>
-                                    <th>Status</th>
+                                    <th>Voucher Status</th>
                                     <th>Created By</th>
                                     <th>Update By</th>
                                     @can('vouchers.edit')

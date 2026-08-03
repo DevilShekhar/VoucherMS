@@ -65,14 +65,14 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{ route('roles.permissions', $roleItem->id) }}" class="btn btn-sm btn-primary me-1">
-                                        Manage Permission
+                                    <a href="{{ route('roles.permissions', $roleItem->id) }}"class="btn btn-sm btn-primary me-1 text-white" title="Manage Permissions">
+                                        <i class="fas fa-user-shield"></i>
                                     </a>
-                                    <a href="{{ route('roles.edit', $roleItem->id) }}" class="btn btn-sm btn-warning me-1">
+                                    <a href="{{ route('roles.edit', $roleItem->id) }}" class="btn btn-sm btn-warning me-1" title="Edit User">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     @if($roleItem->status == 1)
-                                        <form action="{{ route('roles.destroy', $roleItem->id) }}" method="POST" class="delete-form d-inline">
+                                        <form action="{{ route('roles.destroy', $roleItem->id) }}" method="POST" class="delete-form d-inline" title="Deactive User">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">

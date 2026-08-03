@@ -65,8 +65,6 @@ class VoucherRequestController extends Controller
         ]);
 
         $candidate = Candidate::findOrFail($request->candidate_id);
-
-        // Prevent duplicate pending request
         $exists = VoucherRequest::query()->where('candidate_id', $candidate->id)
             ->where('status', 'Pending')
             ->exists();
@@ -93,6 +91,8 @@ class VoucherRequestController extends Controller
             'candidate_id' => $candidate->id,
             'voucher_id' => null,
             'requested_by' => Auth::id(),
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
             'center_id' => $candidate->center_id,
 
             'admin_id' => $admin?->id,
@@ -168,6 +168,7 @@ class VoucherRequestController extends Controller
                 $voucherRequest->load('voucher');
             }
         }
+
         return view('admin.voucher_requests.show', compact('voucherRequest'));
     }
 
@@ -195,59 +196,75 @@ class VoucherRequestController extends Controller
         //
     }
 
-    public function approve(Request $request, VoucherRequest $voucherRequest)
-    {
-        $request->validate([
-            'action' => 'required|in:Approved,Rejected',
-            'remarks' => 'nullable|string',
-            // 'selling_price' => 'required_if:action,Approved|nullable|numeric|min:0',
-        ]);
+   public function approve(Request $request, VoucherRequest $voucherRequest)
+{
+    $request->validate([
+        'action' => 'required|in:Approved,Rejected',
+        'remarks' => 'nullable|string',
+        // 'selling_price' => 'required_if:action,Approved|nullable|numeric|min:0',
+    ]);
 
-        $data = [
-            'status' => $request->action,
-            'remarks' => $request->remarks,
-            //  'selling_price' => $request->selling_price,
-        ];
+    $data = [
+        'status' => $request->action,
+        'remarks' => $request->remarks,
+        // 'selling_price' => $request->selling_price,
+    ];
 
-        if (Auth::user()->role_id == 1) {
-            // Super Admin
-            $data['superadmin_approval'] = $request->action;
-        } elseif (Auth::user()->role_id == 2) {
-            // Admin
-            $data['admin_approval'] = $request->action;
-        } else {
-            abort(403, 'Unauthorized');
-        }
-
-        $voucherRequest->update($data);
-        if ($request->action == 'Approved' && $voucherRequest->voucher_id) {
-            if (! VoucherAllocation::query()->where('request_id', $voucherRequest->id)->exists()) {
-
-                VoucherAllocation::create([
-                    'voucher_id' => $voucherRequest->voucher_id,
-                    'request_id' => $voucherRequest->id,
-                    'candidate_id' => $voucherRequest->candidate_id,
-                    'allocated_to' => Auth::id(),
-                    'allocated_date' => now()->toDateString(),
-                    'status' => 'Allocated',
-                ]);
-
-                $voucherRequest->update([
-                    'status' => 'Allocated',
-                    'approved_at' => now(),
-                ]);
-
-                Voucher::query()->where('id', $voucherRequest->voucher_id)
-                    ->update([
-                        'status' => 'Allocated',
-                    ]);
-            }
-        }
-
-        return redirect()
-            ->route('voucher-requests.show', $voucherRequest)
-            ->with('success', 'Voucher request Approve By You successfully.');
+    if ($request->action == 'Approved') {
+        $data['approved_by'] = Auth::id();
+        $data['approved_at'] = now();
     }
+
+    if (Auth::user()->role_id == 1) {
+        $data['superadmin_approval'] = $request->action;
+    } elseif (Auth::user()->role_id == 2) {
+        $data['admin_approval'] = $request->action;
+    } else {
+        abort(403, 'Unauthorized');
+    }
+
+    // Update request first
+    $voucherRequest->update($data);
+
+    if ($request->action == 'Approved') {
+
+        // Refresh latest data
+        $voucherRequest->refresh();
+
+        if (!$voucherRequest->voucher_id) {
+            return back()->with('error', 'No voucher assigned to this request.');
+        }
+
+        // Create allocation only if not already created
+        if (!VoucherAllocation::where('request_id', $voucherRequest->id)->exists()) {
+
+            VoucherAllocation::create([
+                'voucher_id'     => $voucherRequest->voucher_id,
+                'request_id'     => $voucherRequest->id,
+                'candidate_id'   => $voucherRequest->candidate_id,
+                'allocated_to'   => Auth::id(),
+                'allocated_date' => now()->toDateString(),
+                'status'         => 'Allocated',
+            ]);
+        }
+
+        // Always update voucher status
+        Voucher::where('id', $voucherRequest->voucher_id)
+            ->update([
+                'status' => 'Allocated',
+            ]);
+
+        // Update voucher request status
+        $voucherRequest->update([
+            'status' => 'Allocated',
+            'approved_at' => now(),
+        ]);
+    }
+
+    return redirect()
+        ->route('voucher-requests.show', $voucherRequest)
+        ->with('success', 'Voucher request approved successfully.');
+}
 
     public function allocateVoucher(VoucherRequest $voucherRequest)
     {
@@ -291,10 +308,8 @@ class VoucherRequestController extends Controller
     {
         DB::transaction(function () use ($voucherRequest) {
             $categoryId = $voucherRequest->candidate->course->course_category_id;
-            $courseIds = Course::where('course_category_id', $categoryId)
+            $courseIds = Course::query()->where('course_category_id', $categoryId)
                 ->pluck('id');
-
-            // Get first available voucher
             $voucher = Voucher::whereIn('course_id', $courseIds)
                 ->where('status', 'Available')
                 ->orderBy('expiry_date')

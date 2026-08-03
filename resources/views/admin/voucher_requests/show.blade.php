@@ -69,8 +69,11 @@
                                     <i class="fas fa-graduation-cap"></i>
                                 </div>
                                 <div class="detail-content">
-                                    <span>Course</span>
-                                    <h6>{{ $voucherRequest->candidate->course->course_name ?? '-' }}</h6>
+                                    <span>Course Category</span>
+                                    <h6>{{ $voucherRequest->candidate->course?->category?->name ?? '-' }}</h6>
+
+                                    <span class="mt-2 d-block">Course</span>
+                                    <h6>{{ $voucherRequest->candidate->course?->course_name ?? '-' }}</h6>
                                 </div>
                             </div>
                         </div>
@@ -228,7 +231,7 @@
                         </div>
                     </div>
                     <!-- Voucher Panel -->
-                    @if(auth()->user()->hasAnyRole(['Super Admin', 'Admin', 'Manager']) && in_array($voucherRequest->status, ['Approved', 'Allocated']))
+                    @if(auth()->user()->hasAnyRole(['Super Admin', 'Admin', 'Manager']) && in_array($voucherRequest->status, ['Approved', 'Allocated', 'Pending']))
                         <div class="voucher-panel mt-4">
                             <div class="voucher-header">
                                 <div class="voucher-title">
@@ -244,20 +247,32 @@
                             <div class="voucher-body">
 
                                 @if($voucherRequest->voucher)
+
                                     <div class="row">
                                         <div class="col-md-4">
                                             <strong>Voucher Code</strong>
                                             <h6>{{ $voucherRequest->voucher->voucher_code }}</h6>
                                         </div>
+
                                         <div class="col-md-4">
                                             <strong>Status</strong>
                                             <h6>{{ $voucherRequest->voucher->status }}</h6>
                                         </div>
+
                                         <div class="col-md-4">
                                             <strong>Expiry</strong>
                                             <h6>{{ \Carbon\Carbon::parse($voucherRequest->voucher->expiry_date)->format('d M Y') }}</h6>
                                         </div>
                                     </div>
+
+                                @else
+
+                                    <div class="alert alert-warning mb-0">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                        <strong>No voucher available</strong> for this course category. Please add a voucher for this
+                                        course category before approving the request.
+                                    </div>
+
                                 @endif
                             </div>
                         </div>

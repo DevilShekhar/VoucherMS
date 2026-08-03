@@ -72,8 +72,6 @@ class CandidateController extends Controller
             'gender' => 'nullable|in:Male,Female,Other',
             'dob' => 'nullable|date',
         ]);
-        // dd($request->all());
-
         $lead = Lead::findOrFail($request->lead_id);
 
         // Generate Candidate Code

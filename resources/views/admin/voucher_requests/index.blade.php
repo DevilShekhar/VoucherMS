@@ -51,7 +51,8 @@
                                     <th>Requested By</th>
                                     <th>Requested On</th>
                                     <th>Approval Status</th>
-                                    <th>Status</th>
+                                    <th>Voucher Status</th>
+                                    <th>Approved By</th>
                                     <th width="180">Action</th>
                                 </tr>
 
@@ -125,6 +126,9 @@
                                             @endif
 
                                         </td>
+                                        <td>
+                                            {{ $request->approvedby->name ?? '-' }}
+                                        </td>
 
                                         <td>
 
@@ -150,7 +154,6 @@
                                     </tr>
 
                                 @endforelse
-
                             </tbody>
 
                         </table>
