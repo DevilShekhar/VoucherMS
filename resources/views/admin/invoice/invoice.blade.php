@@ -123,7 +123,7 @@
             <td width="65%">
                <div class="company-name">CARE CONNECT TRUST</div>
 
-               <div class="company-sub">Excellence in Healthcare Education</div>
+               <div class="company-sub">Excellence in Healthcare Educa tion</div>
 
                <div style="margin-top: 10px">
                   Phone : +91-9876543210<br />
