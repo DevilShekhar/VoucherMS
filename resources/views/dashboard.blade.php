@@ -73,6 +73,7 @@
         </div>
     </section>
 
+    @can('lead-report')
     <section class="mb-4">
         <div class="card border-0 shadow-lg rounded-4 report-filter-card">
             <div class="card-header-reports border-0 py-3 px-4">
@@ -175,6 +176,8 @@
             </div>
         </div>
     </section>
+    @endcan
+    @can('view-voucher')
     <section class="mb-4">
     <div class="card border-0 shadow-lg rounded-4 report-filter-card">
 
@@ -326,7 +329,8 @@
         </div>
 
     </div>
-</section>
+    </section>
+    @endcan
 {{-- Other users --}}
 
 @can('student-data')
@@ -613,6 +617,7 @@
 </section>
 @endcan
 
+@can('scheduledexams')
 <section class="mb-4">
     <div class="card border-0 shadow-lg rounded-4 report-filter-card">
 
@@ -648,7 +653,7 @@
             <div class="row g-3">
 
                 <!-- From Date -->
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-4 col-md-4">
                     <label class="form-label fw-semibold">
                         <i class="fas fa-calendar-alt text-primary me-1"></i>
                         From Date
@@ -660,7 +665,7 @@
                 </div>
 
                 <!-- To Date -->
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-4 col-md-4">
                     <label class="form-label fw-semibold">
                         <i class="fas fa-calendar-check text-success me-1"></i>
                         To Date
@@ -672,7 +677,7 @@
                 </div>
 
                 <!-- Exam Mode -->
-                <div class="col-lg-2 col-md-6">
+                <div class="col-lg-4 col-md-4">
                     <label class="form-label fw-semibold">
                         <i class="fas fa-laptop-house text-info me-1"></i>
                         Exam Mode
@@ -689,7 +694,7 @@
                 </div>
 
                 <!-- Center -->
-                <div class="col-lg-2 col-md-6">
+                <div class="col-lg-4 col-md-4">
                     <label class="form-label fw-semibold">
                         <i class="fas fa-building text-warning me-1"></i>
                         Center
@@ -744,21 +749,11 @@
                 </div>
 
                 <!-- Filter Button -->
-                <div class="col-lg-2 d-flex align-items-end">
-
-                    <div class="d-grid w-100">
-
-                        <button type="button"
-                                id="filterBtn"
-                                class="btn btn-success btn-md export-btn">
-
-                            <i class="fas fa-search me-2"></i>
-                            Filter
-
-                        </button>
-
-                    </div>
-
+                <div class="col-lg-12 d-flex justify-content-end mt-3">
+                    <button type="button" id="filterBtn" class="btn btn-success export-btn px-4">
+                        <i class="fas fa-search me-2"></i>
+                        Filter
+                    </button>
                 </div>
 
             </div>
@@ -813,6 +808,7 @@
 
     </div>
 </section>
+@endcan
 
 @can('lead-card')
 <section class="section premium-dashboard pt-0">
@@ -843,7 +839,7 @@
                                 @can('locations.index')
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label">Location</label>
-                                    <select name="location_id" class="form-select">
+                                    <select name="location_id" class="form-control">
                                         <option value="">All Locations</option>
                                         @foreach($locations as $location)
                                             <option value="{{ $location->id }}"
@@ -871,16 +867,19 @@
                                            value="{{ old('to_date', request('to_date')) }}">
                                 </div>
 
-                                <div class="col-md-3 mb-3 d-flex gap-2">
-                                    <button type="submit" class="btn btn-success w-100">
-                                        <i class="fas fa-filter me-1"></i>
-                                        Filter
-                                    </button>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label d-none d-md-block">&nbsp;</label>
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" class="btn btn-success export-btn flex-fill">
+                                            <i class="fas fa-filter me-1"></i>
+                                            Filter
+                                        </button>
 
-                                    <a href="{{ route('dashboard') }}" class="btn btn-secondary w-100">
-                                        <i class="fas fa-undo me-1"></i>
-                                        Reset
-                                    </a>
+                                        <a href="{{ route('dashboard') }}" class="btn btn-secondary export-btn flex-fill">
+                                            <i class="fas fa-undo me-1"></i>
+                                            Reset
+                                        </a>
+                                    </div>
                                 </div>
 
                             </div>
@@ -909,7 +908,7 @@
                                     @endphp
 
                                     <tr style="cursor:pointer"
-                                        onclick="window.location='{{ route('leads.index', ['lead_no' => $item->lead->lead_no]) }}'">
+                                        onclick="window.location='{{ route('leads.show', $item->lead->id) }}'">
 
                                         <td>
                                             <strong>{{ $item->lead->lead_no }}</strong>

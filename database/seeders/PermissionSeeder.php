@@ -151,6 +151,15 @@ class PermissionSeeder extends Seeder
             'lead-card',
             'student-data',
             'scheduledexams',
+
+            //Course Category
+            'course-category.create',
+            'course-category.index',
+            'course-category.edit',
+            'course-category.destory',
+
+            //Lead Report
+            'lead-report',
         ];
 
         foreach ($permissions as $permission) {

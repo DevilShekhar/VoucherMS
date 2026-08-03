@@ -119,12 +119,14 @@ Route::middleware(['auth', 'otp'])->group(function () {
     Route::get('/voucher-dashboard', [VoucherController::class, 'dashboard'])
         ->name('vouchers.dashboard');
 
-    Route::get('/exam-schedules', [ExamScheduleController::class, 'index'])->name('exam-schedules.index');
+    // Route::get('/exam-schedules', [ExamScheduleController::class, 'index'])->name('exam-schedules.index');
+    Route::match(['get', 'post'], '/exam-schedules', [ExamScheduleController::class, 'index'])->name('exam-schedules.index');
     Route::get('/exam-schedules/center', [ExamScheduleController::class, 'center'])->name('exam-schedules.center');
 
     Route::get('/exam-schedules/online', [ExamScheduleController::class, 'online'])->name('exam-schedules.online');
     Route::get('/exam-schedules/{examSchedule}', [ExamScheduleController::class, 'show'])->name('exam-schedules.show');
-    Route::post('/exam-schedules', [ExamScheduleController::class, 'store'])->name('exam-schedules.store');
+    // Route::post('/exam-schedules', [ExamScheduleController::class, 'store'])->name('exam-schedules.store');
+    Route::post('/exam-schedules/store', [ExamScheduleController::class, 'store'])->name('exam-schedules.store');
     Route::get('/locations/{id}/users',
         [LeadController::class, 'getUsersByLocation']);
     Route::get('/sales-executives-by-location', [LeadController::class, 'getSalesExecutives'])

@@ -116,19 +116,30 @@
             @endcan
 
             @can('courses.index')
-                <li>
-                    <a href="{{ route('course-category.index') }}"
-                        class="sb-link {{ request()->routeIs('course-category.*') ? 'active' : '' }}">
-                        <i class="fas fa-list"></i>
-                        <span>Course Category</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('courses.index') }}"
-                        class="sb-link {{ request()->routeIs('courses.*') ? 'active' : '' }}">
+                <li class="sb-item">
+                    <a href="javascript:void(0);"
+                        class="sb-link {{ request()->routeIs('course-category.*') || request()->routeIs('courses.*') ? 'active' : '' }}"
+                        id="coursesMenu">
                         <i class="fas fa-book"></i>
                         <span>Courses</span>
+                        <i class="fas fa-chevron-down ms-auto" id="coursesArrow"></i>
                     </a>
+                    <ul class="sb-submenu" id="coursesSubmenu">
+                        <li>
+                            <a href="{{ route('course-category.index') }}"
+                                class="{{ request()->routeIs('course-category.*') ? 'active' : '' }}">
+                                Course Category
+                            </a>
+                        </li>
+                        @can('course-category.index')
+                        <li>
+                            <a href="{{ route('courses.index') }}"
+                                class="{{ request()->routeIs('courses.*') ? 'active' : '' }}">
+                                Courses
+                            </a>
+                        </li>
+                        @endcan
+                    </ul>
                 </li>
             @endcan
 
@@ -903,6 +914,15 @@
                 'examScheduleArrow'
             );
 
+        });
+
+        // Courses Menu Toggle
+        document.getElementById('coursesMenu')?.addEventListener('click', function () {
+            const submenu = document.getElementById('coursesSubmenu');
+            const arrow = document.getElementById('coursesArrow');
+
+            submenu.classList.toggle('show');
+            arrow.classList.toggle('rotate');
         });
     </script>
 

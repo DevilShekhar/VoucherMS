@@ -31,7 +31,7 @@
 
                 <!-- Right Side: Buttons -->
                 <div class="d-flex align-items-center gap-3">
-                    <button type="button" id="selectAllBtn" class="btn btn-primary">
+                    <button type="button" id="selectAllBtn" class="btn btn-primary text-white">
                         Select All
                     </button>
 
