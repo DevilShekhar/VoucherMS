@@ -44,6 +44,7 @@
                                 <tr>
                                     <th>Candidate Info</th>
                                     <th>Code</th>
+                                    <th>Course Category</th>
                                     <th>Course</th>
                                     <th>Center</th>
                                     <th>Executive</th>
@@ -71,6 +72,7 @@
 
                                         </td>
                                         <td>{{ $candidate->candidate_code }}</td>
+                                        <td>{{ $candidate->course?->category?->name ?? '-' }}</td>
                                         <td>{{ $candidate->course->course_name ?? '-' }}</td>
                                         <td>{{ $candidate->center->center_name ?? '-' }}</td>
                                         <td>
@@ -233,7 +235,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Candidate</label>
                                 <input type="text" id="exam_candidate_name" class="form-control" readonly>
-                            </div>                          
+                            </div>
 
                             <div class="mb-3">
                                 <label class="form-label">

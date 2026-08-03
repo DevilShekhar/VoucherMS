@@ -113,17 +113,17 @@
 
             @can('courses.index')
                 <li>
+                    <a href="{{ route('course-category.index') }}"
+                        class="sb-link {{ request()->routeIs('course-category.*') ? 'active' : '' }}">
+                        <i class="fas fa-list"></i>
+                        <span>Course Category</span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('courses.index') }}"
                         class="sb-link {{ request()->routeIs('courses.*') ? 'active' : '' }}">
                         <i class="fas fa-book"></i>
                         <span>Courses</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('course-category.index') }}"
-                        class="sb-link {{ request()->routeIs('course-category.*') ? 'active' : '' }}">
-                        <i class="fas fa-book"></i>
-                        <span>Course Category</span>
                     </a>
                 </li>
             @endcan
@@ -149,24 +149,28 @@
             @endcan
             @can('exam-schedules.index')
                 <li class="sb-item">
-                    <a href="javascript:void(0);" class="sb-link {{ request()->routeIs('exam-schedules.*') ? 'active' : '' }}" id="examScheduleMenu">
+                    <a href="javascript:void(0);"
+                        class="sb-link {{ request()->routeIs('exam-schedules.*') ? 'active' : '' }}" id="examScheduleMenu">
                         <i class="fas fa-calendar-alt"></i>
                         <span>Exam Schedule</span>
                         <i class="fas fa-chevron-down ms-auto" id="examScheduleArrow"></i>
                     </a>
                     <ul class="sb-submenu" id="examScheduleSubmenu">
                         <li>
-                             <a href="{{ route('exam-schedules.index') }}" class="{{ request()->routeIs('exam-schedules.index') ? 'active' : '' }}">
+                            <a href="{{ route('exam-schedules.index') }}"
+                                class="{{ request()->routeIs('exam-schedules.index') ? 'active' : '' }}">
                                 All
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('exam-schedules.center') }}" class="{{ request()->routeIs('exam-schedules.center') ? 'active' : '' }}">
+                            <a href="{{ route('exam-schedules.center') }}"
+                                class="{{ request()->routeIs('exam-schedules.center') ? 'active' : '' }}">
                                 Center Exam
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('exam-schedules.online') }}" class="{{ request()->routeIs('exam-schedules.online') ? 'active' : '' }}">
+                            <a href="{{ route('exam-schedules.online') }}"
+                                class="{{ request()->routeIs('exam-schedules.online') ? 'active' : '' }}">
                                 Online Exam
                             </a>
                         </li>

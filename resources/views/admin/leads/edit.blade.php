@@ -82,7 +82,7 @@
                                 <label class="form-label">City</label>
                                 <input type="text" name="city" class="form-control" value="{{ old('city', $lead->city) }}">
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label">Course Category</label>
 
                                 <select name="course_category_id" id="course_category_id" class="form-select">
@@ -107,17 +107,47 @@
                                     @endforeach
                                 </select>
                             </div>
-                            @if(auth()->user()->role_id != 4)
+                            @if(Auth::user()->hasAnyRole(['Manager', 'Owner', 'Super Admin', 'Admin']))
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Assigned To</label>
-                                    <select name="assigned_to" class="form-select">
-                                        <option value="">Auto Assign</option>
+                                    <label class="form-label">
+                                        Distribution Location
+                                        <small class="text-muted">(Where vouchers will be distributed)</small>
+                                    </label>
+
+                                    <select name="location_id" id="location" class="form-select">
+                                        <option value="">Select Location</option>
+
+                                        @foreach($locations as $location)
+                                            <option value="{{ $location->id }}" {{ old('location_id', $lead->location_id) == $location->id ? 'selected' : '' }}>
+                                                {{ $location->name }}
+                                            </option>
+                                        @endforeach
+
+                                    </select>
+
+                                    @error('location_id')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        Assign To
+                                        <small class="text-muted">(Leave empty for auto assignment)</small>
+                                    </label>
+
+                                    <select name="assigned_to" class="form-select" id="assigned_to">
+                                        <option value=""></option>
+
                                         @foreach($users as $user)
                                             <option value="{{ $user->id }}" {{ old('assigned_to', $lead->assigned_to) == $user->id ? 'selected' : '' }}>
                                                 {{ $user->name }}
                                             </option>
                                         @endforeach
                                     </select>
+                                    @error('assigned_to')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                             @endif
 
@@ -157,6 +187,42 @@
             </form>
         </section>
         <script>
+            $('#location').on('change', function () {
+
+                let locationId = $(this).val();
+
+                $.ajax({
+                    url: "{{ route('sales.executives.by.location') }}",
+                    type: "GET",
+                    data: {
+                        location_id: locationId
+                    },
+                    success: function (users) {
+
+                        let options = '<option value="">Auto Assign (Round Robin)</option>';
+
+                        $.each(users, function (i, user) {
+                            options += `<option value="${user.id}">${user.name}</option>`;
+                        });
+
+                        $('select[name="assigned_to"]').html(options);
+                    }
+                });
+
+            });
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                $('#assigned_to').select2({
+                    theme: 'bootstrap-5',
+                    placeholder: 'Search User...',
+                    allowClear: true,
+                    width: '100%'
+                });
+            });
+        </script>
+        <script>
             $(document).ready(function () {
 
                 $('#course_category_id').change(function () {
@@ -179,8 +245,8 @@
 
                             $.each(response, function (index, course) {
                                 options += `<option value="${course.id}">
-                                                                            ${course.course_name}
-                                                                        </option>`;
+                                                                                            ${course.course_name}
+                                                                                        </option>`;
                             });
 
                             $('#course_id').html(options);
