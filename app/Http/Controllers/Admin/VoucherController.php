@@ -49,7 +49,6 @@ class VoucherController extends Controller
             'purchase_price' => 'required',
             'cost' => 'required',
         ]);
-    
         $hash = hash('sha256', strtoupper(trim($request->voucher_code)));
         if (Voucher::query()->where('voucher_code_hash', $hash)->exists()) {
             return back()
@@ -72,7 +71,7 @@ class VoucherController extends Controller
         $vendors = VoucherVendor::orderBy('vendor_name')->get();
         $categories = CourseCategory::orderBy('name')->get();
 
-        $courses = Course::where('course_category_id', $voucher->course_category_id)
+        $courses = Course::query()->where('course_category_id', $voucher->course_category_id)
 
             ->orderBy('course_name')
             ->get();
@@ -128,6 +127,7 @@ class VoucherController extends Controller
 
     public function bulkUpload(Request $request)
     {
+        // dd($request->all());
         $rows = Excel::toArray([], $request->file('file'));
 
         if (empty($rows) || empty($rows[0])) {
@@ -142,6 +142,8 @@ class VoucherController extends Controller
         $requiredHeaders = [
             'voucher_code',
             'vendor_name',
+            'course_category',
+            'course',
             'purchase_date',
             'expiry_date',
             'purchase_price',
@@ -195,7 +197,7 @@ class VoucherController extends Controller
 
                     $message .= '
                 <div class="mt-2">
-                    <span class="text-danger fw-bold">Vendor Not Found:</span>
+                    <span class="text-danger fw-bold">Vendor Not Found:Check Vendors name again</span>
                     <ul class="mb-0 text-danger">';
 
                     foreach ($vendors as $vendor) {
@@ -204,6 +206,24 @@ class VoucherController extends Controller
 
                     $message .= '</ul></div>';
                 }
+            }
+            if (! empty(VoucherImport::$courses)) {
+
+                $courses = array_unique(VoucherImport::$courses);
+
+                $message .= '
+                    <div class="mt-2">
+                        <span class="text-danger fw-bold">
+                            Course / Category Not Found:
+                        </span>
+
+                        <ul class="mb-0 text-danger">';
+
+                foreach ($courses as $course) {
+                    $message .= "<li>{$course}</li>";
+                }
+
+                $message .= '</ul></div>';
             }
 
             return redirect()
