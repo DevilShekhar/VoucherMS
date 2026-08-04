@@ -14,10 +14,12 @@ class VouchersExport implements FromCollection, ShouldAutoSize, WithEvents, With
 {
     public function collection()
     {
-        return Voucher::with('vendor')->get()->map(function ($voucher) {
+        return Voucher::with(['vendor', 'course.category'])->get()->map(function ($voucher) {
             return [
                 'Voucher Code' => $voucher->voucher_code,
                 'Vendor' => $voucher->vendor->vendor_name ?? '-',
+                'Course Category' => $voucher->course->category->name ?? '-',
+                'Course' => $voucher->course->course_name ?? '-',
                 'Purchase Date' => $voucher->purchase_date,
                 'Expiry Date' => $voucher->expiry_date,
                 'Purchase Price' => $voucher->purchase_price,
@@ -32,6 +34,8 @@ class VouchersExport implements FromCollection, ShouldAutoSize, WithEvents, With
         return [
             'Voucher Code',
             'Vendor',
+            'Course Category',
+            'Course',
             'Purchase Date',
             'Expiry Date',
             'Purchase Price',
@@ -50,7 +54,7 @@ class VouchersExport implements FromCollection, ShouldAutoSize, WithEvents, With
                 $highestRow = $sheet->getHighestRow();
 
                 // Make header bold
-                $sheet->getStyle('A1:G1')->getFont()->setBold(true);
+                $sheet->getStyle('A1:I1')->getFont()->setBold(true);
 
                 // =============================
                 // Voucher Status Legend
@@ -94,52 +98,52 @@ class VouchersExport implements FromCollection, ShouldAutoSize, WithEvents, With
                 // Highlight Used vouchers
                 for ($row = 2; $row <= $highestRow; $row++) {
 
-                    $status = $sheet->getCell("G{$row}")->getValue();
+                    $status = $sheet->getCell("I{$row}")->getValue();
 
                     if ($status == 'Used') {
 
-                        $sheet->getStyle("A{$row}:G{$row}")
+                        $sheet->getStyle("A{$row}:I{$row}")
                             ->getFont()
                             ->getColor()
                             ->setARGB('FF0000');
 
-                        $sheet->getStyle("A{$row}:G{$row}")
+                        $sheet->getStyle("A{$row}:I{$row}")
                             ->getFill()
                             ->setFillType(Fill::FILL_SOLID);
 
-                        $sheet->getStyle("A{$row}:G{$row}")
+                        $sheet->getStyle("A{$row}:I{$row}")
                             ->getFill()
                             ->getStartColor()
                             ->setARGB('FFFFC7CE');
                     } elseif ($status == 'Available') {
 
                         // Green text with light green background
-                        $sheet->getStyle("A{$row}:G{$row}")
+                        $sheet->getStyle("A{$row}:I{$row}")
                             ->getFont()
                             ->getColor()
                             ->setARGB('008000');
 
-                        $sheet->getStyle("A{$row}:G{$row}")
+                        $sheet->getStyle("A{$row}:I{$row}")
                             ->getFill()
                             ->setFillType(Fill::FILL_SOLID);
 
-                        $sheet->getStyle("A{$row}:G{$row}")
+                        $sheet->getStyle("A{$row}:I{$row}")
                             ->getFill()
                             ->getStartColor()
                             ->setARGB('C6EFCE');
                     } elseif ($status == 'Allocated') {
 
                         // Blue text with light blue background
-                        $sheet->getStyle("A{$row}:G{$row}")
+                        $sheet->getStyle("A{$row}:I{$row}")
                             ->getFont()
                             ->getColor()
                             ->setARGB('1F4E78');
 
-                        $sheet->getStyle("A{$row}:G{$row}")
+                        $sheet->getStyle("A{$row}:I{$row}")
                             ->getFill()
                             ->setFillType(Fill::FILL_SOLID);
 
-                        $sheet->getStyle("A{$row}:G{$row}")
+                        $sheet->getStyle("A{$row}:I{$row}")
                             ->getFill()
                             ->getStartColor()
                             ->setARGB('D9EAF7');

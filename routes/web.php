@@ -22,8 +22,8 @@ use App\Http\Controllers\Auth\OtpController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/login', function () {
-    return view('welcome');
+Route::get('/', function () {
+    return view('auth.login');
 });
 Route::get('/server', function () {
     return view('errors.500');
