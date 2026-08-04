@@ -9,8 +9,12 @@ use App\Models\Center;
 use App\Models\Course;
 use App\Models\CourseCategory;
 use App\Models\Lead;
+use App\Models\Payment;
+use App\Models\VoucherRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CandidateController extends Controller
@@ -40,39 +44,79 @@ class CandidateController extends Controller
 
         $candidates = $query->get();
         $centers = Center::orderBy('center_name')->get();
+        $centerAdminCenter = null;
 
-        return view('admin.candidates.index', compact('candidates', 'centers'));
+        if (optional(Auth::user()->role)->name === 'Center Admin') {
+            $centerAdminCenter = Center::where('center_exe_id', Auth::id())->first();
+        }
+
+        return view('admin.candidates.index', compact('candidates', 'centers','centerAdminCenter'));
     }
-
     public function create()
     {
         $leads = Lead::whereHas('followups', function ($q) {
             $q->where('status', 'Converted');
         })
-            ->whereDoesntHave('candidate')
+            ->whereDoesntHave('candidate.examSchedule', function ($q) {
+                $q->where('exam_status', 'Scheduled');
+            })
             ->get();
 
-        $centers = Center::query()->where('status', 1)->get();
+        if (optional(Auth::user()->role)->name === 'Center Admin') {
+
+            $centers = Center::where('status', 1)
+                ->where('center_exe_id', Auth::id())
+                ->get();
+
+        } else {
+
+            $centers = Center::where('status', 1)->get();
+
+        }
         $categories = CourseCategory::orderBy('name')->get();
-        $courses = Course::query()->where('status', 1)->get();
+        $courses = Course::where('status', 1)->get();
 
-        return view('admin.candidates.create', compact('leads', 'centers', 'courses','categories'));
+        return view('admin.candidates.create', compact(
+            'leads',
+            'centers',
+            'courses',
+            'categories'
+        ));
     }
-
     public function store(Request $request)
     {
         $request->validate([
-            'lead_id' => 'required|exists:leads,id',
             'center_id' => 'required|exists:centers,id',
             'course_id' => 'required|exists:courses,id',
             'first_name' => 'required|string|max:255',
-            'mobile' => 'required|string|max:20',
+            'mobile' => 'required|string|max:20|unique:candidates,mobile',
             'email' => 'nullable|email|unique:candidates,email',
             'last_name' => 'nullable|string|max:255',
             'gender' => 'nullable|in:Male,Female,Other',
             'dob' => 'nullable|date',
+            'address' => 'nullable|string',
+            'city' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'company' => 'nullable|string|max:255',
+            'gst_number' => 'nullable|string|max:30',
         ]);
-        $lead = Lead::findOrFail($request->lead_id);
+        $center = Center::findOrFail($request->center_id);
+        $centerAdminId = $center->center_exe_id;
+        $leadData = [
+            'lead_no' => $this->generateLeadNumber(),
+            'candidate_name' => $request->first_name.' '.($request->last_name ?? ''),
+            'center_id' => $request->center_id,
+            'course_id' => $request->course_id,
+            'email' => $request->email,
+            'mobile' => $request->mobile,
+            'company' => $request->company,
+            'city' => $request->city,
+            'assigned_to' => Auth::id(),
+            'status' => 'Converted',
+            'converted_at' => now(),
+        ];
+        $lead = Lead::create($leadData);
 
         // Generate Candidate Code
         $date = now()->format('Ymd');
@@ -80,11 +124,11 @@ class CandidateController extends Controller
         $next = $last ? str_pad(((int) substr($last->candidate_code ?? '', -4)) + 1, 4, '0', STR_PAD_LEFT) : '0001';
         $candidateCode = "C-{$date}-{$next}";
 
-        Candidate::create([
+        $candidate = Candidate::create([
             'candidate_code' => $candidateCode,
-            'lead_id' => $request->lead_id,
+            'lead_id' => $lead->id,
             'center_id' => $request->center_id,
-            'executive_id' => $lead->assigned_to,
+            'executive_id' => $centerAdminId ?? Auth::id(),
             'course_id' => $request->course_id,
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -102,7 +146,19 @@ class CandidateController extends Controller
         ]);
 
         return redirect()->route('candidates.index')
-            ->with('success', 'Candidate created successfully from lead.');
+            ->with('success', 'Candidate created successfully! Lead has been automatically converted.');
+    }
+
+    /**
+     * Generate a unique lead number
+     */
+    private function generateLeadNumber()
+    {
+        $date = now()->format('Ymd');
+        $lastLead = Lead::latest('id')->first();
+        $next = $lastLead ? str_pad(((int) substr($lastLead->lead_no ?? '', -4)) + 1, 4, '0', STR_PAD_LEFT) : '0001';
+
+        return "L-{$date}-{$next}";
     }
 
     public function edit(Candidate $candidate)
@@ -114,7 +170,8 @@ class CandidateController extends Controller
         $centers = Center::query()->where('status', 1)->get();
         $categories = CourseCategory::orderBy('name')->get();
         $courses = Course::query()->where('status', 1)->get();
-        return view('admin.candidates.edit', compact('candidate', 'leads', 'centers', 'courses','categories'));
+
+        return view('admin.candidates.edit', compact('candidate', 'leads', 'centers', 'courses', 'categories'));
     }
 
     public function update(Request $request, Candidate $candidate)

@@ -55,7 +55,7 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Course Category <span class="text-danger">*</span></label>
 
-                                <select name="course_category_id" id="course_category_id" class="form-select" required>
+                                <select name="course_category_id" id="course_category_id" class="form-control" required>
 
                                     <option value="">Select Category</option>
 
@@ -69,7 +69,7 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Course <span class="text-danger">*</span></label>
 
-                                <select name="course_id" id="course_id" class="form-select" required>
+                                <select name="course_id" id="course_id" class="form-control" required>
 
                                     <option value="">Select Course</option>
                                 </select>

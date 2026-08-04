@@ -15,11 +15,13 @@
                         <p>Manage all converted candidates</p>
                     </div>
                 </div>
-                <div class="premium-header-right">
-                    <a href="{{ route('candidates.create') }}" class="premium-back-btn">
-                        <i class="fas fa-plus-circle"></i> Add New Candidate
-                    </a>
-                </div>
+                @can('candidates.create')
+                    <div class="premium-header-right">
+                        <a href="{{ route('candidates.create') }}" class="premium-back-btn">
+                            <i class="fas fa-plus-circle"></i> Add New Candidate
+                        </a>
+                    </div>
+                @endcan
                 <!-- Decorative Shapes -->
                 <div class="shape circle-1"></div>
                 <div class="shape circle-2"></div>
@@ -47,7 +49,7 @@
                                     <th>Course Category</th>
                                     <th>Course</th>
                                     <th>Center</th>
-                                    <th>Executive</th>
+                                    <th>Center Admin</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -250,34 +252,55 @@
                                 </label>
                                 <input type="time" class="form-control" name="exam_time" required>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">
-                                    Exam Mode <span class="text-danger">*</span>
-                                </label>
+                            @if(optional(Auth::user()->role)->name === 'Center Admin')
 
-                                <select class="form-select" name="exam_mode" id="exam_mode" required>
-                                    <option value="">-- Select Exam Mode --</option>
-                                    <option value="center">Center</option>
-                                    <option value="online">Online</option>
-                                </select>
-                            </div>
+                                <input type="hidden" name="exam_mode" value="center">
 
-                            <div class="mb-3" id="center_div" style="display:none;">
-                                <label class="form-label">
-                                    Exam Center <span class="text-danger">*</span>
-                                </label>
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Exam Mode
+                                    </label>
+                                    <input type="text" class="form-control" value="Center" readonly>
+                                </div>
+                            @else
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Exam Mode
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <select class="form-control" name="exam_mode" id="exam_mode" required>
+                                        <option value="">-- Select Exam Mode --</option>
+                                        <option value="center">Center</option>
+                                        <option value="online">Online</option>
+                                    </select>
+                                </div>
+                            @endif
 
-                                <select class="form-select" name="center_id" id="exam_center_id">
-                                    <option value="">-- Select Center --</option>
-
-                                    @foreach($centers as $center)
-                                        <option value="{{ $center->id }}">
-                                            {{ $center->center_name }}
-                                        </option>
-                                    @endforeach
-
-                                </select>
-                            </div>
+                            @if(optional(Auth::user()->role)->name === 'Center Admin')
+                                <input type="hidden" name="center_id" value="{{ $centerAdminCenter->id ?? '' }}">
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Exam Center
+                                    </label>
+                                    <input type="text" class="form-control" value="{{ $centerAdminCenter->center_name ?? '-' }}"
+                                        readonly>
+                                </div>
+                            @else
+                                <div class="mb-3" id="center_div" style="display:none;">
+                                    <label class="form-label">
+                                        Exam Center
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <select class="form-control" name="center_id" id="exam_center_id">
+                                        <option value="">-- Select Center --</option>
+                                        @foreach($centers as $center)
+                                            <option value="{{ $center->id }}">
+                                                {{ $center->center_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @endif
 
                         </div>
 
@@ -315,7 +338,7 @@
 
                             <div class="mb-3">
                                 <label>Document Type <span class="text-danger">*</span></label>
-                                <select name="document_type" class="form-select" required>
+                                <select name="document_type" class="form-control" required>
                                     <option value="">-- Select --</option>
                                     <option value="Aadhaar">Aadhaar Card</option>
                                     <option value="PAN">PAN Card</option>
@@ -400,7 +423,7 @@
 
                                 <div class="col-md-6 mb-3">
                                     <label>Payment Mode <span class="text-danger">*</span></label>
-                                    <select class="form-select" name="payment_mode" id="payment_mode" required>
+                                    <select class="form-control" name="payment_mode" id="payment_mode" required>
                                         <option value="">Select Payment Mode</option>
                                         <option value="Cash">Cash</option>
                                         <option value="UPI">UPI</option>
@@ -429,10 +452,10 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+                            <button class="btn btn-cancel" data-bs-dismiss="modal" type="button">
                                 <i class="fas fa-times"></i> Close
                             </button>
-                            <button class="btn btn-success" id="savePaymentBtn" type="submit">
+                            <button class="btn btn-save" id="savePaymentBtn" type="submit">
                                 <i class="fas fa-save"></i> Save Payment
                             </button>
                         </div>
@@ -474,7 +497,7 @@
                                     GST Type <span class="text-danger">*</span>
                                 </label>
 
-                                <select name="gst_type" class="form-select" required>
+                                <select name="gst_type" class="form-control" required>
                                     <option value="GST">GST</option>
                                     <option value="Non GST">Non GST</option>
                                 </select>
@@ -501,18 +524,20 @@
             $(document).ready(function () {
 
                 // Show/Hide Center Dropdown
-                $('#exam_mode').change(function () {
+                @if(optional(Auth::user()->role)->name !== 'Center Admin')
+                    $('#exam_mode').change(function () {
+                        if ($(this).val() == 'center') {
+                            $('#center_div').slideDown();
+                            $('#exam_center_id').prop('required', true);
+                        } else {
+                            $('#center_div').slideUp();
+                            $('#exam_center_id').val('');
+                            $('#exam_center_id').prop('required', false);
+                        }
 
-                    if ($(this).val() == 'center') {
-                        $('#center_div').slideDown();
-                        $('#exam_center_id').prop('required', true);
-                    } else {
-                        $('#center_div').slideUp();
-                        $('#exam_center_id').val('');
-                        $('#exam_center_id').prop('required', false);
-                    }
+                    });
 
-                });
+                @endif
 
                 // Open Modal
                 $(document).on('click', '.exam-schedule-btn', function () {

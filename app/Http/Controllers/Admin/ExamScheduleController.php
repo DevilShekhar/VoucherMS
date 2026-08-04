@@ -26,18 +26,22 @@ class ExamScheduleController extends Controller
     ]);
 
     // Role based filter
-    if (in_array($user->role_id, [1, 2])) {
-        // Admin
-    } elseif ($user->role_id == 5) {
+    if ($user->hasRole(['Super Admin', 'Admin'])) {
+
+    } elseif ($user->hasRole('Center Admin')) {
+
         $query->where('center_admin_id', $user->id);
+
     } else {
         $query->where('created_by', $user->id);
     }
 
     // Date Filter
     if ($request->filled('from_date') && $request->filled('to_date')) {
-        $query->whereDate('exam_date', '>=', $request->from_date)
-              ->whereDate('exam_date', '<=', $request->to_date);
+        $query->whereBetween('exam_date', [
+            $request->from_date,
+            $request->to_date
+        ]);
     } elseif ($request->filled('from_date')) {
         $query->whereDate('exam_date', '>=', $request->from_date);
     } elseif ($request->filled('to_date')) {
@@ -60,9 +64,13 @@ class ExamScheduleController extends Controller
 
     $examSchedules = $query->latest()->get();
 
-    $categories = \App\Models\CourseCategory::orderBy('name')->get();
-    $courses    = \App\Models\Course::where('status', 1)->orderBy('course_name')->get();
-    return view('admin.exam-schdule.index', compact('examSchedules', 'categories', 'courses'));
+    $categories = CourseCategory::orderBy('name')->get();
+    $courses = Course::where('status', 1)->orderBy('course_name')->get();
+    return view('admin.exam-schdule.index', compact(
+        'examSchedules',
+        'categories',
+        'courses'
+    ));
 }
 
     public function center()

@@ -60,7 +60,7 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Course Category <span class="text-danger">*</span></label>
 
-                                <select name="course_category_id" id="course_category_id" class="form-select">
+                                <select name="course_category_id" id="course_category_id" class="form-control">
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}" {{ old('course_category_id', $voucher->course_category_id) == $category->id ? 'selected' : '' }}>
                                             {{ $category->name }}

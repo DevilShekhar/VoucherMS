@@ -248,7 +248,22 @@
 
                                 @if($voucherRequest->voucher)
 
+                                    <div class="row mb-3">
+
+                                        <div class="col-md-6">
+                                            <strong>Course Category</strong>
+                                            <h6>{{ $voucherRequest->candidate?->course?->category?->name ?? '-' }}</h6>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <strong>Course</strong>
+                                            <h6>{{ $voucherRequest->candidate?->course?->course_name ?? '-' }}</h6>
+                                        </div>
+
+                                    </div>
+
                                     <div class="row">
+
                                         <div class="col-md-4">
                                             <strong>Voucher Code</strong>
                                             <h6>{{ $voucherRequest->voucher->voucher_code }}</h6>
@@ -263,14 +278,28 @@
                                             <strong>Expiry</strong>
                                             <h6>{{ \Carbon\Carbon::parse($voucherRequest->voucher->expiry_date)->format('d M Y') }}</h6>
                                         </div>
+
                                     </div>
 
                                 @else
 
+                                    <div class="row mb-3">
+
+                                        <div class="col-md-6">
+                                            <strong>Course Category</strong>
+                                            <h6>{{ $voucherRequest->candidate?->course?->category?->name ?? '-' }}</h6>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <strong>Course</strong>
+                                            <h6>{{ $voucherRequest->candidate?->course?->course_name ?? '-' }}</h6>
+                                        </div>
+
+                                    </div>
+
                                     <div class="alert alert-warning mb-0">
                                         <i class="fas fa-exclamation-triangle me-2"></i>
-                                        <strong>No voucher available</strong> for this course category. Please add a voucher for this
-                                        course category before approving the request.
+                                        <strong>No voucher available</strong> for this course category. Please add a voucher for this course category before approving the request.
                                     </div>
 
                                 @endif

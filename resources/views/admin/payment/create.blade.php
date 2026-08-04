@@ -27,7 +27,7 @@
                     <div class="row mb-4">
                         <div class="col-md-8">
                             <label class="form-label">Select Candidate <span class="text-danger">*</span></label>
-                            <select name="candidate_id" id="candidate_id" class="form-select" required>
+                            <select name="candidate_id" id="candidate_id" class="form-control" required>
                                 <option value="">-- Select Converted Candidate --</option>
                                 @forelse($candidates as $candidate)
                                     <option value="{{ $candidate->id }}">
@@ -74,7 +74,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label>Payment Mode <span class="text-danger">*</span></label>
-                            <select name="payment_mode" class="form-select" required>
+                            <select name="payment_mode" class="form-control" required>
                                 <option value="">Select Mode</option>
                                 <option value="Cash">Cash</option>
                                 <option value="UPI">UPI</option>
