@@ -160,7 +160,7 @@
                                 Status <span class="text-danger">*</span>
                             </label>
 
-                            <select name="status" class="form-select">
+                            <select name="status" class="form-control">
                                 <option value="1" {{ old('status', $user->status) == 1 ? 'selected' : '' }}>Active</option>
                                 <option value="0" {{ old('status', $user->status) == 0 ? 'selected' : '' }}>Inactive</option>
                             </select>

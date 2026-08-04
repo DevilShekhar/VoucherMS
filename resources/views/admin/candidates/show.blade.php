@@ -459,7 +459,7 @@
 
                             <div class="mb-3">
                                 <label class="form-label">Document Type <span class="text-danger">*</span></label>
-                                <select name="document_type" class="form-select" required>
+                                <select name="document_type" class="form-control" required>
                                     <option value="">-- Select Document Type --</option>
                                     <option value="Aadhaar">Aadhaar Card</option>
                                     <option value="PAN">PAN Card</option>

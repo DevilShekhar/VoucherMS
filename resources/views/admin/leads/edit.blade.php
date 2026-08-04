@@ -85,7 +85,7 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Course Category</label>
 
-                                <select name="course_category_id" id="course_category_id" class="form-select">
+                                <select name="course_category_id" id="course_category_id" class="form-control">
                                     <option value="">Select Category</option>
 
                                     @foreach($categories as $category)
@@ -97,7 +97,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Course</label>
-                                <select name="course_id" id="course_id" class="form-select">
+                                <select name="course_id" id="course_id" class="form-control">
                                     <option value="">Select Course</option>
 
                                     @foreach($courses->where('course_category_id', old('course_category_id', $lead->course_category_id)) as $course)
@@ -114,7 +114,7 @@
                                         <small class="text-muted">(Where vouchers will be distributed)</small>
                                     </label>
 
-                                    <select name="location_id" id="location" class="form-select">
+                                    <select name="location_id" id="location" class="form-control">
                                         <option value="">Select Location</option>
 
                                         @foreach($locations as $location)
@@ -136,7 +136,7 @@
                                         <small class="text-muted">(Leave empty for auto assignment)</small>
                                     </label>
 
-                                    <select name="assigned_to" class="form-select" id="assigned_to">
+                                    <select name="assigned_to" class="form-control" id="assigned_to">
                                         <option value=""></option>
 
                                         @foreach($users as $user)
@@ -153,7 +153,7 @@
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Priority</label>
-                                <select name="priority" class="form-select">
+                                <select name="priority" class="form-control">
                                     <option value="Low" {{ old('priority', $lead->priority) == 'Low' ? 'selected' : '' }}>Low
                                     </option>
                                     <option value="Medium" {{ old('priority', $lead->priority) == 'Medium' ? 'selected' : '' }}>
