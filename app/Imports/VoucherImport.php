@@ -2,6 +2,8 @@
 
 namespace App\Imports;
 
+use App\Models\Course;
+use App\Models\CourseCategory;
 use App\Models\Voucher;
 use App\Models\VoucherVendor;
 use Carbon\Carbon;
@@ -27,8 +29,8 @@ class VoucherImport implements ToModel, WithHeadingRow
             return null;
         }
 
-        // Vendor check
-        $vendor = VoucherVendor::query()->where('vendor_name', trim($row['vendor_name']))->first();
+        // Vendor
+        $vendor = VoucherVendor::where('vendor_name', trim($row['vendor_name']))->first();
 
         if (! $vendor) {
             self::$vendors[] = $row['vendor_name'];
@@ -36,9 +38,27 @@ class VoucherImport implements ToModel, WithHeadingRow
             return null;
         }
 
+        // Course Category
+        $category = CourseCategory::where('name', trim($row['course_category']))->first();
+
+        if (! $category) {
+            return null;
+        }
+
+        // Course
+        $course = Course::where('course_name', trim($row['course_name']))
+            ->where('course_category_id', $category->id)
+            ->first();
+
+        if (! $course) {
+            return null;
+        }
+
         return new Voucher([
             'voucher_code' => trim($row['voucher_code']),
             'vendor_id' => $vendor->id,
+            'course_category_id' => $category->id,
+            'course_id' => $course->id,
             'purchase_date' => $this->formatDate($row['purchase_date']),
             'expiry_date' => $this->formatDate($row['expiry_date']),
             'purchase_price' => $row['purchase_price'],

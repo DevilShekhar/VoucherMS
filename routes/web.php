@@ -140,7 +140,6 @@ Route::middleware(['auth', 'otp'])->group(function () {
             'voucher_code',
             'vendor_name',
             'course_category',
-            'course_code',
             'course_name',
             'purchase_date',
             'expiry_date',

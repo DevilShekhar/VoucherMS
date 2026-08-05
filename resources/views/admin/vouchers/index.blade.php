@@ -250,7 +250,7 @@
                                 Cancel
                             </button>
 
-                            <button type="submit" class="btn btn-success">
+                            <button type="submit" class="btn btn-save">
                                 <i class="fas fa-upload"></i>
                                 Upload
                             </button>
