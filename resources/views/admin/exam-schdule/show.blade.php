@@ -118,7 +118,7 @@
                             <div class="mt-4 d-flex gap-2 justify-content-end">
                                 <!-- Mark as Used Button - Only show if voucher exists and not used -->
                                 @if($examSchedule->voucher && $examSchedule->voucher->status != 'Used')
-                                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                                    <button class="btn btn-primary btn-sm text-white" data-bs-toggle="modal"
                                         data-bs-target="#voucherStatusModal{{ $examSchedule->id }}"
                                         title="Click to mark this voucher as Used" data-bs-placement="top">
                                         <i class="fas fa-check-circle me-1"></i>
