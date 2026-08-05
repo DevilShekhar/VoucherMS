@@ -139,6 +139,9 @@ Route::middleware(['auth', 'otp'])->group(function () {
         $headers = [
             'voucher_code',
             'vendor_name',
+            'course_category',
+            'course_code',
+            'course_name',
             'purchase_date',
             'expiry_date',
             'purchase_price',
@@ -146,12 +149,16 @@ Route::middleware(['auth', 'otp'])->group(function () {
         ];
 
         $callback = function () use ($headers) {
-            $file = fopen('php://output', 'w');
-            fputcsv($file, $headers);
-            fclose($file);
-        };
+    $file = fopen('php://output', 'w');
 
-        return response()->streamDownload($callback, 'voucher_sample.csv');
+    fputcsv($file, $headers);
+
+    fclose($file);
+};
+
+        return response()->streamDownload($callback, 'voucher_sample.csv', [
+            'Content-Type' => 'text/csv',
+        ]);
     })->name('vouchers.sample');
 
     Route::get('/dashboard/export/leads', [DashboardController::class, 'exportLeads'])
@@ -172,7 +179,7 @@ Route::middleware(['auth', 'otp'])->group(function () {
         ->name('courses.by-category');
     Route::post('voucher-requests/{voucherRequest}/assign-voucher', [VoucherRequestController::class, 'assignVoucher'])->name('voucher-requests.assign-voucher');
     Route::get('/dashboard/exam-schedule-filter', [DashboardController::class, 'examScheduleFilter'])->name('dashboard.exam.schedule.filter');
-    Route::post('/payments/{payment}/send-email',[PaymentController::class, 'sendInvoiceEmail'])->name('payments.sendInvoiceEmail');
+    Route::post('/payments/{payment}/send-email', [PaymentController::class, 'sendInvoiceEmail'])->name('payments.sendInvoiceEmail');
 
 });
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth')->name('logout');
