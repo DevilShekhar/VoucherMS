@@ -32,15 +32,15 @@ class CenterController extends Controller
     {
         $validated = $request->validate([
             'center_code' => 'required|string|max:255|unique:centers,center_code',
-            'center_name' => 'required|string|max:255',
-            'center_exe_id' => 'required|exists:users,id',
-            'address' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
+            'center_name' => 'nullable|string|max:255',
+            'center_exe_id' => 'nullable|exists:users,id',
+            'address' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
             'state' => 'nullable|string|max:255',
             'country' => 'nullable|string|max:255',
-            'pincode' => 'required|string|max:20',
-            'phone' => 'required|string|max:20|unique:centers,phone',
-            'email' => 'required|email|max:255|unique:centers,email',
+            'pincode' => 'nullable|string|max:20',
+            'phone' => 'nullable|string|max:20|unique:centers,phone',
+            'email' => 'nullable|email|max:255|unique:centers,email',
         ], [
             'center_code.unique' => 'This center code already exists.',
             'phone.unique' => 'This phone number already exists.',
