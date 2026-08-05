@@ -149,12 +149,12 @@ Route::middleware(['auth', 'otp'])->group(function () {
         ];
 
         $callback = function () use ($headers) {
-    $file = fopen('php://output', 'w');
+            $file = fopen('php://output', 'w');
 
-    fputcsv($file, $headers);
+            fputcsv($file, $headers);
 
-    fclose($file);
-};
+            fclose($file);
+        };
 
         return response()->streamDownload($callback, 'voucher_sample.csv', [
             'Content-Type' => 'text/csv',
