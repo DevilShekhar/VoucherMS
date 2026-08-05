@@ -7,6 +7,7 @@ use App\Models\CourseCategory;
 use App\Models\Voucher;
 use App\Models\VoucherVendor;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -63,6 +64,7 @@ class VoucherImport implements ToModel, WithHeadingRow
             'expiry_date' => $this->formatDate($row['expiry_date']),
             'purchase_price' => $row['purchase_price'],
             'cost' => $row['cost'],
+            'created_by'         => Auth::id(),
         ]);
     }
 
