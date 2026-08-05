@@ -49,7 +49,7 @@ class VoucherController extends Controller
             'purchase_price' => 'required',
             'cost' => 'required',
         ]);
-    
+
         $hash = hash('sha256', strtoupper(trim($request->voucher_code)));
         if (Voucher::query()->where('voucher_code_hash', $hash)->exists()) {
             return back()
@@ -142,6 +142,8 @@ class VoucherController extends Controller
         $requiredHeaders = [
             'voucher_code',
             'vendor_name',
+            'course_category',
+            'course_name',
             'purchase_date',
             'expiry_date',
             'purchase_price',
